@@ -6,8 +6,7 @@
 # Datasource local storage ignored files
 /dataSources/
 /dataSources.local.xml
-/yjykfsj/
+yjykfsj/
 web/assets/
-!web/assets//js/
+!web/assets/js
 web/sass/
-my_pro/out/
