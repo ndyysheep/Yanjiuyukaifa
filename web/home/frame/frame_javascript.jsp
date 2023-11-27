@@ -1,11 +1,7 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Probe
-  Date: 2023/10/14
-  Time: 21:10
-  To change this template use File | Settings | File Templates.
---%>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
+<!--[if lt IE 9]>
 <script src="../../assets/global/plugins/respond.min.js"></script>
 <script src="../../assets/global/plugins/excanvas.min.js"></script>
 <![endif]-->
@@ -22,7 +18,9 @@
 <script src="../../assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js" type="text/javascript"></script>
 <!-- END CORE PLUGINS -->
 <script src="../../assets/global/scripts/metronic.js" type="text/javascript"></script>
-<script src="../../assets/admin/layout/scripts/layout.js" type="text/javascript"></script>
-<script src="../../assets/admin/layout/scripts/quick-sidebar.js" type="text/javascript"></script>
-<script src="../../assets/admin/layout/scripts/demo.js" type="text/javascript"></script>
-
+<script src="../../assets/admin/layout4/scripts/layout.js" type="text/javascript"></script>
+<script src="../../assets/admin/layout4/scripts/demo.js" type="text/javascript"></script>
+<script src="../../assets/js/jquery.form.js"></script>
+<script src="../../assets/js/dataTables.bootstrap.js" type="text/javascript"></script>
+<script src="../../assets/js/jquery.dataTables.min.js" type="text/javascript"></script>
+<script src="../../assets/js/monitor.js" type="text/javascript"></script>

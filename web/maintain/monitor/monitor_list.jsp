@@ -178,16 +178,19 @@
             <!-- END PAGE HEADER-->
             <!-- BEGIN PAGE CONTENT-->
 
-            <input  type="hidden" id="page_id" name="page_id" value="illegal_list">
+            <%--开始当前自写板块--%>
+            <input  type="hidden" id="page_id" name="page_id" value="monitor_list">
 
             <div class="row">
-                <div class="col-md-6">
-                    <button type="button" id="export_button" name ="export_button" class="btn red">导出记录</button>
-                    <button type="button" id="print_button" name="print_button" class="btn blue">打印</button>
-                    <button type="button" id="print_button_for_word" name="print_button_for_word" class="btn blue">用word打印</button>
-                    <button type="button" id="statistics_button" name="statistics_button" class="btn blue">统计</button>
-                    <button type="button" id="ac_query_button" name ="ac_query_button" class="btn red">查询</button>
+                <div class="col-md-12">
+                    <button type="button" id="ac_add_button" name ="ac_add_button" class="btn default red-stripe">添加记录</button>
+                    <button type="button" id="export_button" name ="export_button" class="btn default blue-stripe">导出记录</button>
+                    <button type="button" id="print_button" name="print_button" class="btn default red-stripe">打印</button>
+                    <button type="button" id="print_button_for_word" name="print_button_for_word" class="btn default blue-stripe">用word打印</button>
+                    <button type="button" id="statistics_button" name="statistics_button" class="btn default blue-stripe">统计</button>
+                    <button type="button" id="ac_query_button" name ="query_button" class="btn default blue-stripe">查询</button>
                 </div>
+
             </div>
 
             <br/>
@@ -214,10 +217,10 @@
 
                         <div class="portlet-body">
                             <div class="table-scrollable">
-                                <table class="table table-striped table-bordered table-hover datatable" id="illegal_list">
+                                <table class="table table-striped table-bordered table-hover datatable" id="monitor_list">
                                     <thead>
                                     <tr>
-                                        <th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#illegal_list .checkboxes" /></th>
+                                        <th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#monitor_list .checkboxes" /></th>
                                         <th>序号</th>
                                         <th>车牌号</th>
                                         <th>车辆类型</th>
@@ -225,48 +228,43 @@
                                         <th>抓拍时间</th>
                                         <th>车速</th>
                                         <th>抓拍路段</th>
-                                        <th>抓拍图片</th>
                                         <th>操作</th>
                                     </tr>
                                     </thead>
                                 </table>
-
                             </div>
                         </div>
-
-
                     </div>
 
 
-                </div>
 
-                <div class="row">
-                    <div class="col-md-12">
-
-                        <div id="current_attachment_name" name="current_attachment_name" value=""></div>
-                        <input type="hidden" id="current_attachment_object_id" name="current_attachment_object_id" value="">
-                        <form id="ajax_form" name="ajax_form" class="form-horizontal" method="post" enctype="multipart/form-data">
-                            第2种方式：【ajax方式上传文件】
-                            <div id="ajax_div" name="ajax_div">
-                                <div id="record_list_div" name="record_list_div"></div>
-                                <input type="file" id="upload_file" name="upload_file">
-                                <button type="button" id="upload_button" name="upload_button">局部刷新方式上传文件</button>
-                            </div>
-                        </form>
-                        <hr>
-
-                    </div>
 
                 </div>
-                <!-- END PAGE CONTENT-->
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+
+                    <div id="current_attachment_name" name="current_attachment_name" value=""></div>
+                    <input type="hidden" id="current_attachment_object_id" name="current_attachment_object_id" value="">
+                    <form id="ajax_form" name="ajax_form" class="form-horizontal" method="post" enctype="multipart/form-data">
+                        第2种方式：【ajax方式上传文件】
+                        <div id="ajax_div" name="ajax_div">
+                            <div id="record_list_div" name="record_list_div"></div>
+                            <input type="file" id="upload_file" name="upload_file">
+                            <button type="button" id="upload_button" name="upload_button">局部刷新方式上传文件</button>
+                        </div>
+                    </form>
+                    <hr>
+
+                </div>
 
             </div>
-        </div>
-        <!-- END CONTENT -->
+            <!-- END PAGE CONTENT-->
 
+        </div>
     </div>
-</div>
-<!-- END CONTENT -->
+    <!-- END CONTENT -->
 </div>
 <!-- END CONTAINER -->
 
@@ -282,14 +280,10 @@
 <!-- END BODY -->
 
 <!--修改数据-->
-<%@include file="illegal_data_export_div.jsp"%>
-<%@include file="illegal_data_query_div.jsp"%>
+<%@include file="monitor_add_div.jsp"%>
+<%@include file="monitor_query_div.jsp"%>
+<%@include file="monitor_modify_div.jsp"%>
+<%@include file="monitor_export_div.jsp"%>
 
 </html>
-
-<script src="../../assets/js/jquery.form.js"></script>
-<script src="../../assets/js/dataTables.bootstrap.js" type="text/javascript"></script>
-<script src="../../assets/js/jquery.dataTables.min.js" type="text/javascript"></script>
-<script src="../../assets/js/illegal.data.js" type="text/javascript"></script>
-
 

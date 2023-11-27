@@ -13,11 +13,9 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class UserDao {
-    public void showDebug(String msg)
-	{
+    public void showDebug(String msg) {
         System.out.println(
-                "[" + (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"))
-						.format(new Date()) + "][user/dao/Db]" + msg);
+                "[" + (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).format(new Date()) + "][user/dao/Db]" + msg);
     }
 
     public void login(String dbName, Data data, JSONObject json) throws JSONException, SQLException {
@@ -40,8 +38,7 @@ public class UserDao {
             ResultSetMetaData rsmd = rs.getMetaData();
             int fieldCount = rsmd.getColumnCount();
 
-            if (!rs.next())
-            {
+            if (!rs.next()) {
                 resultCode = 10;
                 resultMsg = "登录失败，请核对用户名和密码!";
             }
