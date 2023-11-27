@@ -1,6 +1,10 @@
-<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
-
-<!-- BEGIN SIDEBAR -->
+<%--
+  Created by IntelliJ IDEA.
+  User: CornerGjr
+  Date: 2023/11/27
+  Time: 23:46
+  To change this template use File | Settings | File Templates.
+--%>
 <div class="page-sidebar-wrapper">
     <!-- DOC: Set data-auto-scroll="false" to disable the sidebar from auto scrolling/focusing -->
     <!-- DOC: Change data-auto-speed="200" to adjust the sub menu slide up/down speed -->
@@ -12,55 +16,12 @@
         <!-- DOC: Set data-auto-scroll="false" to disable the sidebar from auto scrolling/focusing -->
         <!-- DOC: Set data-keep-expand="true" to keep the submenues expanded -->
         <!-- DOC: Set data-auto-speed="200" to adjust the sub menu slide up/down speed -->
-        <ul class="page-sidebar-menu" data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
-            <!-- DOC: To remove the sidebar toggler from the sidebar you just need to completely remove the below "sidebar-toggler-wrapper" LI element -->
-            <li class="sidebar-toggler-wrapper">
-                <!-- BEGIN SIDEBAR TOGGLER BUTTON -->
-                <div class="sidebar-toggler">
-                </div>
-                <!-- END SIDEBAR TOGGLER BUTTON -->
-            </li>
-            <!-- DOC: To remove the search box from the sidebar you just need to completely remove the below "sidebar-search-wrapper" LI element -->
-            <li class="sidebar-search-wrapper">
-                <!-- BEGIN RESPONSIVE QUICK SEARCH FORM -->
-                <!-- DOC: Apply "sidebar-search-bordered" class the below search form to have bordered search box -->
-                <!-- DOC: Apply "sidebar-search-bordered sidebar-search-solid" class the below search form to have bordered & solid search box -->
-                <form class="sidebar-search " action="extra_search.html" method="POST">
-                    <a href="javascript:;" class="remove">
-                        <i class="icon-close"></i>
-                    </a>
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Search...">
-                        <span class="input-group-btn">
-							<a href="javascript:;" class="btn submit"><i class="icon-magnifier"></i></a>
-							</span>
-                    </div>
-                </form>
-                <!-- END RESPONSIVE QUICK SEARCH FORM -->
-            </li>
+        <ul class="page-sidebar-menu " data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
             <li class="start ">
-                <a href="javascript:;">
+                <a href="index.html">
                     <i class="icon-home"></i>
                     <span class="title">Dashboard</span>
-                    <span class="arrow "></span>
                 </a>
-                <ul class="sub-menu">
-                    <li>
-                        <a href="index.html">
-                            <i class="icon-bar-chart"></i>
-                            Default Dashboard</a>
-                    </li>
-                    <li>
-                        <a href="index_2.html">
-                            <i class="icon-bulb"></i>
-                            New Dashboard #1</a>
-                    </li>
-                    <li>
-                        <a href="index_3.html">
-                            <i class="icon-graph"></i>
-                            New Dashboard #2</a>
-                    </li>
-                </ul>
             </li>
             <li>
                 <a href="javascript:;">
@@ -96,80 +57,24 @@
                     </li>
                 </ul>
             </li>
-            <li>
+            <li class="active open">
                 <a href="javascript:;">
                     <i class="icon-rocket"></i>
                     <span class="title">Page Layouts</span>
-                    <span class="arrow "></span>
+                    <span class="arrow open"></span>
                 </a>
                 <ul class="sub-menu">
                     <li>
-                        <a href="layout_horizontal_sidebar_menu.html">
-                            Horizontal & Sidebar Menu</a>
-                    </li>
-                    <li>
-                        <a href="index_horizontal_menu.html">
-                            Dashboard & Mega Menu</a>
-                    </li>
-                    <li>
-                        <a href="layout_horizontal_menu1.html">
-                            Horizontal Mega Menu 1</a>
-                    </li>
-                    <li>
-                        <a href="layout_horizontal_menu2.html">
-                            Horizontal Mega Menu 2</a>
-                    </li>
-                    <li>
-                        <a href="layout_fontawesome_icons.html">
-                            <span class="badge badge-roundless badge-danger">new</span>Layout with Fontawesome Icons</a>
-                    </li>
-                    <li>
-                        <a href="layout_glyphicons.html">
-                            Layout with Glyphicon</a>
-                    </li>
-                    <li>
-                        <a href="layout_full_height_portlet.html">
-                            <span class="badge badge-roundless badge-success">new</span>Full Height Portlet</a>
-                    </li>
-                    <li>
-                        <a href="layout_full_height_content.html">
-                            <span class="badge badge-roundless badge-warning">new</span>Full Height Content</a>
-                    </li>
-                    <li>
-                        <a href="layout_search_on_header1.html">
-                            Search Box On Header 1</a>
-                    </li>
-                    <li>
-                        <a href="layout_search_on_header2.html">
-                            Search Box On Header 2</a>
-                    </li>
-                    <li>
-                        <a href="layout_sidebar_search_option1.html">
-                            Sidebar Search Option 1</a>
-                    </li>
-                    <li>
-                        <a href="layout_sidebar_search_option2.html">
-                            Sidebar Search Option 2</a>
-                    </li>
-                    <li>
                         <a href="layout_sidebar_reversed.html">
-                            <span class="badge badge-roundless badge-warning">new</span>Right Sidebar Page</a>
+                            <span class="badge badge-warning">new</span>Right Sidebar Page</a>
                     </li>
-                    <li>
+                    <li class="active">
                         <a href="layout_sidebar_fixed.html">
                             Sidebar Fixed Page</a>
                     </li>
                     <li>
                         <a href="layout_sidebar_closed.html">
                             Sidebar Closed Page</a>
-                    </li>
-                    <li>
-                        <a href="layout_ajax.html">
-                            Content Loading via Ajax</a>
-                    </li>
-                    <li>
-                        <a href="layout_disabled_menu.html">
-                            Disabled Menu Links</a>
                     </li>
                     <li>
                         <a href="layout_blank_page.html">
@@ -201,12 +106,8 @@
                             Buttons</a>
                     </li>
                     <li>
-                        <a href="ui_confirmations.html">
-                            Popover Confirmations</a>
-                    </li>
-                    <li>
                         <a href="ui_icons.html">
-                            <span class="badge badge-roundless badge-danger">new</span>Font Icons</a>
+                            <span class="badge badge-danger">new</span>Font Icons</a>
                     </li>
                     <li>
                         <a href="ui_colors.html">
@@ -222,11 +123,11 @@
                     </li>
                     <li>
                         <a href="ui_tree.html">
-                            <span class="badge badge-roundless badge-danger">new</span>Tree View</a>
+                            <span class="badge badge-danger">new</span>Tree View</a>
                     </li>
                     <li>
                         <a href="ui_page_progress_style_1.html">
-                            <span class="badge badge-roundless badge-warning">new</span>Page Progress Bar</a>
+                            <span class="badge badge-warning">new</span>Page Progress Bar - Style 1</a>
                     </li>
                     <li>
                         <a href="ui_blockui.html">
@@ -246,7 +147,7 @@
                     </li>
                     <li>
                         <a href="ui_alert_dialog_api.html">
-                            <span class="badge badge-roundless badge-danger">new</span>Alerts & Dialogs API</a>
+                            <span class="badge badge-danger">new</span>Alerts & Dialogs API</a>
                     </li>
                     <li>
                         <a href="ui_session_timeout.html">
@@ -270,7 +171,7 @@
                     </li>
                     <li>
                         <a href="ui_datepaginator.html">
-                            <span class="badge badge-roundless badge-success">new</span>Date Paginator</a>
+                            <span class="badge badge-success">new</span>Date Paginator</a>
                     </li>
                     <li>
                         <a href="ui_nestable.html">
@@ -336,9 +237,6 @@
                 </a>
             </li>
             <!-- END ANGULARJS LINK -->
-            <li class="heading">
-                <h3 class="uppercase">Features</h3>
-            </li>
             <li>
                 <a href="javascript:;">
                     <i class="icon-settings"></i>
@@ -357,16 +255,12 @@
                             Form Controls</a>
                     </li>
                     <li>
-                        <a href="form_icheck.html">
-                            iCheck Controls</a>
-                    </li>
-                    <li>
                         <a href="form_layouts.html">
                             Form Layouts</a>
                     </li>
                     <li>
                         <a href="form_editable.html">
-                            <span class="badge badge-roundless badge-warning">new</span>Form X-editable</a>
+                            <span class="badge badge-warning">new</span>Form X-editable</a>
                     </li>
                     <li>
                         <a href="form_wizard.html">
@@ -378,7 +272,7 @@
                     </li>
                     <li>
                         <a href="form_image_crop.html">
-                            <span class="badge badge-roundless badge-danger">new</span>Image Cropping</a>
+                            <span class="badge badge-danger">new</span>Image Cropping</a>
                     </li>
                     <li>
                         <a href="form_fileupload.html">
@@ -390,15 +284,14 @@
                     </li>
                 </ul>
             </li>
-            <li class="active open">
+            <li>
                 <a href="javascript:;">
                     <i class="icon-briefcase"></i>
                     <span class="title">Data Tables</span>
-                    <span class="selected"></span>
-                    <span class="arrow open"></span>
+                    <span class="arrow "></span>
                 </a>
                 <ul class="sub-menu">
-                    <li class="active">
+                    <li>
                         <a href="table_basic.html">
                             Basic Datatables</a>
                     </li>
@@ -441,11 +334,11 @@
                     </li>
                     <li>
                         <a href="portlet_general2.html">
-                            <span class="badge badge-roundless badge-danger">new</span>New Portlets #1</a>
+                            <span class="badge badge-danger">new</span>New Portlets #1</a>
                     </li>
                     <li>
                         <a href="portlet_general3.html">
-                            <span class="badge badge-roundless badge-danger">new</span>New Portlets #2</a>
+                            <span class="badge badge-danger">new</span>New Portlets #2</a>
                     </li>
                     <li>
                         <a href="portlet_ajax.html">
@@ -466,7 +359,7 @@
                 <ul class="sub-menu">
                     <li>
                         <a href="charts_amcharts.html">
-                            amChart</a>
+                            Amchart</a>
                     </li>
                     <li>
                         <a href="charts_flotcharts.html">
@@ -493,8 +386,8 @@
                     </li>
                     <li>
                         <a href="page_todo.html">
-                            <i class="icon-check"></i>
-                            Todo</a>
+                            <i class="icon-hourglass"></i>
+                            <span class="badge badge-danger">4</span>Todo</a>
                     </li>
                     <li>
                         <a href="inbox.html">
@@ -503,8 +396,23 @@
                     </li>
                     <li>
                         <a href="extra_faq.html">
-                            <i class="icon-question"></i>
+                            <i class="icon-info"></i>
                             FAQ</a>
+                    </li>
+                    <li>
+                        <a href="page_portfolio.html">
+                            <i class="icon-feed"></i>
+                            Portfolio</a>
+                    </li>
+                    <li>
+                        <a href="page_timeline.html">
+                            <i class="icon-clock"></i>
+                            <span class="badge badge-info">4</span>Timeline</a>
+                    </li>
+                    <li>
+                        <a href="page_coming_soon.html">
+                            <i class="icon-flag"></i>
+                            Coming Soon</a>
                     </li>
                     <li>
                         <a href="page_calendar.html">
@@ -512,9 +420,9 @@
                             <span class="badge badge-danger">14</span>Calendar</a>
                     </li>
                     <li>
-                        <a href="page_coming_soon.html">
+                        <a href="extra_invoice.html">
                             <i class="icon-flag"></i>
-                            Coming Soon</a>
+                            Invoice</a>
                     </li>
                     <li>
                         <a href="page_blog.html">
@@ -566,14 +474,6 @@
                     <li>
                         <a href="extra_search.html">
                             Search Results</a>
-                    </li>
-                    <li>
-                        <a href="extra_invoice.html">
-                            Invoice</a>
-                    </li>
-                    <li>
-                        <a href="page_portfolio.html">
-                            Portfolio</a>
                     </li>
                     <li>
                         <a href="extra_pricing_table.html">
@@ -697,34 +597,6 @@
                     </li>
                 </ul>
             </li>
-            <li class="heading">
-                <h3 class="uppercase">More</h3>
-            </li>
-            <li>
-                <a href="javascript:;">
-                    <i class="icon-logout"></i>
-                    <span class="title">Quick Sidebar</span>
-                    <span class="arrow "></span>
-                </a>
-                <ul class="sub-menu">
-                    <li>
-                        <a href="quick_sidebar_push_content.html">
-                            Push Content</a>
-                    </li>
-                    <li>
-                        <a href="quick_sidebar_over_content.html">
-                            Over Content</a>
-                    </li>
-                    <li>
-                        <a href="quick_sidebar_over_content_transparent.html">
-                            Over Content & Transparent</a>
-                    </li>
-                    <li>
-                        <a href="quick_sidebar_on_boxed_layout.html">
-                            Boxed Layout</a>
-                    </li>
-                </ul>
-            </li>
 
             <li class="last ">
                 <a href="javascript:;">
@@ -747,4 +619,3 @@
         <!-- END SIDEBAR MENU -->
     </div>
 </div>
-<!-- END SIDEBAR -->
