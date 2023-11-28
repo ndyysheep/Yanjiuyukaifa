@@ -7,7 +7,6 @@ jQuery(document).ready(function() {
 	// initiate layout and plugins
 	Metronic.init(); // init metronic core components
 	Layout.init(); // init current layout
-	QuickSidebar.init(); // init quick sidebar
 	Demo.init(); // init demo features
 	Page.init();//页面初始化
 
@@ -465,13 +464,21 @@ var Page = function() {
                 },"orderable": false
             },{
 				"mRender": function(data, type, full) {
-					sReturn = '<div>'+'<a href=\"'+full.image_url+'\" target=\"_blank\">【抓拍图片】</a>'+'</div>';
+
+					sReturn = '<div>'+'<a href=\"'+full.image_url+'\"'
+						+ "class=\"btn default btn-xs blue\"" +' target=\"_blank\">'
+						+"<i class=\"fa fa-share\"></i>"+'查看</a>'+'</div>';
 					return sReturn;
 				},"orderable": false
 			},{
 				"mRender": function(data, type, full) {
-					sReturn = '<div><a href=\"javascript:Page.onDeleteRecord('+full.id+')\">【删除记录】</a>';
-					sReturn+='<a href=\"javascript:Page.onViewRecord('+full.id+')\">【查看记录】</a></div>';
+
+					sReturn = '<a href=\"javascript:Page.onDeleteRecord('+full.id+')\"'
+						+'class=\"btn default btn-xs black\"> <i class=\"fa fa-trash-o\"></i>'
+						+'删除记录</a>';
+					sReturn += '<a href=\"javascript:Page.onViewRecord('+full.id+')\"'
+						+"class=\"btn default btn-xs purple\"> <i class=\"fa fa-camera\"></i>"
+						+'查看记录</a>';
 					return sReturn;
 				},"orderable": false
 			}],
@@ -503,6 +510,11 @@ var Page = function() {
 		$('.datatable').on('change', 'tbody tr .checkboxes', function () {
 			$(this).parents('tr').toggleClass("active");
 		});
+
+		var tableWrapper = $('#sample_1_wrapper'); // datatable creates the table wrapper by adding with id {your_table_jd}_wrapper
+
+		tableWrapper.find('.dataTables_length select').select2(); // initialize select2 dropdown
+
 
 	}
 
@@ -536,7 +548,6 @@ var Page = function() {
 
 	//init-illegal_file functions begin
 	var initDeviceFileControlEvent=function(id){
-		$('#jump_div #upload_button').click(function() {onJumpUploadFile();});
 		$('#upload_button').click(function() {onAjaxUploadFile();});
 		console.log("[initDeviceFileControlEvent]");
 	}
@@ -561,6 +572,7 @@ var Page = function() {
 					var objectId = files[0].file_object_id;
 					$("#current_attachment_name").html("您当前上传的附件是：<span style='color:blue;'><a href='javascript:window.open(\""+fileUrl+"\")'>" + fileUrl + "</a></span>");
 					$("#current_attachment_object_id").val(objectId);
+
 					console.log("[onAjaxUploadFile]fileUrl="+fileUrl);
 					console.log("[onAjaxUploadFile]objectId="+objectId);
 				}else{

@@ -36,7 +36,7 @@
     <div class="page-header-inner">
         <!-- BEGIN LOGO -->
         <div class="page-logo">
-            <a href="index.html">
+            <a href=../../index.jsp>
                 <img src="../../assets/admin/layout4/img/logo-light.png" alt="logo" class="logo-default"/>
             </a>
             <div class="menu-toggler sidebar-toggler">
@@ -161,15 +161,15 @@
             <div class="page-bar">
                 <ul class="page-breadcrumb breadcrumb">
                     <li>
-                        <a href="index.html">Home</a>
+                        <a href="../../index.jsp">Home</a>
                         <i class="fa fa-circle"></i>
                     </li>
                     <li>
-                        <a href="#">Page Layouts</a>
+                        <a href="../monitor/monitor_list.jsp">车辆检测数据</a>
                         <i class="fa fa-circle"></i>
                     </li>
                     <li>
-                        <a href="#">Sidebar Fixed Page</a>
+                        <a href="#">违法数据监控</a>
                     </li>
                 </ul>
             </div>
@@ -214,7 +214,7 @@
 
                         <div class="portlet-body">
                             <div class="table-scrollable">
-                                <table class="table table-striped table-bordered table-hover datatable" id="illegal_list">
+                                <table class="table table-striped table-bordered table-hover datatable" id="sample_1">
                                     <thead>
                                     <tr>
                                         <th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#illegal_list .checkboxes" /></th>
@@ -234,30 +234,36 @@
                             </div>
                         </div>
 
-
                     </div>
-
 
                 </div>
 
+                <!--上传文件处理-->
                 <div class="row">
                     <div class="col-md-12">
-
                         <div id="current_attachment_name" name="current_attachment_name" value=""></div>
                         <input type="hidden" id="current_attachment_object_id" name="current_attachment_object_id" value="">
                         <form id="ajax_form" name="ajax_form" class="form-horizontal" method="post" enctype="multipart/form-data">
-                            第2种方式：【ajax方式上传文件】
                             <div id="ajax_div" name="ajax_div">
                                 <div id="record_list_div" name="record_list_div"></div>
-                                <input type="file" id="upload_file" name="upload_file">
-                                <button type="button" id="upload_button" name="upload_button">局部刷新方式上传文件</button>
+                                <span class="btn green fileinput-button">
+                                    <i class="fa fa-plus"></i>
+                                    <span>Add files... </span>
+                                    <input type="file" id="upload_file" name="upload_file">
+                                </span>
+
+                                <button type="button" class="btn red fileinput-button" id="upload_button" name="upload_button">
+                                    <i class="fa fa-upload"></i>
+                                    <span>Start upload </span>
+                                </button>
                             </div>
+
                         </form>
                         <hr>
-
                     </div>
 
                 </div>
+                <%--上传文件处理结束--%>
                 <!-- END PAGE CONTENT-->
 
             </div>
@@ -276,7 +282,7 @@
 
 <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
 
-<%@include file="../../home/frame/frame_javascript.jsp"%>
+
 <!-- END JAVASCRIPTS -->
 </body>
 <!-- END BODY -->
@@ -286,10 +292,7 @@
 <%@include file="illegal_data_query_div.jsp"%>
 
 </html>
-
-<script src="../../assets/js/jquery.form.js"></script>
-<script src="../../assets/js/dataTables.bootstrap.js" type="text/javascript"></script>
-<script src="../../assets/js/jquery.dataTables.min.js" type="text/javascript"></script>
+<%@include file="../../home/frame/frame_javascript.jsp"%>
 <script src="../../assets/js/illegal.data.js" type="text/javascript"></script>
 
 
