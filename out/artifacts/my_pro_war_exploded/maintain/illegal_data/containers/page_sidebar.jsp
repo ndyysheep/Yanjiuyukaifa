@@ -5,6 +5,7 @@
   Time: 23:46
   To change this template use File | Settings | File Templates.
 --%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <div class="page-sidebar-wrapper">
     <!-- DOC: Set data-auto-scroll="false" to disable the sidebar from auto scrolling/focusing -->
     <!-- DOC: Change data-auto-speed="200" to adjust the sub menu slide up/down speed -->
@@ -60,17 +61,17 @@
             <li class="active open">
                 <a href="javascript:;">
                     <i class="icon-rocket"></i>
-                    <span class="title">Page Layouts</span>
+                    <span class="title">车辆检测数据</span>
                     <span class="arrow open"></span>
                 </a>
                 <ul class="sub-menu">
                     <li>
-                        <a href="layout_sidebar_reversed.html">
-                            <span class="badge badge-warning">new</span>Right Sidebar Page</a>
+                        <a href="../monitor/monitor_list.jsp">
+                            <span class="badge badge-warning">new</span>车辆数据监控</a>
                     </li>
                     <li class="active">
-                        <a href="layout_sidebar_fixed.html">
-                            Sidebar Fixed Page</a>
+                        <a href="../illegal_data/illegal_data_list.jsp">
+                            违法数据监控</a>
                     </li>
                     <li>
                         <a href="layout_sidebar_closed.html">

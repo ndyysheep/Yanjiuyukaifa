@@ -145,7 +145,7 @@
             <div class="page-head">
                 <!-- BEGIN PAGE TITLE -->
                 <div class="page-title">
-                    <h1>车辆监控<small>违法数据信息表</small></h1>
+                    <h1>车辆监控<small> 违法数据信息表</small></h1>
                 </div>
                 <!-- END PAGE TITLE -->
 
@@ -178,6 +178,38 @@
             <!-- END PAGE HEADER-->
             <!-- BEGIN PAGE CONTENT-->
 
+
+            <!--视频预览区块-->
+            <div class="row" id="video_row"></div>
+            <!--视频预览区块结束-->
+
+            <!--上传文件处理-->
+            <div class="row">
+                <div class="col-md-12">
+                    <div id="current_attachment_name" name="current_attachment_name" value=""></div>
+                    <input type="hidden" id="current_attachment_object_id" name="current_attachment_object_id" value="">
+                    <form id="ajax_form" name="ajax_form" class="form-horizontal" method="post" enctype="multipart/form-data">
+                        <div id="ajax_div" name="ajax_div">
+                            <div id="record_list_div" name="record_list_div"></div>
+                            <span class="btn green fileinput-button">
+                                    <i class="fa fa-plus"></i>
+                                    <span>Add files... </span>
+                                    <input type="file" id="upload_file" name="upload_file">
+                                </span>
+
+                            <button type="button" class="btn red fileinput-button" id="upload_button" name="upload_button">
+                                <i class="fa fa-upload"></i>
+                                <span>Start upload </span>
+                            </button>
+                        </div>
+
+                    </form>
+                    <hr>
+                </div>
+
+            </div>
+            <%--上传文件处理结束--%>
+
             <%--开始当前自写板块--%>
             <input  type="hidden" id="page_id" name="page_id" value="monitor_list">
 
@@ -198,10 +230,10 @@
             <%--datatable数据表--%>
             <div class="row" id="row_db">
                 <div class="col-md-12">
-                    <div class="portlet box blue">
+                    <div class="portlet box blue-hoki">
                         <div class="portlet-title">
                             <div class="caption">
-                                <i class="fa fa-comments"></i>违法数据列表
+                                <i class="fa fa-comments"></i>车辆数据监控表
                             </div>
                             <div class="tools">
                                 <a href="javascript:;" class="collapse">
@@ -217,7 +249,7 @@
 
                         <div class="portlet-body">
                             <div class="table-scrollable">
-                                <table class="table table-striped table-bordered table-hover datatable" id="monitor_list">
+                                <table class="table table-striped table-bordered table-hover datatable" id="sample_1">
                                     <thead>
                                     <tr>
                                         <th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#monitor_list .checkboxes" /></th>
@@ -242,24 +274,6 @@
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-md-12">
-
-                    <div id="current_attachment_name" name="current_attachment_name" value=""></div>
-                    <input type="hidden" id="current_attachment_object_id" name="current_attachment_object_id" value="">
-                    <form id="ajax_form" name="ajax_form" class="form-horizontal" method="post" enctype="multipart/form-data">
-                        第2种方式：【ajax方式上传文件】
-                        <div id="ajax_div" name="ajax_div">
-                            <div id="record_list_div" name="record_list_div"></div>
-                            <input type="file" id="upload_file" name="upload_file">
-                            <button type="button" id="upload_button" name="upload_button">局部刷新方式上传文件</button>
-                        </div>
-                    </form>
-                    <hr>
-
-                </div>
-
-            </div>
             <!-- END PAGE CONTENT-->
 
         </div>
@@ -286,4 +300,4 @@
 <%@include file="monitor_export_div.jsp"%>
 
 </html>
-
+<script src="../../assets/js/monitor.js" type="text/javascript"></script>

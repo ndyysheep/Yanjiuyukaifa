@@ -485,8 +485,16 @@ var Page = function() {
                 },"orderable": false
             },{
 				"mRender": function(data, type, full) {
-					sReturn = '<div><a href=\"javascript:Page.onModifyRecord('+full.id+')\">【修改记录】</a><a href=\"javascript:Page.onDeleteRecord('+full.id+')\">【删除记录】</a>';
-					sReturn+='<a href=\"javascript:Page.onViewRecord('+full.id+')\">【查看记录】</a></div>';
+
+					sReturn = '<a href=\"javascript:Page.onModifyRecord('+full.id+')\"'
+						+'class=\"btn default btn-xs red\"> <i class=\"fa fa-wrench\"></i>'
+						+'修改记录</a>';
+					sReturn += '<a href=\"javascript:Page.onDeleteRecord('+full.id+')\"'
+						+'class=\"btn default btn-xs black\"> <i class=\"fa fa-trash-o\"></i>'
+						+'删除记录</a>';
+					sReturn += '<a href=\"javascript:Page.onViewRecord('+full.id+')\"'
+						+"class=\"btn default btn-xs purple\"> <i class=\"fa fa-camera\"></i>"
+						+'查看记录</a>';
 					return sReturn;
 				},"orderable": false
 			}],
@@ -517,6 +525,10 @@ var Page = function() {
 		$('.datatable').on('change', 'tbody tr .checkboxes', function () {
 			$(this).parents('tr').toggleClass("active");
 		});
+
+		var tableWrapper = $('#sample_1_wrapper'); // datatable creates the table wrapper by adding with id {your_table_jd}_wrapper
+
+		tableWrapper.find('.dataTables_length select').select2(); // initialize select2 dropdown
 
 	}
 
@@ -665,6 +677,12 @@ var Page = function() {
 					var objectId = files[0].file_object_id;
 					$("#current_attachment_name").html("您当前上传的附件是：<span style='color:blue;'><a href='javascript:window.open(\""+fileUrl+"\")'>" + fileUrl + "</a></span>");
 					$("#current_attachment_object_id").val(objectId);
+
+					var html="";
+					html+="<video width=\"640\" height=\"360\" controls>";
+					html+="<source src='"+fileUrl+"' type=\"video/mp4\">"+"</video>"
+
+					$("#video_row").html(html);
 					console.log("[onAjaxUploadFile]fileUrl="+fileUrl);
 					console.log("[onAjaxUploadFile]objectId="+objectId);
 				}else{
