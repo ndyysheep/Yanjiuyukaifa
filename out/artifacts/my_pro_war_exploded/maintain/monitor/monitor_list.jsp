@@ -213,6 +213,7 @@
             <%--开始当前自写板块--%>
             <input  type="hidden" id="page_id" name="page_id" value="monitor_list">
 
+
             <div class="row">
                 <div class="col-md-12">
                     <button type="button" id="ac_add_button" name ="ac_add_button" class="btn default red-stripe">添加记录</button>

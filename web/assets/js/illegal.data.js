@@ -47,9 +47,7 @@ var Page = function() {
 	var columnsData=undefined;
 	var recordResult=undefined;
 	var chartData=[{
-		"year": 2009,
-		"income": 23.5,
-		"expenses": 18.1
+
 	}, {
 		"year": 2010,
 		"income": 26.2,
