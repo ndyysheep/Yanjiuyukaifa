@@ -2192,7 +2192,7 @@ License: You must have a valid license purchased only from themeforest(the above
 <script src="../../assets/admin/layout/scripts/quick-sidebar.js" type="text/javascript"></script>
 <script src="../../assets/admin/layout/scripts/demo.js" type="text/javascript"></script>
 <script src="../../assets/admin/pages/scripts/form-editable.js"></script>
-<script src="../../assets/js/device.js"></script>
+<script src="../../assets/js/monitor.js"></script>
 <script>
     jQuery(document).ready(function() {
 // initiate layout and plugins
