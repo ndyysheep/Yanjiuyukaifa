@@ -26,12 +26,7 @@
     <meta content="" name="author"/>
 
 
-    <link rel="stylesheet" type="text/css" href="../../assets/global/plugins/clockface/css/clockface.css"/>
-    <link rel="stylesheet" type="text/css" href="../../assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css"/>
-    <link rel="stylesheet" type="text/css" href="../../assets/global/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css"/>
-    <link rel="stylesheet" type="text/css" href="../../assets/global/plugins/bootstrap-colorpicker/css/colorpicker.css"/>
-    <link rel="stylesheet" type="text/css" href="../../assets/global/plugins/bootstrap-daterangepicker/daterangepicker-bs3.css"/>
-    <link rel="stylesheet" type="text/css" href="../../assets/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css"/>
+
 
     <%@include file="../../home/frame/frame_style.jsp"%>
 
@@ -233,7 +228,7 @@
 
                     <div class="col-md-2">
                         <div class="input-group">
-                            <input type="text" class="form-control timepicker timepicker-24"  id ="time_to_minute">
+                            <input type="text" class="form-control timepicker timepicker-24" id ="time_to_minute">
                             <span class="input-group-btn">
                             <button class="btn default" type="button"><i class="fa fa-clock-o"></i></button>
                         </span>

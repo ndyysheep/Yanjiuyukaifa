@@ -268,15 +268,13 @@ var Page = function() {
 				if(list!=undefined && list.length>0){
 					for(var i=0;i<list.length;i++){
 						var record=list[i];
-						$("#my_id").text(record.id);
-						$("#record_view  #DeviceId").text(record.DeviceId);
-						$("#record_view #Longitude").text(record.Longitude);
-						$("#record_view  #Latitude").text(record.Latitude);
-						$("#record_view  #Speed").text(record.Speed);
-						$("#record_view #Direction").text(record.Direction);
-						$("#record_view #Location").text(record.location);
-						$("#record_view #GPS_Time").text(record.GPSTime);
-						$("#record_view #Recv_Time").text(record.RecvTime);
+						$("small_title").text("车辆序号"+record.id);
+						$("#record_view_div_div  #car_code").text(record.car_code);
+						$("#record_view_div #vehicle_type").text(record.vehicle_type);
+						$("#record_view_div  #illegal_status").text(explainIllegalCode(record.illegal_status));
+						$("#record_view_div  #capture_time").text(record.capture_time);
+						$("#record_view_div #speed").text(record.speed);
+						$("#record_view_div #lane_name").text(record.lane_name);
 
 
 					}

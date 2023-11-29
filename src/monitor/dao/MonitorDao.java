@@ -18,7 +18,7 @@ import java.util.*;
 /**
  * @author CornerGjr
  */
-public class DeviceDao {
+public class MonitorDao {
 
     /*
      * 声明数据库名
@@ -84,27 +84,37 @@ public class DeviceDao {
      */
     private String useWhere(JSONObject param, String keyParam, String where,boolean isLike) throws JSONException {
         String subStr = where;
+        String keyCommand = " where ";
 
+        if(param.has(keyParam))
+        {
+            if (checkParamValid(param, keyParam)) {
+                if(isLike)
+                {
+                    if (!subStr.isEmpty())
+                    {
+                        subStr += " and " + keyParam + " like '%" + param.getString(keyParam) + "%'";
+                    }
+                    else
+                    {
+                        subStr = keyCommand + keyParam + " like '%" + param.getString(keyParam) + "%'";
+                    }
 
-
-        if (checkParamValid(param, keyParam)) {
-            if(isLike)
-            {
-                if (!subStr.isEmpty()) {
-                    subStr = subStr + " and " + keyParam + " like '%" + param.getString(keyParam) + "%'";
-                } else {
-                    subStr = keyParam + " like '%" + param.getString(keyParam) + "%'";
                 }
-            }
-            else
-            {
-                if (!subStr.isEmpty()) {
-                    subStr = subStr + " and " + keyParam + " = '" + param.getString(keyParam) + "'";
-                } else {
-                    subStr = keyParam + "='" + param.getString(keyParam) + "'";
+                else
+                {
+                    if (!subStr.isEmpty())
+                    {
+                        subStr   +=" and " + keyParam + " = '" + param.getString(keyParam) + "'";
+                    }
+                    else
+                    {
+                        subStr = keyCommand + keyParam + "='" + param.getString(keyParam) + "'";
+                    }
                 }
             }
         }
+
 
         return subStr;
     }
@@ -304,51 +314,7 @@ public class DeviceDao {
         /*--------------------返回数据 结束--------------------*/
     }
 
-    public void GPSRecord(Data data, JSONObject json) throws JSONException {
-        /*--------------------获取变量 开始--------------------*/
-        String resultMsg = "ok";
-        String timeFrom = (new SimpleDateFormat("yyyy-MM-dd 00:00:00")).format(new Date());
-        String timeTo = (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).format(new Date());
-        int resultCode = 0;
-        int GPS_count = 0;
-        List jsonList = new ArrayList();
-        /*--------------------获取变量 完毕--------------------*/
-        /*--------------------数据操作 开始--------------------*/
-        Db queryDb = new Db(dbName);
-        String sql = "select count(*) as total from " + relationName + " where gpsTime between '" + timeFrom + "' and '"
-                + timeTo + "'";
-        showDebug("[queryRecord]构造的SQL语句是：" + sql);
 
-        try {
-
-            ResultSet rs = queryDb.executeQuery(sql);
-            ResultSetMetaData rsmd = rs.getMetaData();
-            int fieldCount = rsmd.getColumnCount();
-
-            while (rs.next()) {
-                GPS_count = rs.getInt("total");
-            }
-
-            rs.close();
-
-        } catch (Exception e) {
-
-            e.printStackTrace();
-            showDebug("[queryRecord]查询数据库出现错误：" + sql);
-            resultCode = 10;
-            resultMsg = "查询数据库出现错误！" + e.getMessage();
-
-        }
-
-        queryDb.close();
-        /*--------------------数据操作 结束--------------------*/
-        /*--------------------返回数据 开始--------------------*/
-        json.put("gps_vehicle_number", GPS_count);
-        /* json.put("aaData", jsonList); */
-        json.put("result_msg", resultMsg); // 如果发生错误就设置成"error"等
-        json.put("result_code", resultCode); // 返回0表示正常，不等于0就表示有错误产生，错误代码
-        /*--------------------返回数据 结束--------------------*/
-    }
 
     public void toStatistics(Data data, JSONObject json) throws JSONException {
         /*--------------------获取变量 开始--------------------*/
@@ -442,8 +408,13 @@ public class DeviceDao {
         // showDebug(midSql);
 
         String sql = "select * from " + relationName;
+        String where="";
         sql += createJoinSql(relationName, "lane_data", "lane_id", "lane_id");
+        where=useWhere(param,"id",where,false);
 
+
+        showDebug("111"+"sql");
+        sql+=where;
         return sql;
 
     }
@@ -501,18 +472,18 @@ public class DeviceDao {
         return sql;
     }
 
-    public void getExportDeviceRecordToPDF(JSONObject json, Data data) {
+    public void getExportMonitorRecordToPDF(JSONObject json, Data data) {
 
     }
 
-    public void getExportDeviceRecordToExcel(JSONObject json, Data data) throws JSONException, IOException {
+    public void getExportMonitorRecordToExcel(JSONObject json, Data data) throws JSONException, IOException {
         json.put("download_url", "/upload/maintain/monitor/export_device.xls");
         json.put("file_path", "/upload/maintain/monitor/export_device.xls");
         MyExcel m = new MyExcel();
         m.exportData(data, json);
     }
 
-    public void getExportDeviceRecordToTxt(JSONObject json, Data data) throws JSONException {
+    public void getExportMonitorRecordToTxt(JSONObject json, Data data) throws JSONException {
         String jsonStr = json.toString();
         String jsonPath = "D:\\upload\\maintain\\monitor\\export_device.txt";
         File jsonFile = new File(jsonPath);
@@ -542,7 +513,7 @@ public class DeviceDao {
 
     }
 
-    public void getExportDeviceRecordToFile(JSONObject json, Data data) throws JSONException {
+    public void getExportMonitorRecordToFile(JSONObject json, Data data) throws JSONException {
 
     }
 

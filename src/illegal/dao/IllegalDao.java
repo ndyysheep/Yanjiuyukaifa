@@ -301,14 +301,15 @@ public class IllegalDao {
             timeTo =data.getParam().getString("time_to");
         }
 
+
         int resultCode = 0;
         List jsonList = new ArrayList();
         /*--------------------获取变量 完毕--------------------*/
         /*--------------------数据操作 开始--------------------*/
         Db queryDb = new Db(dbName);
-        String sql = "select DATE_FORMAT(GPSTime,\"%H\") as time_interval,count(*) as total from " + relationName;
-        sql += " where GPSTime between '" + timeFrom + "' and '" + timeTo + "'";
-        sql += " group by DATE_FORMAT(GPSTime,\"%H\")";
+        String sql = "select DATE_FORMAT(capture_time,\"%H\") as time_interval,count(*) as total from " + relationName;
+        sql += " where capture_time between '" + timeFrom + "' and '" + timeTo + "'";
+        sql += " group by DATE_FORMAT(capture_time,\"%H\")";
         showDebug("[toStatistics]构造的SQL语句是：" + sql);
 
         try {
