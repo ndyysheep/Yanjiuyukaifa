@@ -8,7 +8,7 @@ jQuery(document).ready(function() {
 	Metronic.init(); // init metronic core components
 	Layout.init(); // init current layout
 	Demo.init(); // init demo features
-	ComponentsPickers.init();
+	ComponentsPickers.init();//选择时间
 	Page.init();//页面初始化
 
 });
@@ -26,7 +26,6 @@ var Page = function() {
 		}
 		if(pageId==="monitor_file"){
 
-			alert("1");
 			//文件
 			initDeviceFile();
 		}
@@ -58,6 +57,7 @@ var Page = function() {
 	/*----------------------------------------业务函数  开始----------------------------------------*/
 	/*------------------------------针对各个页面的入口  开始------------------------------*/
 	var initMonitorList=function(){
+		onPageListener();
 		initMonitorListControlEvent();
 		initMonitorRecordList();
 		initDeviceFile();
@@ -90,113 +90,15 @@ var Page = function() {
 	}
 
 	var initMonitorStatistics = function(time_from,time_to){
-		//initDevicePrintControlEvent();
 		$.ajaxSettings.async=false;
 		initMonitorRecordForStatistics(time_from,time_to);
 		$.ajaxSettings.async=true;
 		initChartSets();
 	}
 
-	var initMonitorStatisticsControl = function(){
-		pageListener();
-		$("#time_submit_button").click(function(){onTimeLimitSubmit()})
-	}
-
-	var pageListener = function(){
-
-		//自定义变量,用于获取元素并改变元素的样式
-		var barContainer = document.getElementById("warning");
-		var beginContainer = document.getElementById("time_from");
-		var endContainer = document.getElementById("time_to");
-
-
-		//自定义变量,用于获取元素并监听
-		var beginListener = undefined;
-		var endListener =  undefined;
 
 
 
-		//监听开始年月日
-		$("#time_from").change(function(){
-			beginListener=$("#time_from").val();
-			console.log(beginListener);
-			if(endListener!==undefined)
-			{
-				if(beginListener>endListener)
-				{
-					barContainer.style.display="block";
-					beginContainer.style.borderColor="#a94442";
-				}
-				else
-				{
-					barContainer.style.display="none";
-					beginContainer.style.borderColor="#d6e9c6";
-				}
-			}
-		});
-
-		//监听结束年月日
-		$("#time_to").change(function(){
-			endListener=($("#time_to").val());
-			console.log(beginListener);
-			console.log(endListener);
-			console.log(beginListener>endListener);
-			if(beginListener!==undefined)
-			{
-				if(beginListener>endListener)
-				{
-					barContainer.style.display="block";
-					endContainer.style.borderColor="#a94442";
-				}
-				else
-				{
-					barContainer.style.display="none";
-					endContainer.style.borderColor="#d6e9c6";
-
-				}
-			}
-		});
-
-	}
-
-
-	var onTimeLimitSubmit = function(){
-
-		var forTimeCheck=[$("#time_from_minute").val(),$("#time_to_minute").val()];
-
-		for(var i=0;i<forTimeCheck.length;i++)
-		{
-			if(parseInt(forTimeCheck[i])<10)
-			{
-				forTimeCheck[i]="0"+forTimeCheck[i];
-			}
-		}
-
-		var time_from = $("#time_from").val()+" "+forTimeCheck[0];
-		var time_to = $("#time_to").val()+" "+forTimeCheck[1];
-
-		//自定义变量,用于获取元素并改变元素的样式
-		var barContainer = document.getElementById("warning");
-		var beginMinuteContainer = document.getElementById("time_from_minute");
-		var endMinuteContainer = document.getElementById("time_to_minute");
-
-		if(time_from>time_to)
-		{
-			barContainer.style.display="block";
-			beginMinuteContainer.style.borderColor="#a94442";
-			endMinuteContainer.style.borderColor="#a94442";
-		}
-		else
-		{
-			console.log(time_from);
-			barContainer.style.display="none";
-			beginMinuteContainer.style.borderColor="#d6e9c6";
-			endMinuteContainer.style.borderColor="#d6e9c6";
-			initMonitorStatistics(time_from,time_to);
-		}
-
-
-	}
 
 	/*------------------------------针对各个页面的入口 结束------------------------------*/
 	var getUrlParam=function(name){
@@ -221,7 +123,6 @@ var Page = function() {
 		$("#help_button").click(function() {help();});
 		$('#record_add_div #submit_button').click(function() {submitAddRecord();});
 	}
-
 	var initDeviceQueryControlEvent=function(){
 		$("#help_button").click(function() {help();});
 		$('#record_query_div #query_button').click(function() {myQuerySubmit();});
@@ -229,6 +130,10 @@ var Page = function() {
 	var initDeviceViewControlEvent=function(){
 		$("#help_button").click(function() {help();});
 		$('#return_button').click(function() {returnBack();});
+	}
+	var initMonitorStatisticsControl = function(){
+		pageListener();
+		$("#time_submit_button").click(function(){onTimeLimitSubmit()})
 	}
 
 
@@ -238,12 +143,9 @@ var Page = function() {
 		getDeviceRecordDatatable();
 
 	}
-
-
 	var initMonitorRecordForPrint=function(){
 		getMonitorRecordPrint();
 	}
-
 	var initMonitorRecordForPrint_Word=function(){
 		getMonitorRecordPrint_Word();
 	}
@@ -381,7 +283,62 @@ var Page = function() {
 
 
 	}
+	var pageListener = function(){
 
+		//自定义变量,用于获取元素并改变元素的样式
+		var barContainer = document.getElementById("warning");
+		var beginContainer = document.getElementById("time_from");
+		var endContainer = document.getElementById("time_to");
+
+
+		//自定义变量,用于获取元素并监听
+		var beginListener = undefined;
+		var endListener =  undefined;
+
+
+
+		//监听开始年月日
+		$("#time_from").change(function(){
+			beginListener=$("#time_from").val();
+			console.log(beginListener);
+			if(endListener!==undefined)
+			{
+				if(beginListener>endListener)
+				{
+					barContainer.style.display="block";
+					beginContainer.style.borderColor="#a94442";
+				}
+				else
+				{
+					barContainer.style.display="none";
+					beginContainer.style.borderColor="#d6e9c6";
+				}
+			}
+		});
+
+		//监听结束年月日
+		$("#time_to").change(function(){
+			endListener=($("#time_to").val());
+			console.log(beginListener);
+			console.log(endListener);
+			console.log(beginListener>endListener);
+			if(beginListener!==undefined)
+			{
+				if(beginListener>endListener)
+				{
+					barContainer.style.display="block";
+					endContainer.style.borderColor="#a94442";
+				}
+				else
+				{
+					barContainer.style.display="none";
+					endContainer.style.borderColor="#d6e9c6";
+
+				}
+			}
+		});
+
+	}
 	var initChartSets = function(){
 
 		var chart = AmCharts.makeChart("chart_1", {
@@ -503,6 +460,8 @@ var Page = function() {
 		$('.datatable').DataTable().destroy();
 
 		$('.datatable').dataTable( {
+
+
 			"paging":true,
 			"searching":false,
 			"oLanguage": {
@@ -533,37 +492,37 @@ var Page = function() {
 				"mRender": function(data, type, full) {
 					sReturn = '<div>'+full.id+'</div>';
 					return sReturn;
-				},"orderable": false
+				},"orderable": true
 			},{
 				"mRender": function(data, type, full) {
 					sReturn = '<div>'+full.car_code+'</div>';
 					return sReturn;
-				},"orderable": false
+				},"orderable": true
 			},{
 				"mRender": function(data, type, full) {
 					sReturn = '<div>'+full.vehicle_type+'</div>';
 					return sReturn;
-				},"orderable": false
+				},"orderable": true
 			},{
 				"mRender": function(data, type, full) {
 					sReturn = '<div>'+explainIllegalCode(full.illegal_status)+'</div>';
 					return sReturn;
-				},"orderable": false
+				},"orderable": true
 			},{
 				"mRender": function(data, type, full) {
 					sReturn = '<div>'+full.capture_time+'</div>';
 					return sReturn;
-				},"orderable": false
+				},"orderable": true
 			},{
 				"mRender": function(data, type, full) {
 					sReturn = '<div>'+full.speed+'</div>';
 					return sReturn;
-				},"orderable": false
+				},"orderable":true
 			},{
                 "mRender": function(data, type, full) {
                     sReturn = '<div>'+full.lane_name+'</div>';
                     return sReturn;
-                },"orderable": false
+                },"orderable":true
             },{
 				"mRender": function(data, type, full) {
 
@@ -579,6 +538,7 @@ var Page = function() {
 					return sReturn;
 				},"orderable": false
 			}],
+
 			"aLengthMenu": [[5,10,15,20,25,40,50],[5,10,15,20,25,40,50]],
 			"fnDrawCallback": function(){$(".checkboxes").uniform();$(".group-checkable").uniform();},
 			//"sAjaxSource": "get_record.jsp"
@@ -614,61 +574,37 @@ var Page = function() {
 	}
 
 
-	var getDeviceRecordBar = function(){
+	var onPageListener = function()
+	{
 
-		var data={};
-		data.action="get_device_record";
-		data.id=$("#record_query_setup #_id").val();
-		data.DeviceId=$("#record_query_setup #Device_Id").val();
-		data.Longitude=$("#record_query_setup #Longi_tude").val();
-		data.Latitude=$("#record_query_setup #Lati_tude").val();
-		data.Speed=$("#record_query_setup #Speed_").val();
-		data.Direction=$("#record_query_setup #Dir_").val();
-		data.location=$("#record_query_setup #Location").val();
-		$.post("../../monitor_file_servlet_action",data,function(json){
-			console.log(JSON.stringify(json));
-			if(json.result_code==0){
-				var list=json.aaData;
-				var html="";
-				if(list!=undefined && list.length>0){
-					for(var i=0;i<list.length;i++){
-						var record=list[i];
-						html=html+"<div class=\"media\">";
-						html=html+" <a href=\"javascript:;\" class=\"pull-left\">";
-						html=html+" <img alt=\"\" src=\"../../assets/admin/pages/media/blog/5.jpg\" class=\"media-object\">";
-						html=html+" </a>";
-						html=html+" <div class=\"media-body\">";
-						html=html+" <h4 class=\"media-heading\">Media heading <span>";
-						html=html+" 17 hours ago / <a href=\"javascript:;\">";
-						html=html+" Reply </a>";
-						html=html+" </span>";
-						html=html+" </h4>";
-						html=html+"<p>";
-						html=html+" id:"+record.id;
-						html=html+"设备ID:"+record.DeviceId;
-						html=html+"</br>GPS时间:"+record.GPSTime;
-						html=html+"</br>记录时间:"+record.RecvTime;
-						html=html+"</br>经度:"+record.Longitude;
-						html=html+"/<br>纬度:"+record.Latitude;
-						html=html+"</br>速度:"+record.Speed;
-						html=html+"</br>方向:"+record.Direction;
-						html=html+"</br>位置:"+record.location;
-						html=html+"</br>操作:<a href=\"javascript:Page.onModifyRecord("+record.id+")\">【修改记录】</a>"
-						html+="<a href=\"javascript:Page.onDeleteRecord("+record.id+")\">【删除记录】</a>";
-						html=html+"<br/><a href=\"javascript:Page.onViewRecord("+record.id+")\">【查看记录】</a>";
-						html=html+" </p>";
-						html=html+" </div>";
-						html=html+" </div>";
+		var inputListener = $(".form-group input");
+		var colorContainer=inputListener.css("borderColor");
+		inputListener.click(function(event){
 
+			var element = $(event.target);
+			element.keypress(function(leafEvent){
+				var value=leafEvent.key;
+				console.log(value.toString());
+				if(!checkInputValid(value))
+				{
 
-					}
+					element.css({
+						"border-color" : "#a94442"
+					})
+					alert("不允许输入特殊字符");
 				}
-				$("#record_bar_div").html(html);
-			}
+				else
+				{
+					element.css({
+						"border-color" : colorContainer
+					})
+				}
+
+			})
+
 		})
+
 	}
-
-
 
 	//get_record functions end
 
@@ -786,19 +722,31 @@ var Page = function() {
 		var data={};
 		data.action="add_device_record";
 
+		var check = false;
+		var checkCol = [];
 		data.car_code=$("#record_add_div #car_code").val();
 		data.vehicle_type=$("#record_add_div #vehicle_type").val();
 		data.illegal_status=explainIllegalCode_Contrary($("#record_add_div #illegal_status").val());
 		data.capture_time=$("#record_add_div #capture_time").val();
 		data.speed=$("#record_add_div #speed").val();
 		data.lane_name=$("#record_add_div #lane_name").val();
-		console.log(data);
-		$.post(url,data,function(json){
-			if(json.result_code==0){
-				alert("已经完成设备添加。");
-				window.location.reload();
-			}
-		});
+
+		if(checkValid($("#record_add_div")))
+		{
+			console.log(data);
+			$.post(url,data,function(json){
+				if(json.result_code===0){
+					alert("已经完成设备添加。");
+					window.location.reload();
+				}
+			});
+		}
+		else
+		{
+			alert("请按照合法格式输入内容!");
+		}
+
+
 	}
 	var myModifySubmit = function(){
 		if(confirm("您确定要修改该记录吗？")){
@@ -814,12 +762,22 @@ var Page = function() {
 			data.speed=$("#record_modify_div #speed").val();
 			data.lane_name=$("#record_modify_div #lane_name").val();
 
-			$.post(url,data,function(json){
-				if(json.result_code==0){
-					alert("已经完成设备修改。");
-					window.location.reload();
-				}
-			});
+
+			if(checkValid($("#record_modify_div")))
+			{
+				$.post(url,data,function(json){
+					if(json.result_code==0){
+						alert("已经完成设备修改。");
+						window.location.reload();
+					}
+				});
+			}
+			else
+			{
+				alert("请按照合法格式输入内容!");
+			}
+
+
 		}
 
 	}
@@ -836,9 +794,18 @@ var Page = function() {
 		data.speed=$("#record_query_div #speed").val();
 		data.lane_name=$("#record_query_div #lane_name").val();
 
-		$("#record_query_div").modal("hide");
+		if(checkValid($("#record_query_div")))
+		{
+			$("#record_query_div").modal("hide");
 
-		getDeviceRecordDatatable(data);
+			getDeviceRecordDatatable(data);
+		}
+		else
+		{
+			alert("请按照合法格式输入内容!");
+		}
+
+
 
 	}
 	var myExportAPI = function(){
@@ -855,7 +822,6 @@ var Page = function() {
 			}
 		});
 	}
-
 	var myPrintAPI = function(){
 		window.open("monitor_print_default.jsp");
 	}
@@ -866,6 +832,43 @@ var Page = function() {
 	var myStatisticsAPI = function() {
 
 		window.open("monitor_statistics.jsp");
+	}
+	var onTimeLimitSubmit = function(){
+
+		var forTimeCheck=[$("#time_from_minute").val(),$("#time_to_minute").val()];
+
+		for(var i=0;i<forTimeCheck.length;i++)
+		{
+			if(parseInt(forTimeCheck[i])<10)
+			{
+				forTimeCheck[i]="0"+forTimeCheck[i];
+			}
+		}
+
+		var time_from = $("#time_from").val()+" "+forTimeCheck[0];
+		var time_to = $("#time_to").val()+" "+forTimeCheck[1];
+
+		//自定义变量,用于获取元素并改变元素的样式
+		var barContainer = document.getElementById("warning");
+		var beginMinuteContainer = document.getElementById("time_from_minute");
+		var endMinuteContainer = document.getElementById("time_to_minute");
+
+		if(time_from>time_to)
+		{
+			barContainer.style.display="block";
+			beginMinuteContainer.style.borderColor="#a94442";
+			endMinuteContainer.style.borderColor="#a94442";
+		}
+		else
+		{
+			console.log(time_from);
+			barContainer.style.display="none";
+			beginMinuteContainer.style.borderColor="#d6e9c6";
+			endMinuteContainer.style.borderColor="#d6e9c6";
+			initMonitorStatistics(time_from,time_to);
+		}
+
+
 	}
 	//submit functions end
 
@@ -1042,6 +1045,44 @@ var Page = function() {
 
 		return false;
 	}
+
+	var checkInputValid = function(key)
+	{
+		var invalidKeys=['-','=','+','{','}','\'','/',',',
+			'\\','"',':',';','?','!','%','&','*','#','$','^','(',')']
+
+		for(var i = 0;i<invalidKeys.length;i++)
+		{
+			if(key===invalidKeys[i])
+			{
+				return false;
+			}
+		}
+
+		return true;
+
+	}
+
+	var checkValid = function(element)
+	{
+		var inputElements = element.find("input");
+		var check =  true;
+		var str = "";
+
+		inputElements.each(function(){
+
+			str = $(this).val();
+			for(var i = 0;i<str.length;i++)
+			{
+				var myCh = str[i];
+				check = checkInputValid(myCh);
+			}
+		})
+
+		return check;
+	}
+
+
 
 
 	//Page return 开始

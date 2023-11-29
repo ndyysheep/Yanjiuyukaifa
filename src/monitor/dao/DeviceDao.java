@@ -82,14 +82,27 @@ public class DeviceDao {
      * @return
      * @throws JSONException
      */
-    private String useWhere(JSONObject param, String keyParam, String where) throws JSONException {
+    private String useWhere(JSONObject param, String keyParam, String where,boolean isLike) throws JSONException {
         String subStr = where;
 
+
+
         if (checkParamValid(param, keyParam)) {
-            if (!subStr.isEmpty()) {
-                subStr = subStr + " and " + keyParam + " = '" + param.getString(keyParam) + "'";
-            } else {
-                subStr = keyParam + "='" + param.getString(keyParam) + "'";
+            if(isLike)
+            {
+                if (!subStr.isEmpty()) {
+                    subStr = subStr + " and " + keyParam + " like '%" + param.getString(keyParam) + "%'";
+                } else {
+                    subStr = keyParam + " like '%" + param.getString(keyParam) + "%'";
+                }
+            }
+            else
+            {
+                if (!subStr.isEmpty()) {
+                    subStr = subStr + " and " + keyParam + " = '" + param.getString(keyParam) + "'";
+                } else {
+                    subStr = keyParam + "='" + param.getString(keyParam) + "'";
+                }
             }
         }
 
@@ -443,8 +456,15 @@ public class DeviceDao {
     public String createGetQueryRecordSql(Data data) throws JSONException {
         JSONObject param = data.getParam();
 
+        boolean isJoin = false;
         String sql = "select * from " + relationName;
-        sql += createJoinSql(relationName, "lane_data", "lane_id", "lane_id");
+
+        if(data.getParam().has("lane_name"))
+        {
+            sql += createJoinSql(relationName, "lane_data", "lane_id", "lane_id");
+            isJoin = true;
+        }
+
         String where = "";
 
         if (checkParamValid(param, "id")) {
@@ -463,18 +483,10 @@ public class DeviceDao {
 
         }
 
-        where = useWhere(param, "car_code", where);
-        where = useWhere(param, "speed", where);
+        where = useWhere(param, "car_code", where,true);
+        where = useWhere(param, "speed", where,false);
+        where = useWhere(param, "lane_name", where,true);
 
-        if (checkParamValid(param, "location")) {
-
-            if (!where.isEmpty()) {
-                where = where + " and location like '%" + param.getString("location") + "%'";
-            } else {
-                where = "location like '%" + param.getString("location") + "%'";
-            }
-
-        }
 
         // 判断是否有条件
         if (!where.isEmpty()) {

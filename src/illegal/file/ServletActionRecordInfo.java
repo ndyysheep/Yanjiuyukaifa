@@ -57,8 +57,7 @@ public class ServletActionRecordInfo extends HttpServlet {
     }
 
     /*
-     * ========================================函数分流
-     * 开始========================================
+     * ========================================函数分流开始========================================
      */
     public void processAction(HttpServletRequest request, HttpServletResponse response)
             throws IOException, JSONException {
@@ -159,27 +158,12 @@ public class ServletActionRecordInfo extends HttpServlet {
 
             }
 
-            if (action.equals("get_GPS_record")) {
+            if (action.equals("illegal_statistics")) {
                 actionOk = true;
 
                 try {
 
-                    getGPSRecord(request, response, json);
-
-                } catch (Exception e) {
-
-                    e.printStackTrace();
-
-                }
-
-            }
-
-            if (action.equals("device_statistics")) {
-                actionOk = true;
-
-                try {
-
-                    statisticsGPSRecord(request, response, json);
+                    statisticsIllegalRecord(request, response, json);
 
                 } catch (Exception e) {
 
@@ -204,12 +188,12 @@ public class ServletActionRecordInfo extends HttpServlet {
 
             }
 
-            if (action.equals("device_print")) {
+            if (action.equals("illegal_data_print")) {
                 actionOk = true;
 
                 try {
 
-                    printDeviceRecord(request, response, json);
+                    printIllegalRecord(request, response, json);
 
                 } catch (Exception e) {
 
@@ -248,14 +232,10 @@ public class ServletActionRecordInfo extends HttpServlet {
 
     }
 
-    /*
-     * ========================================函数分流
-     * 结束========================================
-     */
-    /*
-     * ========================================公共函数
-     * 开始========================================
-     */
+    /*========================================函数分流结束========================================*/
+
+    /*========================================公共函数开始========================================*/
+
     private Data getPageParameters(HttpServletRequest request, HttpServletResponse response) throws JSONException {
         Data data = new Data();
         HttpSession session = request.getSession();
@@ -337,34 +317,18 @@ public class ServletActionRecordInfo extends HttpServlet {
         }
     }
 
-    /*
-     * ========================================公共函数
-     * 结束========================================
-     */
-    /*
-     * ========================================MySQL HTTP操作通用函数
-     * 开始========================================
-     */
+    /*========================================公共函数结束========================================*/
+
+    /*========================================MySQL HTTP操作通用函数开始========================================*/
     private void updateRecord(HttpServletRequest request, HttpServletResponse response, JSONObject json)
             throws JSONException, SQLException {
         MySQLDao dao = new MySQLDao();
         dao.updateRecord(data, json);
     }
+    /*========================================MySQL HTTP操作通用函数结束========================================*/
 
-    private void queryRecord(HttpServletRequest request, HttpServletResponse response, JSONObject json)
-            throws JSONException, SQLException {
-        MySQLDao dao = new MySQLDao();
-        dao.queryRecord(data, json);
-    }
+    /*========================================CRUD业务函数开始========================================*/
 
-    /*
-     * ========================================MySQL HTTP操作通用函数
-     * 结束========================================
-     */
-    /*
-     * ========================================CRUD业务函数
-     * 开始========================================
-     */
     private void getIllegalRecord(HttpServletRequest request, HttpServletResponse response, JSONObject json)
             throws JSONException, SQLException {
         IllegalDao dao = new IllegalDao();
@@ -389,13 +353,9 @@ public class ServletActionRecordInfo extends HttpServlet {
         dao.deleteIllegalRecord(data, json);
     }
 
-    private void getGPSRecord(HttpServletRequest request, HttpServletResponse response, JSONObject json)
-            throws JSONException, SQLException {
-        IllegalDao dao = new IllegalDao();
-        dao.GPSRecord(data, json);
-    }
 
-    private void statisticsGPSRecord(HttpServletRequest request, HttpServletResponse response, JSONObject json)
+
+    private void statisticsIllegalRecord(HttpServletRequest request, HttpServletResponse response, JSONObject json)
             throws JSONException, SQLException {
         IllegalDao dao = new IllegalDao();
         dao.toStatistics(data, json);
@@ -415,7 +375,7 @@ public class ServletActionRecordInfo extends HttpServlet {
 
     }
 
-    private void printDeviceRecord(HttpServletRequest request, HttpServletResponse response, JSONObject json)
+    private void printIllegalRecord(HttpServletRequest request, HttpServletResponse response, JSONObject json)
             throws JSONException, SQLException, IOException {
         IllegalDao dao = new IllegalDao();
         Data data = getPageParameters(request, response);
@@ -423,12 +383,10 @@ public class ServletActionRecordInfo extends HttpServlet {
     }
 
     /*
-     * ========================================CRUD业务函数
-     * 结束========================================
+     * ========================================CRUD业务函数结束========================================
      */
     /*
-     * ========================================上传文件函数
-     * 开始========================================
+     * ========================================上传文件函数开始========================================
      */
     private void uploadFile(HttpServletRequest request, HttpServletResponse response, JSONObject json)
             throws JSONException, SQLException {
@@ -561,7 +519,6 @@ public class ServletActionRecordInfo extends HttpServlet {
         dao.saveUploadFileRecord(json, data);
     }
     /*
-     * ========================================上传文件函数
-     * 结束========================================
+     * ========================================上传文件函数结束========================================
      */
 }
