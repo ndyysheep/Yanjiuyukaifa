@@ -8,6 +8,7 @@ jQuery(document).ready(function() {
 	Metronic.init(); // init metronic core components
 	Layout.init(); // init current layout
 	Demo.init(); // init demo features
+	ComponentsPickers.init();
 	Page.init();//页面初始化
 
 });
@@ -46,41 +47,14 @@ var Page = function() {
 
 		if(pageId==="monitor_statistics"){
 			//打印页面
+			initMonitorStatisticsControl();
 			initMonitorStatistics();
 		}
 	};
 	/*----------------------------------------入口函数  结束----------------------------------------*/
 	var columnsData=undefined;
 	var recordResult=undefined;
-	var chartData=[{
-		"year": 2009,
-		"income": 23.5,
-		"expenses": 18.1
-	}, {
-		"year": 2010,
-		"income": 26.2,
-		"expenses": 22.8
-	}, {
-		"year": 2011,
-		"income": 30.1,
-		"expenses": 23.9
-	}, {
-		"year": 2012,
-		"income": 29.5,
-		"expenses": 25.1
-	}, {
-		"year": 2013,
-		"income": 30.6,
-		"expenses": 27.2,
-		"dashLengthLine": 5
-	}, {
-		"year": 2014,
-		"income": 34.1,
-		"expenses": 29.9,
-		"dashLengthColumn": 5,
-		"alpha": 0.2,
-		"additional": "(projection)"
-	}];
+	var chartData=[];
 	/*----------------------------------------业务函数  开始----------------------------------------*/
 	/*------------------------------针对各个页面的入口  开始------------------------------*/
 	var initMonitorList=function(){
@@ -115,13 +89,115 @@ var Page = function() {
 		initMonitorRecordForPrint_Word();
 	}
 
-	var initMonitorStatistics = function(){
+	var initMonitorStatistics = function(time_from,time_to){
 		//initDevicePrintControlEvent();
 		$.ajaxSettings.async=false;
-		initMonitorRecordForStatistics();
+		initMonitorRecordForStatistics(time_from,time_to);
 		$.ajaxSettings.async=true;
 		initChartSets();
 	}
+
+	var initMonitorStatisticsControl = function(){
+		pageListener();
+		$("#time_submit_button").click(function(){onTimeLimitSubmit()})
+	}
+
+	var pageListener = function(){
+
+		//自定义变量,用于获取元素并改变元素的样式
+		var barContainer = document.getElementById("warning");
+		var beginContainer = document.getElementById("time_from");
+		var endContainer = document.getElementById("time_to");
+
+
+		//自定义变量,用于获取元素并监听
+		var beginListener = undefined;
+		var endListener =  undefined;
+
+
+
+		//监听开始年月日
+		$("#time_from").change(function(){
+			beginListener=$("#time_from").val();
+			console.log(beginListener);
+			if(endListener!==undefined)
+			{
+				if(beginListener>endListener)
+				{
+					barContainer.style.display="block";
+					beginContainer.style.borderColor="#a94442";
+				}
+				else
+				{
+					barContainer.style.display="none";
+					beginContainer.style.borderColor="#d6e9c6";
+				}
+			}
+		});
+
+		//监听结束年月日
+		$("#time_to").change(function(){
+			endListener=($("#time_to").val());
+			console.log(beginListener);
+			console.log(endListener);
+			console.log(beginListener>endListener);
+			if(beginListener!==undefined)
+			{
+				if(beginListener>endListener)
+				{
+					barContainer.style.display="block";
+					endContainer.style.borderColor="#a94442";
+				}
+				else
+				{
+					barContainer.style.display="none";
+					endContainer.style.borderColor="#d6e9c6";
+
+				}
+			}
+		});
+
+	}
+
+
+	var onTimeLimitSubmit = function(){
+
+		var forTimeCheck=[$("#time_from_minute").val(),$("#time_to_minute").val()];
+
+		for(var i=0;i<forTimeCheck.length;i++)
+		{
+			if(parseInt(forTimeCheck[i])<10)
+			{
+				forTimeCheck[i]="0"+forTimeCheck[i];
+			}
+		}
+
+		var time_from = $("#time_from").val()+" "+forTimeCheck[0];
+		var time_to = $("#time_to").val()+" "+forTimeCheck[1];
+
+		//自定义变量,用于获取元素并改变元素的样式
+		var barContainer = document.getElementById("warning");
+		var beginMinuteContainer = document.getElementById("time_from_minute");
+		var endMinuteContainer = document.getElementById("time_to_minute");
+
+		if(time_from>time_to)
+		{
+			barContainer.style.display="block";
+			beginMinuteContainer.style.borderColor="#a94442";
+			endMinuteContainer.style.borderColor="#a94442";
+		}
+		else
+		{
+			console.log(time_from);
+			barContainer.style.display="none";
+			beginMinuteContainer.style.borderColor="#d6e9c6";
+			endMinuteContainer.style.borderColor="#d6e9c6";
+			initMonitorStatistics(time_from,time_to);
+		}
+
+
+	}
+
 	/*------------------------------针对各个页面的入口 结束------------------------------*/
 	var getUrlParam=function(name){
 		//获取url中的参数
@@ -132,7 +208,6 @@ var Page = function() {
 
 	//init-device_list functions begin
 	var initMonitorListControlEvent=function(){
-		$("#help_button").click(function() {help();});
 		$('#ac_add_button').click(function() {onAddRecord(),initDeviceAdd();});
 		$('#ac_query_button').click(function() {onQueryRecord(),initDeviceQuery();});
 		$('#record_modify_div #submit_button').click(function() {myModifySubmit();});
@@ -275,10 +350,16 @@ var Page = function() {
 
 	}
 
-	var initMonitorRecordForStatistics =function(){
+	var initMonitorRecordForStatistics =function(time_from,time_to){
 		var url = "../../monitor_file_servlet_action";
 		var data={};
 		data.action="monitor_statistics";
+		if(time_from!=undefined&&time_to!=undefined)
+		{
+			data.time_from = time_from;
+			data.time_to=time_to;
+		}
+
 		$.post(url,data,function(json){
 			if(json.result_code==0){
 				console.log(JSON.stringify(json));
@@ -327,9 +408,9 @@ var Page = function() {
 				"balloonText": "<span style='font-size:13px;'>[[title]] in [[category]]:<b>[[value]]</b> [[additional]]</span>",
 				"dashLengthField": "dashLengthColumn",
 				"fillAlphas": 1,
-				"title": "Income",
+				"title": "legalCars",
 				"type": "column",
-				"valueField": "income"
+				"valueField": "legalCars"
 			}, {
 				"balloonText": "<span style='font-size:13px;'>[[title]] in [[category]]:<b>[[value]]</b> [[additional]]</span>",
 				"bullet": "round",
@@ -345,7 +426,7 @@ var Page = function() {
 				"title": "Expenses",
 				"valueField": "expenses"
 			}],
-			"categoryField": "year",
+			"categoryField": "hour",
 			"categoryAxis": {
 				"gridPosition": "start",
 				"axisAlpha": 0,
@@ -634,7 +715,7 @@ var Page = function() {
 		$("#record_modify_div").modal("show");
 	}
 	var onViewRecord = function(id){
-		window.location.href = "illegal_data_view.jsp?id="+id;
+		window.location.href = "monitor_view.jsp?id="+id;
 	}
 	//on-functions end
 
@@ -783,6 +864,7 @@ var Page = function() {
 
 	}
 	var myStatisticsAPI = function() {
+
 		window.open("monitor_statistics.jsp");
 	}
 	//submit functions end
@@ -795,7 +877,7 @@ var Page = function() {
 
 
 		for(var i=0;i<list.length;i++){
-			var json={"year":list[i].time_interval,"income":list[i].total,"expenses":list[i].total};
+			var json={"hour":list[i].time_interval,"legalCars":list[i].total,"expenses":list[i].total};
 			chartData.push(json);
 		}
 
@@ -906,6 +988,61 @@ var Page = function() {
 		}
 
 	}
+
+	var checkTime = function(type,time)
+	{
+		var collection = "";
+		var status = false;
+		if(type==="hour")
+		{
+			for(var i=0;i<24;i++)
+			{
+				if(i<10)
+				{
+					collection = "0"+i.toString();
+				}
+				else
+				{
+					collection = i.toString();
+				}
+
+				if(time===collection)
+				{
+					status = true;
+					return true;
+				}
+
+			}
+
+		}
+		else if (type==="minutes"||type==="seconds")
+		{
+			for(var i=0;i<60;i++)
+			{
+				if(i<10)
+				{
+					collection = "0"+i.toString();
+				}
+				else
+				{
+					collection = i.toString();
+				}
+
+				if(time===collection)
+				{
+					status = true;
+					return true;
+				}
+			}
+		}
+		else
+		{
+			console.log("error!");
+		}
+
+		return false;
+	}
+
 
 	//Page return 开始
 	return {

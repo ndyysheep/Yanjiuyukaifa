@@ -344,6 +344,14 @@ public class DeviceDao {
         cal.add(Calendar.DATE, -1);
         String timeFrom = (new SimpleDateFormat("yyyy-MM-dd 00:00:00")).format(cal.getTime());
         String timeTo = (new SimpleDateFormat("yyyy-MM-dd 23:59:59")).format(cal.getTime());
+
+        if(data.getParam().has("time_to")&&data.getParam().has("time_from"))
+        {
+            timeFrom = data.getParam().getString("time_from");
+             timeTo =data.getParam().getString("time_to");
+        }
+
+
         int resultCode = 0;
         List jsonList = new ArrayList();
         /*--------------------获取变量 完毕--------------------*/
