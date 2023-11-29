@@ -41,9 +41,8 @@
 <body lang=ZH-CN style='word-wrap:break-word;text-justify-trim:punctuation'>
 
 
-
 <div class=WordSection1 style='layout-grid:15.6pt'>
-    <input type="hidden" id="page_id" name="page_id" value="device_print_word">
+    <input type="hidden" id="page_id" name="page_id" value="illegal_data_print_word">
     <table class=MsoTable15Grid3Accent3 border=1 cellspacing=0 cellpadding=0
            style='border-collapse:collapse;border:none'>
         <tr style='height:28.05pt'>
@@ -51,7 +50,7 @@
   border-bottom:solid #C9C9C9 1.0pt;background:white;padding:0cm 5.4pt 0cm 5.4pt;
   height:28.05pt'>
                 <p class=MsoNormal align=center style='text-align:center'><b><i><span
-                        style='font-family:"微软雅黑",sans-serif;color:black'>设备列表</span></i></b></p>
+                        style='font-family:"微软雅黑",sans-serif;color:black'>车辆抓拍信息表</span></i></b></p>
             </td>
         </tr>
         <tr style='height:26.95pt' >
@@ -60,98 +59,93 @@
                 <p class=MsoNormal  align=center style='text-align:center'><i><span
                         lang=EN-US style='font-family:"微软雅黑",sans-serif;color:black'>id</span></i></p>
             </td>
+
+            <td width=106 valign=top style='width:79.4pt;border-top:none;border-left:
+  none;border-bottom:solid #C9C9C9 1.0pt;border-right:solid #C9C9C9 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>
+                <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US
+                                                                                style='font-family:"微软雅黑",sans-serif'>车牌</span><span style='font-family:
+  "微软雅黑",sans-serif'>号</span></p>
+            </td>
             <td width=63 valign=top style='width:47.05pt;border-top:none;border-left:
   none;border-bottom:solid #C9C9C9 1.0pt;border-right:solid #C9C9C9 1.0pt;
   padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>
                 <p class=MsoNormal align=center style='text-align:center'><span
-                        style='font-family:"微软雅黑",sans-serif'>设备<span lang=EN-US>ID</span></span></p>
+                        style='font-family:"微软雅黑",sans-serif'>车辆类型</span></p>
+            </td>
+            <td width=63 valign=top style='width:47.05pt;border-top:none;border-left:
+  none;border-bottom:solid #C9C9C9 1.0pt;border-right:solid #C9C9C9 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>
+                <p class=MsoNormal align=center style='text-align:center'><span
+                        style='font-family:"微软雅黑",sans-serif'>违法类型</span></p>
+            </td>
+            <td width=63 valign=top style='width:47.05pt;border-top:none;border-left:
+  none;border-bottom:solid #C9C9C9 1.0pt;border-right:solid #C9C9C9 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>
+                <p class=MsoNormal align=center style='text-align:center'><span
+                        style='font-family:"微软雅黑",sans-serif'>抓拍时间</span></p>
+            </td>
+            <td width=63 valign=top style='width:47.05pt;border-top:none;border-left:
+  none;border-bottom:solid #C9C9C9 1.0pt;border-right:solid #C9C9C9 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>
+                <p class=MsoNormal align=center style='text-align:center'><span
+                        style='font-family:"微软雅黑",sans-serif'>行驶速度</span></p>
+            </td>
+            <td width=63 valign=top style='width:47.4pt;border:none;background:white;
+  padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>
+                <p class=MsoNormal align=center style='text-align:center'><i><span
+                        style='font-family:"微软雅黑",sans-serif;color:black'>抓拍路段</span></i></p>
+            </td>
+        </tr>
+        <tbody class="row" id="print_list_for_word">
+        <tr style='height:26.95pt'>
+            <td width=63 valign=top style='width:46.95pt;border:none;border-right:solid #C9C9C9 1.0pt;
+  background:white;padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>
+                <p class=MsoNormal align=center style='text-align:center'><i><span
+                        lang=EN-US style='font-family:"微软雅黑",sans-serif'>&nbsp;</span></i></p>
+            </td>
+            <td width=63 valign=top style='width:47.05pt;border-top:none;border-left:
+  none;border-bottom:solid #C9C9C9 1.0pt;border-right:solid #C9C9C9 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>
+                <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US
+                                                                                style='font-family:"微软雅黑",sans-serif'>&nbsp;</span></p>
             </td>
             <td width=106 valign=top style='width:79.4pt;border-top:none;border-left:
   none;border-bottom:solid #C9C9C9 1.0pt;border-right:solid #C9C9C9 1.0pt;
   padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>
                 <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US
-                                                                                style='font-family:"微软雅黑",sans-serif'>GPS</span><span style='font-family:
-  "微软雅黑",sans-serif'>时间</span></p>
+                                                                                style='font-family:"微软雅黑",sans-serif'>&nbsp;</span></p>
             </td>
             <td width=63 valign=top style='width:47.05pt;border-top:none;border-left:
   none;border-bottom:solid #C9C9C9 1.0pt;border-right:solid #C9C9C9 1.0pt;
   padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>
-                <p class=MsoNormal align=center style='text-align:center'><span
-                        style='font-family:"微软雅黑",sans-serif'>经度</span></p>
+                <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US
+                                                                                style='font-family:"微软雅黑",sans-serif'>&nbsp;</span></p>
             </td>
             <td width=63 valign=top style='width:47.05pt;border-top:none;border-left:
   none;border-bottom:solid #C9C9C9 1.0pt;border-right:solid #C9C9C9 1.0pt;
   padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>
-                <p class=MsoNormal align=center style='text-align:center'><span
-                        style='font-family:"微软雅黑",sans-serif'>纬度</span></p>
+                <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US
+                                                                                style='font-family:"微软雅黑",sans-serif'>&nbsp;</span></p>
             </td>
             <td width=63 valign=top style='width:47.05pt;border-top:none;border-left:
   none;border-bottom:solid #C9C9C9 1.0pt;border-right:solid #C9C9C9 1.0pt;
   padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>
-                <p class=MsoNormal align=center style='text-align:center'><span
-                        style='font-family:"微软雅黑",sans-serif'>速度</span></p>
+                <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US
+                                                                                style='font-family:"微软雅黑",sans-serif'>&nbsp;</span></p>
             </td>
             <td width=63 valign=top style='width:47.05pt;border-top:none;border-left:
   none;border-bottom:solid #C9C9C9 1.0pt;border-right:solid #C9C9C9 1.0pt;
   padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>
-                <p class=MsoNormal align=center style='text-align:center'><span
-                        style='font-family:"微软雅黑",sans-serif'>方向</span></p>
+                <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US
+                                                                                style='font-family:"微软雅黑",sans-serif'>&nbsp;</span></p>
             </td>
             <td width=63 valign=top style='width:47.4pt;border:none;background:white;
   padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>
                 <p class=MsoNormal align=center style='text-align:center'><i><span
-                        style='font-family:"微软雅黑",sans-serif;color:black'>位置</span></i></p>
+                        lang=EN-US style='font-family:"微软雅黑",sans-serif'>&nbsp;</span></i></p>
             </td>
         </tr>
-        <tbody class="row" id="print_list_for_word">
-            <tr style='height:26.95pt'>
-                <td width=63 valign=top style='width:46.95pt;border:none;border-right:solid #C9C9C9 1.0pt;
-  background:white;padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>
-                    <p class=MsoNormal align=center style='text-align:center'><i><span
-                            lang=EN-US style='font-family:"微软雅黑",sans-serif'>&nbsp;</span></i></p>
-                </td>
-                <td width=63 valign=top style='width:47.05pt;border-top:none;border-left:
-  none;border-bottom:solid #C9C9C9 1.0pt;border-right:solid #C9C9C9 1.0pt;
-  padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>
-                    <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US
-                                                                                    style='font-family:"微软雅黑",sans-serif'>&nbsp;</span></p>
-                </td>
-                <td width=106 valign=top style='width:79.4pt;border-top:none;border-left:
-  none;border-bottom:solid #C9C9C9 1.0pt;border-right:solid #C9C9C9 1.0pt;
-  padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>
-                    <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US
-                                                                                    style='font-family:"微软雅黑",sans-serif'>&nbsp;</span></p>
-                </td>
-                <td width=63 valign=top style='width:47.05pt;border-top:none;border-left:
-  none;border-bottom:solid #C9C9C9 1.0pt;border-right:solid #C9C9C9 1.0pt;
-  padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>
-                    <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US
-                                                                                    style='font-family:"微软雅黑",sans-serif'>&nbsp;</span></p>
-                </td>
-                <td width=63 valign=top style='width:47.05pt;border-top:none;border-left:
-  none;border-bottom:solid #C9C9C9 1.0pt;border-right:solid #C9C9C9 1.0pt;
-  padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>
-                    <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US
-                                                                                    style='font-family:"微软雅黑",sans-serif'>&nbsp;</span></p>
-                </td>
-                <td width=63 valign=top style='width:47.05pt;border-top:none;border-left:
-  none;border-bottom:solid #C9C9C9 1.0pt;border-right:solid #C9C9C9 1.0pt;
-  padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>
-                    <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US
-                                                                                    style='font-family:"微软雅黑",sans-serif'>&nbsp;</span></p>
-                </td>
-                <td width=63 valign=top style='width:47.05pt;border-top:none;border-left:
-  none;border-bottom:solid #C9C9C9 1.0pt;border-right:solid #C9C9C9 1.0pt;
-  padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>
-                    <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US
-                                                                                    style='font-family:"微软雅黑",sans-serif'>&nbsp;</span></p>
-                </td>
-                <td width=63 valign=top style='width:47.4pt;border:none;background:white;
-  padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>
-                    <p class=MsoNormal align=center style='text-align:center'><i><span
-                            lang=EN-US style='font-family:"微软雅黑",sans-serif'>&nbsp;</span></i></p>
-                </td>
-            </tr>
         </tbody>
 
     </table>

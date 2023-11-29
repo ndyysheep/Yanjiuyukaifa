@@ -47,6 +47,15 @@
 		<servlet-name>illegal_data_servlet_action</servlet-name>
 		<url-pattern>/illegal_data_servlet_action</url-pattern>
 	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>illegal_file_servlet_action</servlet-name>
+		<servlet-class>illegal.file.ServletActionRecordInfo</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>illegal_file_servlet_action</servlet-name>
+		<url-pattern>/illegal_file_servlet_action</url-pattern>
+	</servlet-mapping>
 	
 	
   </web-app>

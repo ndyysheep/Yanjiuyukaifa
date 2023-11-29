@@ -148,6 +148,12 @@ public class IllegalDao {
         queryRecord(data, json);
     }
 
+    /**
+     * 查询用,构建Sql语句
+     * @param data json.data 字段信息
+     * @return 返回构建好的Sql
+     * @throws JSONException 抛出json类异常
+     */
     public String createGetQueryRecordSql(Data data) throws JSONException {
         JSONObject param = data.getParam();
 
@@ -274,52 +280,13 @@ public class IllegalDao {
         /*--------------------返回数据 结束--------------------*/
     }
 
-    public void GPSRecord(Data data, JSONObject json) throws JSONException {
-        /*--------------------获取变量 开始--------------------*/
-        String resultMsg = "ok";
-        String timeFrom = (new SimpleDateFormat("yyyy-MM-dd 00:00:00")).format(new Date());
-        String timeTo = (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).format(new Date());
-        int resultCode = 0;
-        int GPS_count = 0;
-        List jsonList = new ArrayList();
-        /*--------------------获取变量 完毕--------------------*/
-        /*--------------------数据操作 开始--------------------*/
-        Db queryDb = new Db(dbName);
-        String sql = "select count(*) as total from " + relationName + " where gpsTime between '" + timeFrom + "' and '"
-                + timeTo + "'";
-        showDebug("[queryRecord]构造的SQL语句是：" + sql);
 
-        try {
-
-            ResultSet rs = queryDb.executeQuery(sql);
-            ResultSetMetaData rsmd = rs.getMetaData();
-            int fieldCount = rsmd.getColumnCount();
-
-            while (rs.next()) {
-                GPS_count = rs.getInt("total");
-            }
-
-            rs.close();
-
-        } catch (Exception e) {
-
-            e.printStackTrace();
-            showDebug("[queryRecord]查询数据库出现错误：" + sql);
-            resultCode = 10;
-            resultMsg = "查询数据库出现错误！" + e.getMessage();
-
-        }
-
-        queryDb.close();
-        /*--------------------数据操作 结束--------------------*/
-        /*--------------------返回数据 开始--------------------*/
-        json.put("gps_vehicle_number", GPS_count);
-        /* json.put("aaData", jsonList); */
-        json.put("result_msg", resultMsg); // 如果发生错误就设置成"error"等
-        json.put("result_code", resultCode); // 返回0表示正常，不等于0就表示有错误产生，错误代码
-        /*--------------------返回数据 结束--------------------*/
-    }
-
+    /**
+     * 静态数据统计
+     * @param data data字段信息
+     * @param json json对象
+     * @throws JSONException 抛出json类异常
+     */
     public void toStatistics(Data data, JSONObject json) throws JSONException {
         /*--------------------获取变量 开始--------------------*/
         String resultMsg = "ok";
@@ -327,6 +294,13 @@ public class IllegalDao {
         cal.add(Calendar.DATE, -1);
         String timeFrom = (new SimpleDateFormat("yyyy-MM-dd 00:00:00")).format(cal.getTime());
         String timeTo = (new SimpleDateFormat("yyyy-MM-dd 23:59:59")).format(cal.getTime());
+
+        if(data.getParam().has("time_to")&&data.getParam().has("time_from"))
+        {
+            timeFrom = data.getParam().getString("time_from");
+            timeTo =data.getParam().getString("time_to");
+        }
+
         int resultCode = 0;
         List jsonList = new ArrayList();
         /*--------------------获取变量 完毕--------------------*/
@@ -396,6 +370,12 @@ public class IllegalDao {
         /*--------------------返回数据 结束--------------------*/
     }
 
+    /**
+     * 构建Sql语句函数
+     * @param data data字段信息
+     * @return 返回构建好的Sql语句
+     * @throws JSONException 抛出json类异常
+     */
     private String createGetRecordSql(Data data) throws JSONException {
         JSONObject param = data.getParam();
 

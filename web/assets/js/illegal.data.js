@@ -8,6 +8,7 @@ jQuery(document).ready(function() {
 	Metronic.init(); // init metronic core components
 	Layout.init(); // init current layout
 	Demo.init(); // init demo features
+	ComponentsPickers.init();//选择时间
 	Page.init();//页面初始化
 
 });
@@ -38,45 +39,14 @@ var Page = function() {
 			initIllegalDataPrint_Word();
 		}
 
-		if(pageId==="illegal_data_statistics"){
-			//打印页面
-			initIllegalDataStatistics();
-		}
 	};
 	/*----------------------------------------入口函数  结束----------------------------------------*/
-	var columnsData=undefined;
-	var recordResult=undefined;
-	var chartData=[{
 
-	}, {
-		"year": 2010,
-		"income": 26.2,
-		"expenses": 22.8
-	}, {
-		"year": 2011,
-		"income": 30.1,
-		"expenses": 23.9
-	}, {
-		"year": 2012,
-		"income": 29.5,
-		"expenses": 25.1
-	}, {
-		"year": 2013,
-		"income": 30.6,
-		"expenses": 27.2,
-		"dashLengthLine": 5
-	}, {
-		"year": 2014,
-		"income": 34.1,
-		"expenses": 29.9,
-		"dashLengthColumn": 5,
-		"alpha": 0.2,
-		"additional": "(projection)"
-	}];
 	/*----------------------------------------业务函数  开始----------------------------------------*/
 	/*------------------------------针对各个页面的入口  开始------------------------------*/
 	var initIllegalDataList=function(){
 
+		onPageListener();
 		initIllegalDataListControlEvent();
 		initIllegalDataRecordList();
 		initDeviceFile();
@@ -94,28 +64,51 @@ var Page = function() {
 	}
 
 	var initIllegalDataPrint = function(){
-		//initDevicePrintControlEvent();
 		initDeviceRecordForPrint();
 	}
 
 	var initIllegalDataPrint_Word = function(){
-		//initDevicePrintControlEvent();
-		initDeviceRecordForPrint_Word();
+		initIllegalRecordForPrint_Word();
 	}
 
-	var initIllegalDataStatistics = function(){
-		//initDevicePrintControlEvent();
-		$.ajaxSettings.async=false;
-		initDeviceRecordForStatistics();
-		$.ajaxSettings.async=true;
-		initChartSets();
-	}
 	/*------------------------------针对各个页面的入口 结束------------------------------*/
 	var getUrlParam=function(name){
 		//获取url中的参数
 		var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
 		var r = window.location.search.substr(1).match(reg);  //匹配目标参数
 		if (r != null) return decodeURI(r[2]); return null; //返回参数值，如果是中文传递，就用decodeURI解决乱码，否则用unescape
+	}
+
+	var onPageListener = function()
+	{
+
+		var inputListener = $(".form-group input");
+		var colorContainer=inputListener.css("borderColor");
+		inputListener.click(function(event){
+
+			var element = $(event.target);
+			element.keypress(function(leafEvent){
+				var value=leafEvent.key;
+				console.log(value.toString());
+				if(!checkInputValid(value))
+				{
+
+					element.css({
+						"border-color" : "#a94442"
+					})
+					alert("不允许输入特殊字符");
+				}
+				else
+				{
+					element.css({
+						"border-color" : colorContainer
+					})
+				}
+
+			})
+
+		})
+
 	}
 
 	//init-device_list functions begin
@@ -154,8 +147,8 @@ var Page = function() {
 		getDeviceRecordPrint();
 	}
 
-	var initDeviceRecordForPrint_Word=function(){
-		getDeviceRecordPrint_Word();
+	var initIllegalRecordForPrint_Word=function(){
+		getIllegalRecordPrint_Word();
 	}
 
 	var  getDeviceRecordPrint = function(){
@@ -174,15 +167,14 @@ var Page = function() {
 					for(var i=0;i<list.length;i++) {
 
 						var record=list[i];
-						myhtml+="<tr><td class=\"hidden-xs\">" +record.id+"</td>";
-						myhtml+="<td>" +record.DeviceId+" </td>"
-						myhtml+="<td>"+record.GPSTime +"</td>";
-						myhtml+="<td class=\"hidden-xs\">"+record.RecvTime +"</td> "
-						myhtml+="<td class=\"highlight\">"+record.Longitude+"</td>";
-						myhtml+="<td>"+record.Latitude+"</td>";
-						myhtml+="<td class=\"highlight\">"+parseInt(record.Speed)+ "</td>";
-						myhtml+="<td class=\"highlight\">"+record.Direction+"</td>";
-						myhtml+="<td>"+ record.location+"</td> </tr>";
+						myhtml+="<tr><td class=\"highlight\">" +record.id+"</td>";
+						myhtml+="<td>" +record.car_code+" </td>"
+						myhtml+="<td>"+record.vehicle_type +"</td>";
+						myhtml+="<td class=\"highlight\">"+explainIllegalCode(record.illegal_status) +"</td> "
+						myhtml+="<td class=\"highlight\">"+record.capture_time+"</td>";
+						myhtml+="<td>"+record.speed+"</td>";
+						myhtml+="<td class=\"highlight\">"+record.lane_name+ "</td>";
+						myhtml+="</tr>";
 					}
 				}
 			}
@@ -192,7 +184,7 @@ var Page = function() {
 
 	}
 
-	var  getDeviceRecordPrint_Word = function(){
+	var  getIllegalRecordPrint_Word = function(){
 		var url = "../../illegal_file_servlet_action";
 		var data={};
 		data.action="illegal_data_print";
@@ -218,42 +210,37 @@ var Page = function() {
 						html=html+" none;border-bottom:solid #C9C9C9 1.0pt;border-right:solid #C9C9C9 1.0pt;";
 						html=html+" padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>";
 						html=html+" <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US";
-						html=html+" style='font-family:\"微软雅黑\",sans-serif'>"+record.DeviceId+"</span></p>";
+						html=html+" style='font-family:\"微软雅黑\",sans-serif'>"+record.car_code+"</span></p>";
 						html=html+" </td>";
 						html=html+" <td width=106 valign=top style='width:79.4pt;border-top:none;border-left:";
 						html=html+"  none;border-bottom:solid #C9C9C9 1.0pt;border-right:solid #C9C9C9 1.0pt;";
 						html=html+"  padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>";
 						html=html+" <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US";
-						html=html+" style='font-family:\"微软雅黑\",sans-serif'>"+record.GPSTime+"</span></p>";
+						html=html+" style='font-family:\"微软雅黑\",sans-serif'>"+record.vehicle_type+"</span></p>";
 						html=html+" </td>";
 						html=html+" <td width=63 valign=top style='width:47.05pt;border-top:none;border-left:";
 						html=html+"  none;border-bottom:solid #C9C9C9 1.0pt;border-right:solid #C9C9C9 1.0pt;";
 						html=html+"  padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>";
 						html=html+" <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US";
-						html=html+" style='font-family:\"微软雅黑\",sans-serif'>"+record.Longitude+"</span></p>";
+						html=html+" style='font-family:\"微软雅黑\",sans-serif'>"+explainIllegalCode(record.illegal_status)+"</span></p>";
 						html=html+" </td>";
 						html=html+" <td width=63 valign=top style='width:47.05pt;border-top:none;border-left:";
 						html=html+" none;border-bottom:solid #C9C9C9 1.0pt;border-right:solid #C9C9C9 1.0pt;";
 						html=html+" padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>";
 						html=html+" <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US";
-						html=html+" style='font-family:\"微软雅黑\",sans-serif'>"+record.Latitude+"</span></p>";
+						html=html+" style='font-family:\"微软雅黑\",sans-serif'>"+record.capture_time+"</span></p>";
 						html=html+" </td>";
 						html=html+" <td width=63 valign=top style='width:47.05pt;border-top:none;border-left:";
 						html=html+"  none;border-bottom:solid #C9C9C9 1.0pt;border-right:solid #C9C9C9 1.0pt;";
 						html=html+"  padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>";
 						html=html+" <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US";
-						html=html+" style='font-family:\"微软雅黑\",sans-serif'>"+parseInt(record.Speed)+"</span></p>";
+						html=html+" style='font-family:\"微软雅黑\",sans-serif'>"+record.speed+"</span></p>";
 						html=html+" </td>";
 						html=html+" <td width=63 valign=top style='width:47.05pt;border-top:none;border-left:";
 						html=html+"  none;border-bottom:solid #C9C9C9 1.0pt;border-right:solid #C9C9C9 1.0pt;";
 						html=html+"  padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>";
 						html=html+" <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US";
-						html=html+" style='font-family:\"微软雅黑\",sans-serif'>"+record.Direction+"</span></p>";
-						html=html+" </td>";
-						html=html+" <td width=63 valign=top style='width:47.4pt;border:none;background:white;";
-						html=html+"  padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>";
-						html=html+" <p class=MsoNormal align=center style='text-align:center'><i><span";
-						html=html+" lang=EN-US style='font-family:\"微软雅黑\",sans-serif'>"+record.location+"</span></i></p>";
+						html=html+" style='font-family:\"微软雅黑\",sans-serif'>"+record.lane_name+"</span></p>";
 						html=html+" </td>";
 						html=html+" </tr>";
 
@@ -266,89 +253,7 @@ var Page = function() {
 
 	}
 
-	var initDeviceRecordForStatistics =function(){
-		var url = "../../illegal_file_servlet_action";
-		var data={};
-		data.action="illegal_data_statistics";
-		$.post(url,data,function(json){
-			if(json.result_code==0){
-				console.log(JSON.stringify(json));
 
-				var list = json.aaData;
-				if(list!=undefined&&list.length>0){
-					changeResultDataToChart(list,chartData);
-
-					console.log(JSON.stringify(chartData));
-
-				}
-
-
-			}else{
-				alert("与后端交互错误!"+json.result_Msg);
-			}
-
-		});
-
-
-	}
-
-	var initChartSets = function(){
-
-		var chart = AmCharts.makeChart("chart_1", {
-			"type": "serial",
-			"theme": "light",
-			"pathToImages": Metronic.getGlobalPluginsPath() + "amcharts/amcharts/images/",
-			"autoMargins": false,
-			"marginLeft": 30,
-			"marginRight": 8,
-			"marginTop": 10,
-			"marginBottom": 26,
-
-			"fontFamily": 'Open Sans',
-			"color":    '#888',
-
-			"dataProvider": chartData,
-			"valueAxes": [{
-				"axisAlpha": 0,
-				"position": "left"
-			}],
-			"startDuration": 1,
-			"graphs": [{
-				"alphaField": "alpha",
-				"balloonText": "<span style='font-size:13px;'>[[title]] in [[category]]:<b>[[value]]</b> [[additional]]</span>",
-				"dashLengthField": "dashLengthColumn",
-				"fillAlphas": 1,
-				"title": "Income",
-				"type": "column",
-				"valueField": "income"
-			}, {
-				"balloonText": "<span style='font-size:13px;'>[[title]] in [[category]]:<b>[[value]]</b> [[additional]]</span>",
-				"bullet": "round",
-				"dashLengthField": "dashLengthLine",
-				"lineThickness": 3,
-				"bulletSize": 7,
-				"bulletBorderAlpha": 1,
-				"bulletColor": "#FFFFFF",
-				"useLineColorForBulletBorder": true,
-				"bulletBorderThickness": 3,
-				"fillAlphas": 0,
-				"lineAlpha": 1,
-				"title": "Expenses",
-				"valueField": "expenses"
-			}],
-			"categoryField": "year",
-			"categoryAxis": {
-				"gridPosition": "start",
-				"axisAlpha": 0,
-				"tickLength": 0
-			}
-		});
-
-		$('#chart_1').closest('.portlet').find('.fullscreen').click(function() {
-			chart.invalidateSize();
-		});
-
-	}
 
 	var initDeviceRecordView=function(){
 		var id=getUrlParam("id");
@@ -427,39 +332,39 @@ var Page = function() {
 				"mRender": function(data, type, full) {
 					sReturn = '<div>'+full.id+'</div>';
 					return sReturn;
-				},"orderable": false
+				},"orderable": true
 			},{
 				"mRender": function(data, type, full) {
 					sReturn = '<div>'+full.car_code+'</div>';
 					return sReturn;
-				},"orderable": false
+				},"orderable": true
 			},{
 				"mRender": function(data, type, full) {
 					sReturn = '<div>'+full.vehicle_type+'</div>';
 					return sReturn;
-				},"orderable": false
+				},"orderable": true
 			},{
 				"mRender": function(data, type, full) {
 					sReturn = '<div>'+explainIllegalCode(full.illegal_status)+'</div>';
 					return sReturn;
-				},"orderable": false
+				},"orderable": true
 			},{
 				"mRender": function(data, type, full) {
 					sReturn = '<div>'+full.capture_time+'</div>';
 					return sReturn;
-				},"orderable": false
+				},"orderable": true
 			},{
 				"mRender": function(data, type, full) {
 					var speed=speedAnalysis(full.start_lines_x1,full.start_lines_y1
 						,full.end_lines_x2,full.end_lines_y2,full.time_start,full.time_end)
 					sReturn = '<div>'+speed+'</div>';
 					return sReturn;
-				},"orderable": false
+				},"orderable": true
 			},{
                 "mRender": function(data, type, full) {
                     sReturn = '<div>'+full.lane_name+'</div>';
                     return sReturn;
-                },"orderable": false
+                },"orderable": true
             },{
 				"mRender": function(data, type, full) {
 
@@ -467,7 +372,7 @@ var Page = function() {
 						+ "class=\"btn default btn-xs blue\"" +' target=\"_blank\">'
 						+"<i class=\"fa fa-share\"></i>"+'查看</a>'+'</div>';
 					return sReturn;
-				},"orderable": false
+				},"orderable": true
 			},{
 				"mRender": function(data, type, full) {
 
@@ -587,8 +492,6 @@ var Page = function() {
 
 
 	//submit functions begin
-
-
 	var myQuerySubmit = function(){
 
 		var url = "../../illegal_data_servlet_action";
@@ -602,7 +505,17 @@ var Page = function() {
 		data.speed=$("#illegal_record_query_div #speed").val();
 		data.lane_name=$("#illegal_record_query_div #lane_name").val();
 
-		getDeviceRecordDatatable(data);
+		if(checkValid($("#illegal_record_query_div")))
+		{
+			$("#record_query_div").modal("hide");
+
+			getDeviceRecordDatatable(data);
+		}
+		else
+		{
+			alert("请按照合法格式输入内容!");
+		}
+
 	}
 	var myExportAPI = function(){
 		var url = "../../illegal_file_servlet_action";
@@ -618,7 +531,6 @@ var Page = function() {
 			}
 		});
 	}
-
 	var myPrintAPI = function(){
 		window.open("illegal_data_print_default.jsp");
 	}
@@ -635,16 +547,7 @@ var Page = function() {
 		history.go(-1);
 	}
 
-	var changeResultDataToChart =function(list, chartData){
-
-
-		for(var i=0;i<list.length;i++){
-			var json={"year":list[i].time_interval,"income":list[i].total,"expenses":list[i].total};
-			chartData.push(json);
-		}
-
-	}
-
+	//数据解析模块
 	var explainIllegalCode = function(code)
 	{
 		if(code == 1)
@@ -750,6 +653,46 @@ var Page = function() {
 		}
 
 	}
+
+
+	var checkInputValid = function(key)
+	{
+		var invalidKeys=['-','=','+','{','}','\'','/',',',
+			'\\','"',':',';','?','!','%','&','*','#','$','^','(',')']
+
+		for(var i = 0;i<invalidKeys.length;i++)
+		{
+			if(key===invalidKeys[i])
+			{
+				return false;
+			}
+		}
+
+		return true;
+
+	}
+
+	var checkValid = function(element)
+	{
+		var inputElements = element.find("input");
+		var check =  true;
+		var str = "";
+
+		inputElements.each(function(){
+
+			str = $(this).val();
+			for(var i = 0;i<str.length;i++)
+			{
+				var myCh = str[i];
+				check = checkInputValid(myCh);
+			}
+		})
+
+		return check;
+	}
+
+
+	//数据解析模块 结束
 
 	//Page return 开始
 	return {
