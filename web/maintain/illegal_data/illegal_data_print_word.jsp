@@ -160,7 +160,7 @@
 
 </div>
 <%@include file="../../home/frame/frame_javascript.jsp"%>
-<script src="../../assets/js/device.js" type="text/javascript"></script>
+<script src="../../assets/js/illegal.data.js" type="text/javascript"></script>
 </body>
 
 </html>
