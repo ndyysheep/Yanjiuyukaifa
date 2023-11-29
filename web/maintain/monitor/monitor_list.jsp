@@ -161,15 +161,15 @@
             <div class="page-bar">
                 <ul class="page-breadcrumb breadcrumb">
                     <li>
-                        <a href="index.html">Home</a>
+                        <a href="../monitor/monitor_list.jsp">Home</a>
                         <i class="fa fa-circle"></i>
                     </li>
                     <li>
-                        <a href="#">Page Layouts</a>
+                        <a href="../monitor/monitor_list.jsp">车辆监测数据</a>
                         <i class="fa fa-circle"></i>
                     </li>
                     <li>
-                        <a href="#">Sidebar Fixed Page</a>
+                        <a href="../monitor/monitor_list.jsp">车辆数据监控</a>
                     </li>
                 </ul>
             </div>

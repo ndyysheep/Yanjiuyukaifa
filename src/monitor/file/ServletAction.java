@@ -6,7 +6,7 @@ package monitor.file;
  */
 
 import monitor.dao.Data;
-import monitor.dao.DeviceDao;
+import monitor.dao.MonitorDao;
 import monitor.dao.MySQLDao;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
@@ -84,12 +84,12 @@ public class ServletAction extends HttpServlet {
             json.put("result_msg", "ok");
 
             // 这几个常规增删改查功能
-            if (action.equals("get_device_record")) {
+            if (action.equals("get_monitor_record")) {
                 actionOk = true;
 
                 try {
 
-                    getDeviceRecord(request, response, json);
+                    getMonitorRecord(request, response, json);
 
                 } catch (Exception e) {
 
@@ -99,11 +99,11 @@ public class ServletAction extends HttpServlet {
 
             }
 
-            if (action.equals("add_device_record")) {
+            if (action.equals("add_monitor_record")) {
                 actionOk = true;
                 try {
 
-                    addDeviceRecord(request, response, json);
+                    addMonitorRecord(request, response, json);
 
                 } catch (JSONException e) {
 
@@ -117,11 +117,11 @@ public class ServletAction extends HttpServlet {
 
             }
 
-            if (action.equals("modify_device_record")) {
+            if (action.equals("modify_monitor_record")) {
                 actionOk = true;
                 try {
 
-                    modifyDeviceRecord(request, response, json);
+                    modifyMonitorRecord(request, response, json);
 
                 } catch (Exception e) {
 
@@ -130,11 +130,11 @@ public class ServletAction extends HttpServlet {
                 }
 
             }
-            if (action.equals("delete_device_record")) {
+            if (action.equals("delete_monitor_record")) {
                 actionOk = true;
                 try {
 
-                    deleteDeviceRecord(request, response, json);
+                    deleteMonitorRecord(request, response, json);
 
                 } catch (Exception e) {
 
@@ -178,7 +178,7 @@ public class ServletAction extends HttpServlet {
 
                 try {
 
-                    modifyDeviceRecordForView(request, response, json);
+                    modifyMonitorRecordForView(request, response, json);
 
                 } catch (Exception e) {
 
@@ -188,20 +188,6 @@ public class ServletAction extends HttpServlet {
 
             }
 
-            if (action.equals("get_GPS_record")) {
-                actionOk = true;
-
-                try {
-
-                    getGPSRecord(request, response, json);
-
-                } catch (Exception e) {
-
-                    e.printStackTrace();
-
-                }
-
-            }
 
             if (action.equals("monitor_statistics")) {
                 actionOk = true;
@@ -223,7 +209,7 @@ public class ServletAction extends HttpServlet {
 
                 try {
 
-                    exportDeviceRecord(request, response, json);
+                    exportMonitorRecord(request, response, json);
 
                 } catch (Exception e) {
 
@@ -394,72 +380,68 @@ public class ServletAction extends HttpServlet {
      * ========================================CRUD业务函数
      * 开始========================================
      */
-    private void getDeviceRecord(HttpServletRequest request, HttpServletResponse response, JSONObject json)
+    private void getMonitorRecord(HttpServletRequest request, HttpServletResponse response, JSONObject json)
             throws JSONException, SQLException {
-        DeviceDao dao = new DeviceDao();
+        MonitorDao dao = new MonitorDao();
         dao.getMonitorRecord(data, json);
     }
 
     private void getQueryRecord(HttpServletRequest request, HttpServletResponse response, JSONObject json)
             throws JSONException, SQLException {
-        DeviceDao dao = new DeviceDao();
+        MonitorDao dao = new MonitorDao();
         dao.getQueryRecord(data, json);
     }
 
-    private void modifyDeviceRecord(HttpServletRequest request, HttpServletResponse response, JSONObject json)
+    private void modifyMonitorRecord(HttpServletRequest request, HttpServletResponse response, JSONObject json)
             throws JSONException, SQLException {
-        DeviceDao dao = new DeviceDao();
+        MonitorDao dao = new MonitorDao();
         dao.modifyDeviceRecord(data, json);
     }
 
-    private void modifyDeviceRecordForView(HttpServletRequest request, HttpServletResponse response, JSONObject json)
+    private void modifyMonitorRecordForView(HttpServletRequest request, HttpServletResponse response, JSONObject json)
             throws JSONException, SQLException {
-        DeviceDao dao = new DeviceDao();
+        MonitorDao dao = new MonitorDao();
         dao.modifyDeviceRecordForView(data, json);
     }
 
-    private void deleteDeviceRecord(HttpServletRequest request, HttpServletResponse response, JSONObject json)
+    private void deleteMonitorRecord(HttpServletRequest request, HttpServletResponse response, JSONObject json)
             throws JSONException, SQLException {
-        DeviceDao dao = new DeviceDao();
+        MonitorDao dao = new MonitorDao();
         dao.deleteDeviceRecord(data, json);
     }
 
-    private void addDeviceRecord(HttpServletRequest request, HttpServletResponse response, JSONObject json)
+    private void addMonitorRecord(HttpServletRequest request, HttpServletResponse response, JSONObject json)
             throws JSONException, SQLException {
-        DeviceDao dao = new DeviceDao();
+        MonitorDao dao = new MonitorDao();
         dao.addDeviceRecord(data, json);
     }
 
-    private void getGPSRecord(HttpServletRequest request, HttpServletResponse response, JSONObject json)
-            throws JSONException, SQLException {
-        DeviceDao dao = new DeviceDao();
-        dao.GPSRecord(data, json);
-    }
 
     private void statisticsGPSRecord(HttpServletRequest request, HttpServletResponse response, JSONObject json)
             throws JSONException, SQLException {
-        DeviceDao dao = new DeviceDao();
+        MonitorDao dao = new MonitorDao();
         dao.toStatistics(data, json);
     }
 
-    private void exportDeviceRecord(HttpServletRequest request, HttpServletResponse response, JSONObject json)
+    private void exportMonitorRecord(HttpServletRequest request, HttpServletResponse response, JSONObject json)
             throws JSONException, SQLException, IOException {
-        DeviceDao dao = new DeviceDao();
+        MonitorDao dao = new MonitorDao();
         Data data = getPageParameters(request, response);
         // 获取设备信息
         dao.getMonitorRecord(data, json);
 
         // 下载操作
-        dao.getExportDeviceRecordToFile(json, data);
-        dao.getExportDeviceRecordToTxt(json, data);
-        dao.getExportDeviceRecordToExcel(json, data);
-        dao.getExportDeviceRecordToPDF(json, data);
+        dao.getExportMonitorRecordToFile(json, data);
+        dao.getExportMonitorRecordToTxt(json, data);
+        dao.getExportMonitorRecordToExcel(json, data);
+        dao.getExportMonitorRecordToPDF(json, data);
+
 
     }
 
     private void printMonitorRecord(HttpServletRequest request, HttpServletResponse response, JSONObject json)
             throws JSONException, SQLException, IOException {
-        DeviceDao dao = new DeviceDao();
+        MonitorDao dao = new MonitorDao();
         Data data = getPageParameters(request, response);
         dao.getMonitorRecord(data, json);
     }
@@ -599,7 +581,7 @@ public class ServletAction extends HttpServlet {
     private void saveFileAttachmentRecord(Data data, JSONObject json) throws JSONException, SQLException {
         // 这部分需要自己写
         showDebug("[saveFileRecord]收完文件后，传递出来的json是：" + json.toString());
-        DeviceDao dao = new DeviceDao();
+        MonitorDao dao = new MonitorDao();
         dao.saveUploadFileRecord(json, data);
     }
     /*

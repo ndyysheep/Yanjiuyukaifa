@@ -47,11 +47,28 @@
 
                             <div class="form-group">
                                 <label class="col-md-3 control-label">抓拍时间：</label>
-                                <div class="col-md-9">
-                                    <input type="text" class="form-control" id="capture_time" name="capture_time" placeholder="Enter text">
-                                    <span class="help-block">
-											A block of help text. </span>
+                                <div class="col-md-5">
+                                    <div class="input-group input-medium date date-picker" data-date="2023-01-01" data-date-format="yyyy-mm-dd" data-date-viewmode="years">
+                                        <input type="text" class="form-control" readOnly="" id="capture_time">
+                                        <span class="input-group-btn">
+                                                <button class="btn default" type="button">
+                                                    <i class="fa fa-calendar"></i>
+                                                </button>
+                                            </span>
+                                    </div>
+                                    <!-- /input-group -->
+                                    <span class="help-block" id="endHelper">选择抓拍日期</span>
                                 </div>
+
+                                <div class="col-md-4">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control timepicker timepicker-24" id ="capture_time_sec">
+                                        <span class="input-group-btn">
+                                                <button class="btn default" type="button"><i class="fa fa-clock-o"></i></button>
+                                            </span>
+                                    </div>
+                                </div>
+
                             </div>
 
                             <div class="form-group">

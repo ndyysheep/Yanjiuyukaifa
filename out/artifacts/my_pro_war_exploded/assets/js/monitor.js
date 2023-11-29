@@ -30,11 +30,6 @@ var Page = function() {
 			initDeviceFile();
 		}
 
-		if(pageId==="device_view"){
-			//详情页
-			initDeviceView();
-		}
-
 		if(pageId==="monitor_print"){
 			//打印页面
 			initMonitorPrint();
@@ -62,8 +57,8 @@ var Page = function() {
 		initMonitorRecordList();
 		initDeviceFile();
 	}
-	var initDeviceAdd=function(){
-		initDeviceAddControlEvent();
+	var initMonitorAdd=function(){
+		initMonitorAddControlEvent();
 	}
 
 	var initDeviceQuery=function(){
@@ -75,10 +70,6 @@ var Page = function() {
 		initDeviceFileControlEvent();
 	}
 
-	var initDeviceView = function(){
-		initDeviceViewControlEvent();
-		initDeviceRecordView();
-	}
 
 	var initMonitorPrint = function(){
 		initMonitorRecordForPrint();
@@ -110,7 +101,7 @@ var Page = function() {
 
 	//init-device_list functions begin
 	var initMonitorListControlEvent=function(){
-		$('#ac_add_button').click(function() {onAddRecord(),initDeviceAdd();});
+		$('#ac_add_button').click(function() {onAddRecord(),initMonitorAdd();});
 		$('#ac_query_button').click(function() {onQueryRecord(),initDeviceQuery();});
 		$('#record_modify_div #submit_button').click(function() {myModifySubmit();});
 		$('#export_button').click(function() {myExportAPI();});
@@ -119,7 +110,7 @@ var Page = function() {
 		$('#statistics_button').click(function() {myStatisticsAPI()});
 
 	}
-	var initDeviceAddControlEvent=function(){
+	var initMonitorAddControlEvent=function(){
 		$("#help_button").click(function() {help();});
 		$('#record_add_div #submit_button').click(function() {submitAddRecord();});
 	}
@@ -127,11 +118,9 @@ var Page = function() {
 		$("#help_button").click(function() {help();});
 		$('#record_query_div #query_button').click(function() {myQuerySubmit();});
 	}
-	var initDeviceViewControlEvent=function(){
-		$("#help_button").click(function() {help();});
-		$('#return_button').click(function() {returnBack();});
-	}
+
 	var initMonitorStatisticsControl = function(){
+
 		pageListener();
 		$("#time_submit_button").click(function(){onTimeLimitSubmit()})
 	}
@@ -140,7 +129,7 @@ var Page = function() {
 	var initMonitorRecordList=function(){
 
 		//使用Datatable的数据表,统计总数据
-		getDeviceRecordDatatable();
+		getMonitorRecordDatatable();
 
 	}
 	var initMonitorRecordForPrint=function(){
@@ -397,37 +386,7 @@ var Page = function() {
 
 	}
 
-	var initDeviceRecordView=function(){
-		var id=getUrlParam("id");
-		console.log("运行");
-		var data={};
-		data.action="get_device_record";
-		data.id=id;
-		$.post("../../"+module+"_"+sub+"_servlet_action",data,function(json){
-			console.log(JSON.stringify(json));
-			if(json.result_code==0){
-				var list=json.aaData;
-				if(list!=undefined && list.length>0){
-					for(var i=0;i<list.length;i++){
-						var record=list[i];
-						$("#my_id").text(record.id);
-						$("#record_view  #DeviceId").text(record.DeviceId);
-						$("#record_view #Longitude").text(record.Longitude);
-						$("#record_view  #Latitude").text(record.Latitude);
-						$("#record_view  #Speed").text(record.Speed);
-						$("#record_view #Direction").text(record.Direction);
-						$("#record_view #Location").text(record.location);
-						$("#record_view #GPS_Time").text(record.GPSTime);
-						$("#record_view #Recv_Time").text(record.RecvTime);
 
-
-					}
-				}
-
-
-			}
-		})
-	}
 
 	//table functions begin
 
@@ -448,19 +407,21 @@ var Page = function() {
 		// data.speed=$("#record_query_setup #speed").val();
 
 	}
-	var getDeviceRecordDatatable =function(data){
+	var getMonitorRecordDatatable =function(data){
 
 		var servletRequest ="../../monitor_file_servlet_action";
+		var counter = -1;
+		resultList=[];
+
 		if(data==undefined)
 		{
 			data={};
-			data.action="get_device_record";
+			data.action="get_monitor_record";
 		}
 
 		$('.datatable').DataTable().destroy();
 
 		$('.datatable').dataTable( {
-
 
 			"paging":true,
 			"searching":false,
@@ -485,41 +446,66 @@ var Page = function() {
 				}
 			},
 			"aoColumns": [{"mRender": function(data, type, full) {
+
 					sReturn = '<input type="checkbox" class="checkboxes" value="'+full.id+'"/>';
 					return sReturn;
 				},"orderable": false
 			},{
 				"mRender": function(data, type, full) {
+					counter++;
+					resultList[counter] = {};
+					resultList[counter].id= full.id;
 					sReturn = '<div>'+full.id+'</div>';
 					return sReturn;
 				},"orderable": true
 			},{
 				"mRender": function(data, type, full) {
+					counter++;
+					resultList[counter] = {};
+					resultList[counter].car_code= full.car_code;
 					sReturn = '<div>'+full.car_code+'</div>';
 					return sReturn;
 				},"orderable": true
 			},{
 				"mRender": function(data, type, full) {
+					counter++;
+					resultList[counter] = {};
+					resultList[counter].vehicle_type= full.vehicle_type;
 					sReturn = '<div>'+full.vehicle_type+'</div>';
 					return sReturn;
 				},"orderable": true
 			},{
 				"mRender": function(data, type, full) {
+					counter++;
+					resultList[counter] = {};
+					resultList[counter].illegal_status= full.illegal_status;
 					sReturn = '<div>'+explainIllegalCode(full.illegal_status)+'</div>';
 					return sReturn;
 				},"orderable": true
 			},{
 				"mRender": function(data, type, full) {
+					counter++;
+					resultList[counter] = {};
+					resultList[counter].capture_time= full.capture_time;
 					sReturn = '<div>'+full.capture_time+'</div>';
 					return sReturn;
 				},"orderable": true
 			},{
 				"mRender": function(data, type, full) {
+					counter++;
+					resultList[counter] = {};
+					resultList[counter].speed= full.speed;
 					sReturn = '<div>'+full.speed+'</div>';
 					return sReturn;
 				},"orderable":true
 			},{
                 "mRender": function(data, type, full) {
+					counter++;
+					resultList[counter] = {};
+					resultList[counter].lane_name= full.lane_name;
+					var check = data;
+					console.log(check );
+					console.log(resultList);
                     sReturn = '<div>'+full.lane_name+'</div>';
                     return sReturn;
                 },"orderable":true
@@ -528,13 +514,13 @@ var Page = function() {
 
 					sReturn = '<a href=\"javascript:Page.onModifyRecord('+full.id+')\"'
 						+'class=\"btn default btn-xs red\"> <i class=\"fa fa-wrench\"></i>'
-						+'修改记录</a>';
+						+'修改</a>';
 					sReturn += '<a href=\"javascript:Page.onDeleteRecord('+full.id+')\"'
 						+'class=\"btn default btn-xs black\"> <i class=\"fa fa-trash-o\"></i>'
-						+'删除记录</a>';
+						+'删除</a>';
 					sReturn += '<a href=\"javascript:Page.onViewRecord('+full.id+')\"'
 						+"class=\"btn default btn-xs purple\"> <i class=\"fa fa-camera\"></i>"
-						+'查看记录</a>';
+						+'查看</a>';
 					return sReturn;
 				},"orderable": false
 			}],
@@ -622,7 +608,7 @@ var Page = function() {
 			if(id>-1){
 				var url="../../monitor_file_servlet_action";
 				var data={};
-				data.action="delete_device_record";
+				data.action="delete_monitor_record";
 				data.id=id;
 				$.post(url,data,function(json){
 					if(json.result_code==0){
@@ -635,17 +621,27 @@ var Page = function() {
 	}
 	var onModifyRecord=function(id){
 
+		console.log(id);
 
 		for(var i=0;i<resultList.length;i++)
+		{
 			if(resultList[i].id==id){
-				$("#record_modify_div #_id").text(resultList[i].id);
+				$("#_id").text(resultList[i].id);
 				$("#record_modify_div #car_code").val(resultList[i].car_code);
 				$("#record_modify_div #vehicle_type").val(resultList[i].vehicle_type);
 				$("#record_modify_div #illegal_status").val(explainIllegalCode(resultList[i].illegal_status));
-				$("#record_modify_div #capture_time").val(resultList[i].capture_time);
+
 				$("#record_modify_div #speed").val(resultList[i].speed);
 				$("#record_modify_div #lane_name").val(resultList[i].lane_name);
-			};
+				var date="";
+				var time ="";
+				date =resultList[i].capture_time.slice(0,11);
+				time=resultList[i].capture_time.slice(11,19);
+				$("#record_modify_div #capture_time").val(date);
+				$("#record_modify_div #capture_time_sec").val(time);
+			}
+		}
+
 
 		//window.location.href="device_modify.jsp?id="+id;
 		$("#record_modify_div").modal("show");
@@ -720,14 +716,15 @@ var Page = function() {
 		alert("开始操作!");
 		var url="../../monitor_file_servlet_action";
 		var data={};
-		data.action="add_device_record";
+		data.action="add_monitor_record";
 
 		var check = false;
 		var checkCol = [];
 		data.car_code=$("#record_add_div #car_code").val();
 		data.vehicle_type=$("#record_add_div #vehicle_type").val();
 		data.illegal_status=explainIllegalCode_Contrary($("#record_add_div #illegal_status").val());
-		data.capture_time=$("#record_add_div #capture_time").val();
+		data.capture_time=$("#record_add_div #capture_time").val()+" "
+			+$("#record_add_div #capture_time_sec").val();
 		data.speed=$("#record_add_div #speed").val();
 		data.lane_name=$("#record_add_div #lane_name").val();
 
@@ -748,17 +745,18 @@ var Page = function() {
 
 
 	}
-	var myModifySubmit = function(){
+	var myModifySubmit = function(id){
 		if(confirm("您确定要修改该记录吗？")){
 			var id=$("#record_modify_div #_id").text();
 			var url="../../monitor_file_servlet_action";
 			var data={};
-			data.action="modify_device_record";
+			data.action="modify_monitor_record";
 			data.id=id;
 			data.car_code=$("#record_modify_div #car_code").val();
 			data.vehicle_type=$("#record_modify_div #vehicle_type").val();
 			data.illegal_status=explainIllegalCode_Contrary($("#record_modify_div #illegal_status").val());
-			data.capture_time=$("#record_modify_div #capture_time").val();
+			data.capture_time=$("#record_modify_div #capture_time").val()+" "
+			+$("#record_modify_div #capture_time_sec").val();
 			data.speed=$("#record_modify_div #speed").val();
 			data.lane_name=$("#record_modify_div #lane_name").val();
 
@@ -798,14 +796,12 @@ var Page = function() {
 		{
 			$("#record_query_div").modal("hide");
 
-			getDeviceRecordDatatable(data);
+			getMonitorRecordDatatable(data);
 		}
 		else
 		{
 			alert("请按照合法格式输入内容!");
 		}
-
-
 
 	}
 	var myExportAPI = function(){
