@@ -54,12 +54,55 @@
                             </div>
 
                             <div class="form-group">
-                                <label class="col-md-3 control-label">抓拍时间：</label>
-                                <div class="col-md-9">
-                                    <input type="text" class="form-control" id="capture_time" name="capture_time" placeholder="Enter text">
-                                    <span class="help-block">
-											A block of help text. </span>
+                                <label class="col-md-3 control-label">开始时间：</label>
+                                <div class="col-md-5">
+                                    <div class="input-group input-medium date date-picker" data-date="2023-01-01" data-date-format="yyyy-mm-dd" data-date-viewmode="years">
+                                        <input type="text" class="form-control" readOnly="" id="capture_time_from">
+                                        <span class="input-group-btn">
+                                                <button class="btn default" type="button">
+                                                    <i class="fa fa-calendar"></i>
+                                                </button>
+                                            </span>
+                                    </div>
+                                    <!-- /input-group -->
+                                    <span class="help-block" id="endHelper_from">选择开始时间</span>
                                 </div>
+
+                                <div class="col-md-4">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control timepicker timepicker-24" id ="capture_time_sec_from">
+                                        <span class="input-group-btn">
+                                                <button class="btn default" type="button"><i class="fa fa-clock-o"></i></button>
+                                            </span>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">截止时间：</label>
+                                <div class="col-md-5">
+                                    <div class="input-group input-medium date date-picker" data-date="2023-01-01" data-date-format="yyyy-mm-dd" data-date-viewmode="years">
+                                        <input type="text" class="form-control" readOnly="" id="capture_time_to">
+                                        <span class="input-group-btn">
+                                                <button class="btn default" type="button">
+                                                    <i class="fa fa-calendar"></i>
+                                                </button>
+                                            </span>
+                                    </div>
+                                    <!-- /input-group -->
+                                    <span class="help-block" id="endHelper_to">选择截止时间</span>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control timepicker timepicker-24" id ="capture_time_sec_to">
+                                        <span class="input-group-btn">
+                                                <button class="btn default" type="button"><i class="fa fa-clock-o"></i></button>
+                                            </span>
+                                    </div>
+                                </div>
+
                             </div>
 
                             <div class="form-group">

@@ -357,14 +357,6 @@ var Page = function() {
 				"title": "legalCars",
 				"type": "column",
 				"valueField": "legalCars"
-			},{
-				"alphaField": "alpha",
-				"balloonText": "<span style='font-size:13px;'>[[title]] in [[category]]:<b>[[value]]</b> [[additional]]</span>",
-				"dashLengthField": "dashLengthColumn",
-				"fillAlphas": 1,
-				"title": "legalCars",
-				"type": "column",
-				"valueField": "legalCars"
 			}, {
 				"balloonText": "<span style='font-size:13px;'>[[title]] in [[category]]:<b>[[value]]</b> [[additional]]</span>",
 				"bullet": "round",
@@ -772,11 +764,26 @@ var Page = function() {
 		var url = "../../monitor_file_servlet_action";
 		var data={};
 		var query = "query_monitor_record";
+		var time_from = $("#record_query_div #capture_time_from").val();
+		var time_to = $("#record_query_div #capture_time_to").val();
 		data.action="query_monitor_record";
 
 		data.id=$("#record_query_div #id").val();
 		data.car_code=$("#record_query_div #car_code").val();
 		data.vehicle_type=$("#record_query_div #vehicle_type").val();
+		data.illegal_status=explainIllegalCode_Contrary($("#record_add_div #illegal_status").val());
+		data.time_from = time_from;
+		data.time_to = time_to;
+		if(time_from!=="")
+		{
+			data.time_from+=" "+$("#record_query_div #capture_time_sec_from").val();
+		}
+
+		if(time_to!=="")
+		{
+			data.time_to+=" " +$("#record_query_div #capture_time_sec_to").val();
+		}
+
 		data.speed=$("#record_query_div #speed").val();
 		data.lane_name=$("#record_query_div #lane_name").val();
 
@@ -901,6 +908,7 @@ var Page = function() {
 		}
 		else
 		{
+			console.log(code);
 			return "数据错误";
 		}
 
@@ -928,6 +936,10 @@ var Page = function() {
 		else if(code === "正常行驶")
 		{
 			return 0;
+		}
+		else if(code==="")
+		{
+			return code;
 		}
 		else
 		{

@@ -99,6 +99,21 @@ public class ServletAction extends HttpServlet {
 
             }
 
+            if (action.equals("view_monitor_record")) {
+                actionOk = true;
+
+                try {
+
+                    viewMonitorRecord(request, response, json);
+
+                } catch (Exception e) {
+
+                    e.printStackTrace();
+
+                }
+
+            }
+
             if (action.equals("add_monitor_record")) {
                 actionOk = true;
                 try {
@@ -187,7 +202,6 @@ public class ServletAction extends HttpServlet {
                 }
 
             }
-
 
             if (action.equals("monitor_statistics")) {
                 actionOk = true;
@@ -384,6 +398,12 @@ public class ServletAction extends HttpServlet {
             throws JSONException, SQLException {
         MonitorDao dao = new MonitorDao();
         dao.getMonitorRecord(data, json);
+    }
+
+    private void viewMonitorRecord(HttpServletRequest request, HttpServletResponse response, JSONObject json)
+            throws JSONException, SQLException {
+        MonitorDao dao = new MonitorDao();
+        dao.viewMonitorRecord(data, json);
     }
 
     private void getQueryRecord(HttpServletRequest request, HttpServletResponse response, JSONObject json)

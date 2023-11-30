@@ -390,8 +390,8 @@ public class IllegalDao {
 
         String where = "";
 
-        if (checkParamValid(param, "id")) {
-            where = "id=" + param.getString("id");
+        if (checkParamValid(param, "monitor_id")) {
+            where = "monitor_id=" + param.getString("monitor_id");
         }
 
         if (checkParamValid(param, "time_from") && checkParamValid(param, "time_to")) {

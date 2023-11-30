@@ -281,7 +281,7 @@ var Page = function(){
         var id=getUrlParam("id");
         console.log("运行");
         var data={};
-        data.action="get_monitor_record";
+        data.action="view_monitor_record";
         data.id=id;
         $.post("../../"+module+"_"+sub+"_servlet_action",data,function(json){
             console.log(JSON.stringify(json));
@@ -297,6 +297,9 @@ var Page = function(){
                         $("#record_view_div  #capture_time").text(record.capture_time);
                         $("#record_view_div #speed").text(record.speed);
                         $("#record_view_div #lane_name").text(record.lane_name);
+                        $(".tiles .name").text(record.id);
+                        $(".tiles #image_container").attr("src",record.image_url);
+                        $(".tiles #url_container").attr("href",record.image_url);
 
                     }
                 }
