@@ -26,8 +26,6 @@ public class MonitorDao {
     private String dbName = "yjykfsj8";
     private String relationName = "monitoring_data";
 
-    private String ralationNameForIllegal = "record_info";
-
     private ArrayList<String> dbColomn = new Db(dbName).getColomns(relationName);
 
     // private int[] lines = new int[5];
@@ -230,6 +228,13 @@ public class MonitorDao {
         queryRecord(data, json);
     }
 
+    public void viewMonitorRecord(Data data, JSONObject json) throws JSONException, SQLException {
+        // 构造sql语句，根据传递过来的查询条件参数
+        String sql = createViewRecordSql(data); // 构造sql语句，根据传递过来的查询条件参数
+        data.getParam().put("sql", sql);
+        queryRecord(data, json);
+    }
+
     public void getQueryRecord(Data data, JSONObject json) throws JSONException, SQLException {
         // 构造sql语句，根据传递过来的查询条件参数
         String sql = createGetQueryRecordSql(data); // 构造sql语句，根据传递过来的查询条件参数
@@ -404,14 +409,29 @@ public class MonitorDao {
     private String createGetRecordSql(Data data) throws JSONException {
         JSONObject param = data.getParam();
 
-        // String midSql = dbColomn.toString();
-        // midSql = midSql.substring(1,midSql.length()-1);
-        // showDebug(midSql);
-
         String sql = "select * from " + relationName;
         String where="";
         sql += createJoinSql(relationName, "lane_data", "lane_id", "lane_id");
         where=useWhere(param,"id",where,false);
+
+        showDebug("111"+"sql");
+        sql+=where;
+        return sql;
+
+    }
+
+    private String createViewRecordSql(Data data) throws JSONException {
+        JSONObject param = data.getParam();
+
+        String sql = "select * from " + relationName ;
+        String where="";
+        sql += createJoinSql(relationName, "lane_data", "lane_id", "lane_id");
+        sql += createJoinSql(relationName,"record_info","id","monitor_id");
+
+        if(checkParamValid(param,"id"))
+        {
+            where +=" where "+relationName+"."+"id="+param.getString("id");
+        }
 
 
         showDebug("111"+"sql");
@@ -430,6 +450,9 @@ public class MonitorDao {
 
         boolean isJoin = false;
         String sql = "select * from " + relationName;
+        String timeTo = "";
+        String timeFrom = "";
+        String Now=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
 
         if(data.getParam().has("lane_name"))
         {
@@ -443,13 +466,35 @@ public class MonitorDao {
             where = "id=" + param.getString("id");
         }
 
-        if (checkParamValid(param, "time_from") && checkParamValid(param, "time_to")) {
 
-            if (!where.isEmpty()) {
-                where += " and create_time between '" + param.getString("time_from") + "' and '"
-                        + param.getString("time_to") + "'";
-            } else {
-                where = "create_time between '" + param.getString("time_from") + "' and '" + param.getString("time_to")
+        if(checkParamValid(param, "time_from") || checkParamValid(param, "time_to"))
+        {
+            if(checkParamValid(param, "time_from"))
+            {
+                timeFrom = param.getString("time_from");
+            }
+            else
+            {
+                timeFrom = Now;
+            }
+
+            if(checkParamValid(param, "time_to"))
+            {
+                timeTo = param.getString("time_to");
+            }
+            else
+            {
+                timeTo = Now;
+            }
+
+            if (!where.isEmpty())
+            {
+                where += " and create_time between '" + timeFrom + "' and '"
+                        + timeTo + "'";
+            }
+            else
+            {
+                where =" where "+"create_time between '" + timeFrom + "' and '" + timeTo
                         + "'";
             }
 
@@ -458,16 +503,14 @@ public class MonitorDao {
         where = useWhere(param, "car_code", where,true);
         where = useWhere(param, "speed", where,false);
         where = useWhere(param, "lane_name", where,true);
+        where = useWhere(param,"illegal_status",where,false);
 
-
+        showDebug("111"+where);
         // 判断是否有条件
         if (!where.isEmpty()) {
-            sql = sql + " where " + where;
+            sql = sql + where;
         }
 
-        if (checkParamValid(param, "order_by")) {
-            sql = sql + " order by " + param.getString("order_by");
-        }
 
         showDebug(sql);
         return sql;
