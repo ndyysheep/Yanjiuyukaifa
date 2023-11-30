@@ -62,7 +62,7 @@ var Page = function() {
 	}
 
 	var initDeviceQuery=function(){
-		initDeviceQueryControlEvent();
+		initMonitorQueryControlEvent();
 	}
 
 	var initDeviceFile=function(){
@@ -114,7 +114,7 @@ var Page = function() {
 		$("#help_button").click(function() {help();});
 		$('#record_add_div #submit_button').click(function() {submitAddRecord();});
 	}
-	var initDeviceQueryControlEvent=function(){
+	var initMonitorQueryControlEvent=function(){
 		$("#help_button").click(function() {help();});
 		$('#record_query_div #query_button').click(function() {myQuerySubmit();});
 	}
@@ -357,6 +357,14 @@ var Page = function() {
 				"title": "legalCars",
 				"type": "column",
 				"valueField": "legalCars"
+			},{
+				"alphaField": "alpha",
+				"balloonText": "<span style='font-size:13px;'>[[title]] in [[category]]:<b>[[value]]</b> [[additional]]</span>",
+				"dashLengthField": "dashLengthColumn",
+				"fillAlphas": 1,
+				"title": "legalCars",
+				"type": "column",
+				"valueField": "legalCars"
 			}, {
 				"balloonText": "<span style='font-size:13px;'>[[title]] in [[category]]:<b>[[value]]</b> [[additional]]</span>",
 				"bullet": "round",
@@ -394,19 +402,7 @@ var Page = function() {
 
 	//get_record functions begin
 	var resultList=[];
-	var getMonitorRecordList=function(){
 
-		var data={};
-		data.action="get_illegal_record";
-
-		// data.order_by=$("#record_query_setup #order_select").val();
-		// data.id=$("#record_query_setup #_id").val();
-		// data.car_code=$("#record_query_setup #car_code").val();
-		// data.vehicle_type=$("#record_query_setup #vehicle_type").val();
-		// data.capture_time=$("#record_query_setup #capture_time").val();
-		// data.speed=$("#record_query_setup #speed").val();
-
-	}
 	var getMonitorRecordDatatable =function(data){
 
 		var servletRequest ="../../monitor_file_servlet_action";
@@ -452,60 +448,41 @@ var Page = function() {
 				},"orderable": false
 			},{
 				"mRender": function(data, type, full) {
-					counter++;
-					resultList[counter] = {};
-					resultList[counter].id= full.id;
 					sReturn = '<div>'+full.id+'</div>';
 					return sReturn;
 				},"orderable": true
 			},{
 				"mRender": function(data, type, full) {
-					counter++;
-					resultList[counter] = {};
-					resultList[counter].car_code= full.car_code;
 					sReturn = '<div>'+full.car_code+'</div>';
 					return sReturn;
 				},"orderable": true
 			},{
 				"mRender": function(data, type, full) {
-					counter++;
-					resultList[counter] = {};
-					resultList[counter].vehicle_type= full.vehicle_type;
+
 					sReturn = '<div>'+full.vehicle_type+'</div>';
 					return sReturn;
 				},"orderable": true
 			},{
 				"mRender": function(data, type, full) {
-					counter++;
-					resultList[counter] = {};
-					resultList[counter].illegal_status= full.illegal_status;
+
 					sReturn = '<div>'+explainIllegalCode(full.illegal_status)+'</div>';
 					return sReturn;
 				},"orderable": true
 			},{
 				"mRender": function(data, type, full) {
-					counter++;
-					resultList[counter] = {};
-					resultList[counter].capture_time= full.capture_time;
+
 					sReturn = '<div>'+full.capture_time+'</div>';
 					return sReturn;
 				},"orderable": true
 			},{
 				"mRender": function(data, type, full) {
-					counter++;
-					resultList[counter] = {};
-					resultList[counter].speed= full.speed;
+
 					sReturn = '<div>'+full.speed+'</div>';
 					return sReturn;
 				},"orderable":true
 			},{
                 "mRender": function(data, type, full) {
-					counter++;
-					resultList[counter] = {};
-					resultList[counter].lane_name= full.lane_name;
-					var check = data;
-					console.log(check );
-					console.log(resultList);
+
                     sReturn = '<div>'+full.lane_name+'</div>';
                     return sReturn;
                 },"orderable":true
@@ -531,10 +508,18 @@ var Page = function() {
 			"ajax": {
 				"url": servletRequest,
 				"type": "POST",
-				"data":data
+				"data":data,
+				"dataSrc": function(json) {
+					console.log(json.aaData);
+					resultList = json.aaData;
+					return json.aaData; // 返回的 JSON 数据中的数据源位置
 				}
 
+			}
+
+
 		});
+
 		$('.datatable').find('.group-checkable').change(function () {
 			var set = jQuery(this).attr("data-set");
 			var checked = jQuery(this).is(":checked");
@@ -558,7 +543,6 @@ var Page = function() {
 		tableWrapper.find('.dataTables_length select').select2(); // initialize select2 dropdown
 
 	}
-
 
 	var onPageListener = function()
 	{
@@ -619,6 +603,7 @@ var Page = function() {
 			}
 		}
 	}
+
 	var onModifyRecord=function(id){
 
 		console.log(id);
@@ -646,6 +631,7 @@ var Page = function() {
 		//window.location.href="device_modify.jsp?id="+id;
 		$("#record_modify_div").modal("show");
 	}
+
 	var onViewRecord = function(id){
 		window.location.href = "monitor_view.jsp?id="+id;
 	}
@@ -745,6 +731,7 @@ var Page = function() {
 
 
 	}
+
 	var myModifySubmit = function(id){
 		if(confirm("您确定要修改该记录吗？")){
 			var id=$("#record_modify_div #_id").text();
@@ -779,6 +766,7 @@ var Page = function() {
 		}
 
 	}
+
 	var myQuerySubmit = function(){
 
 		var url = "../../monitor_file_servlet_action";
@@ -804,6 +792,7 @@ var Page = function() {
 		}
 
 	}
+
 	var myExportAPI = function(){
 		var url = "../../monitor_file_servlet_action";
 		var data={};
@@ -818,9 +807,11 @@ var Page = function() {
 			}
 		});
 	}
+
 	var myPrintAPI = function(){
 		window.open("monitor_print_default.jsp");
 	}
+
 	var myPrintAPI_Word = function(){
 		window.open("monitor_print_word.jsp");
 
@@ -829,6 +820,7 @@ var Page = function() {
 
 		window.open("monitor_statistics.jsp");
 	}
+
 	var onTimeLimitSubmit = function(){
 
 		var forTimeCheck=[$("#time_from_minute").val(),$("#time_to_minute").val()];
@@ -874,8 +866,11 @@ var Page = function() {
 
 	var changeResultDataToChart =function(list, chartData){
 
-
 		for(var i=0;i<list.length;i++){
+			if(list[i].time_interval=="0")
+			{
+				list[i].time_interval+='0';
+			}
 			var json={"hour":list[i].time_interval,"legalCars":list[i].total,"expenses":list[i].total};
 			chartData.push(json);
 		}

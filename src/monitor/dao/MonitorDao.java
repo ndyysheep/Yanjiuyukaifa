@@ -364,6 +364,7 @@ public class MonitorDao {
                     jsonList.add(map);
                 }
 
+
                 HashMap map = new HashMap();
                 map.put("time_interval", time);
                 map.put("total", rs.getInt("total"));
