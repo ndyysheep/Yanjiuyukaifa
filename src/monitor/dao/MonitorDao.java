@@ -74,11 +74,12 @@ public class MonitorDao {
     }
 
     /**
-     * @param param
-     * @param keyParam
-     * @param where
-     * @return
-     * @throws JSONException
+     * @param param json数据对象
+     * @param keyParam key键值
+     * @param where 原where语句
+     * @param isLike 判断使用'=' 还是 "like"
+     * @return String 返回构造好的where语句
+     * @throws JSONException 抛出Json类异常
      */
     private String useWhere(JSONObject param, String keyParam, String where,boolean isLike) throws JSONException {
         String subStr = where;
@@ -324,26 +325,53 @@ public class MonitorDao {
     public void toStatistics(Data data, JSONObject json) throws JSONException {
         /*--------------------获取变量 开始--------------------*/
         String resultMsg = "ok";
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DATE, -1);
-        String timeFrom = (new SimpleDateFormat("yyyy-MM-dd 00:00:00")).format(cal.getTime());
-        String timeTo = (new SimpleDateFormat("yyyy-MM-dd 23:59:59")).format(cal.getTime());
+        String timeTo = "";
+        String timeFrom = "";
+        String Now=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
 
-        if(data.getParam().has("time_to")&&data.getParam().has("time_from"))
+
+
+        String where = "";
+        JSONObject param = data.getParam();
+
+
+        if(checkParamValid(param, "time_from") || checkParamValid(param, "time_to"))
         {
-            timeFrom = data.getParam().getString("time_from");
-             timeTo =data.getParam().getString("time_to");
-        }
+            if(checkParamValid(param, "time_from"))
+            {
+                timeFrom = param.getString("time_from");
+            }
+            else
+            {
+                timeFrom = Now;
+            }
 
+            if(checkParamValid(param, "time_to"))
+            {
+                timeTo = param.getString("time_to");
+            }
+            else
+            {
+                timeTo = Now;
+            }
+
+
+                where =" where "+"capture_time between '" + timeFrom + "' and '" + timeTo
+                        + "'";
+
+        }
 
         int resultCode = 0;
         List jsonList = new ArrayList();
         /*--------------------获取变量 完毕--------------------*/
         /*--------------------数据操作 开始--------------------*/
         Db queryDb = new Db(dbName);
-        String sql = "select DATE_FORMAT(capture_time,\"%H\") as time_interval,count(*) as total from " + relationName;
-        sql += " where capture_time between '" + timeFrom + "' and '" + timeTo + "'";
-        sql += " group by DATE_FORMAT(capture_time,\"%H\")";
+        String sql = "select DATE_FORMAT(capture_time,\"%H\") as time_interval,count(*) as total, "
+                +"count(case when illegal_status<>0 then 1 end) as illegal_total,"
+                +"count(case when illegal_status=0 then 1 end) as legal_total"
+                +" from " + relationName;
+        sql += where;
+        sql += " group by time_interval";
         showDebug("[toStatistics]构造的SQL语句是：" + sql);
 
         try {
@@ -351,38 +379,18 @@ public class MonitorDao {
             ResultSet rs = queryDb.executeQuery(sql);
             ResultSetMetaData rsmd = rs.getMetaData();
             int fieldCount = rsmd.getColumnCount();
-            int i = 0;
-            boolean[] check = new boolean[24];
-
-            for (boolean it : check) {
-                it = false;
-            }
 
             while (rs.next()) {
 
                 int time = rs.getInt("time_interval");
-
-                for (; i < time; i++) {
-                    HashMap map = new HashMap();
-                    map.put("time_interval", i < 10 ? "0" + i : i);
-                    map.put("total", 0);
-                    jsonList.add(map);
-                }
-
-
                 HashMap map = new HashMap();
                 map.put("time_interval", time);
                 map.put("total", rs.getInt("total"));
-                i = time + 1;
+                map.put("legal_total", rs.getInt("legal_total"));
+                map.put("illegal_total", rs.getInt("illegal_total"));
+
                 jsonList.add(map);
 
-            }
-
-            for (; i < 24; i++) {
-                HashMap map = new HashMap();
-                map.put("time_interval", i < 10 ? "0" + i : i);
-                map.put("total", 0);
-                jsonList.add(map);
             }
 
             rs.close();
@@ -400,6 +408,7 @@ public class MonitorDao {
         /*--------------------数据操作 结束--------------------*/
         /*--------------------返回数据 开始--------------------*/
 
+        showDebug(jsonList.toString());
         json.put("aaData", jsonList);
         json.put("result_msg", resultMsg); // 如果发生错误就设置成"error"等
         json.put("result_code", resultCode); // 返回0表示正常，不等于0就表示有错误产生，错误代码
@@ -448,7 +457,7 @@ public class MonitorDao {
     public String createGetQueryRecordSql(Data data) throws JSONException {
         JSONObject param = data.getParam();
 
-        boolean isJoin = false;
+
         String sql = "select * from " + relationName;
         String timeTo = "";
         String timeFrom = "";
@@ -457,7 +466,6 @@ public class MonitorDao {
         if(data.getParam().has("lane_name"))
         {
             sql += createJoinSql(relationName, "lane_data", "lane_id", "lane_id");
-            isJoin = true;
         }
 
         String where = "";

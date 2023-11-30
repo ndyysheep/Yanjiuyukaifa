@@ -32,6 +32,7 @@ License: You must have a valid license purchased only from themeforest(the above
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
     <meta content="" name="description"/>
     <meta content="" name="author"/>
+
     <!-- BEGIN GLOBAL MANDATORY STYLES -->
     <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css">
     <link href="../../assets/global/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
@@ -220,6 +221,25 @@ License: You must have a valid license purchased only from themeforest(the above
                             <hr>
                         </div>
                     </div>
+
+                    <div class = "tiles">
+                        <div class="tile image double selected">
+                            <div class="tile-body">
+                                <a href="#" id="url_container">
+                                    <img src="" alt="" id="image_container">
+                                </a>
+                            </div>
+                            <div class="tile-object">
+                                <div class="name">
+                                    车辆序号
+                                </div>
+                                <div class="number">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="row">
                         <div class="col-md-12">
                             <table id="user" class="table table-bordered table-striped">
@@ -365,6 +385,7 @@ License: You must have a valid license purchased only from themeforest(the above
 <script type="text/javascript" src="../../assets/global/plugins/bootstrap-editable/inputs-ext/address/address.js"></script>
 <script type="text/javascript" src="../../assets/global/plugins/bootstrap-editable/inputs-ext/wysihtml5/wysihtml5.js"></script>
 <!-- END X-EDITABLE PLUGIN -->
+
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
 <script src="../../assets/global/scripts/metronic.js" type="text/javascript"></script>
 <script src="../../assets/admin/layout4/scripts/layout.js" type="text/javascript"></script>
