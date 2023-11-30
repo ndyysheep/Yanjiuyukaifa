@@ -76,22 +76,46 @@ public class IllegalDao {
     }
 
     /**
-     * @param param
-     * @param keyParam
-     * @param where
-     * @return
-     * @throws JSONException
+     * @param param json数据对象
+     * @param keyParam key键值
+     * @param where 原where语句
+     * @param isLike 判断使用'=' 还是 "like"
+     * @return String 返回构造好的where语句
+     * @throws JSONException 抛出Json类异常
      */
-    private String useWhere(JSONObject param, String keyParam, String where) throws JSONException {
+    private String useWhere(JSONObject param, String keyParam, String where,boolean isLike) throws JSONException {
         String subStr = where;
+        String keyCommand = " where ";
 
-        if (checkParamValid(param, keyParam)) {
-            if (!subStr.isEmpty()) {
-                subStr = subStr + " and " + keyParam + " = '" + param.getString(keyParam) + "'";
-            } else {
-                subStr = keyParam + "='" + param.getString(keyParam) + "'";
+        if(param.has(keyParam))
+        {
+            if (checkParamValid(param, keyParam)) {
+                if(isLike)
+                {
+                    if (!subStr.isEmpty())
+                    {
+                        subStr += " and " + keyParam + " like '%" + param.getString(keyParam) + "%'";
+                    }
+                    else
+                    {
+                        subStr = keyCommand + keyParam + " like '%" + param.getString(keyParam) + "%'";
+                    }
+
+                }
+                else
+                {
+                    if (!subStr.isEmpty())
+                    {
+                        subStr   +=" and " + keyParam + " = '" + param.getString(keyParam) + "'";
+                    }
+                    else
+                    {
+                        subStr = keyCommand + keyParam + "='" + param.getString(keyParam) + "'";
+                    }
+                }
             }
         }
+
 
         return subStr;
     }
@@ -116,21 +140,6 @@ public class IllegalDao {
 
     }
 
-    public void modifyDeviceRecordForView(Data data, JSONObject json) throws JSONException, SQLException {
-        // 构造sql语句，根据传递过来的条件参数
-        String id = data.getParam().has("pk") ? data.getParam().getString("pk") : null;
-        String _op = data.getParam().getString("name");
-
-        if (id != null && _op != null) {
-            String sql = "update " + relationName + " set " + _op + "='" + data.getParam().getString("value") + "'";
-            sql += "where id=" + "'" + id + "'";
-            data.getParam().put("sql", sql);
-            updateRecord(data, json);
-
-        }
-
-    }
-
     /**
      * 查询记录
      */
@@ -148,60 +157,6 @@ public class IllegalDao {
         queryRecord(data, json);
     }
 
-    /**
-     * 查询用,构建Sql语句
-     * @param data json.data 字段信息
-     * @return 返回构建好的Sql
-     * @throws JSONException 抛出json类异常
-     */
-    public String createGetQueryRecordSql(Data data) throws JSONException {
-        JSONObject param = data.getParam();
-
-        String sql = "select * from " + relationName;
-        sql += createJoinSql(relationName, "monitoring_data", "car_code", "car_code");
-        String where = "";
-
-        if (checkParamValid(param, "id")) {
-            where = relationName + ".id=" + param.getString("id");
-        }
-
-        if (checkParamValid(param, "time_from") && checkParamValid(param, "time_to")) {
-
-            if (!where.isEmpty()) {
-                where += " and create_time between '" + param.getString("time_from") + "' and '"
-                        + param.getString("time_to") + "'";
-            } else {
-                where = "create_time between '" + param.getString("time_from") + "' and '" + param.getString("time_to")
-                        + "'";
-            }
-
-        }
-
-        where = useWhere(param, "car_code", where);
-        where = useWhere(param, "speed", where);
-
-        if (checkParamValid(param, "location")) {
-
-            if (!where.isEmpty()) {
-                where = where + " and location like '%" + param.getString("location") + "%'";
-            } else {
-                where = "location like '%" + param.getString("location") + "%'";
-            }
-
-        }
-
-        // 判断是否有条件
-        if (!where.isEmpty()) {
-            sql = sql + " where " + where;
-        }
-
-        if (checkParamValid(param, "order_by")) {
-            sql = sql + " order by " + param.getString("order_by");
-        }
-
-        showDebug(sql);
-        return sql;
-    }
 
     /**
      * 这是一个样板的函数，可以拷贝做修改用
@@ -380,13 +335,9 @@ public class IllegalDao {
     private String createGetRecordSql(Data data) throws JSONException {
         JSONObject param = data.getParam();
 
-        // String midSql = dbColomn.toString();
-        // midSql = midSql.substring(1,midSql.length()-1);
-        // showDebug(midSql);
-
         String sql = "select * from " + relationName;
         sql += createJoinSql(relationName, "lane_data", "lane_id", "lane_id");
-        sql += createJoinSql(relationName, "monitoring_data", "car_code", "car_code");
+        sql += createJoinSql(relationName, "monitoring_data", "monitor_id", "id");
 
         String where = "";
 
@@ -394,42 +345,56 @@ public class IllegalDao {
             where = "monitor_id=" + param.getString("monitor_id");
         }
 
-        if (checkParamValid(param, "time_from") && checkParamValid(param, "time_to")) {
 
-            if (!where.isEmpty()) {
-                where += " and create_time between '" + param.getString("time_from") + "' and '"
-                        + param.getString("time_to") + "'";
-            } else {
-                where = "create_time between '" + param.getString("time_from") + "' and '" + param.getString("time_to")
-                        + "'";
-            }
-
-        }
-
-        where = useWhere(param, "car_code", where);
-
-        if (checkParamValid(param, "location")) {
-
-            if (!where.isEmpty()) {
-                where = where + " and location like '%" + param.getString("location") + "%'";
-            } else {
-                where = "location like '%" + param.getString("location") + "%'";
-            }
-
-        }
+        where = useWhere(param, "car_code", where,false);
+        where = useWhere(param,"lane_name",where,true);
 
         // 判断是否有条件
         if (!where.isEmpty()) {
             sql = sql + " where " + where;
         }
 
-        if (checkParamValid(param, "order_by")) {
-            sql = sql + " order by " + param.getString("order_by");
-        }
 
         return sql;
 
     }
+
+    /**
+     * 查询用,构建Sql语句
+     * @param data json.data 字段信息
+     * @return 返回构建好的Sql
+     * @throws JSONException 抛出json类异常
+     */
+    public String createGetQueryRecordSql(Data data) throws JSONException {
+        JSONObject param = data.getParam();
+
+        String timeTo = "";
+        String timeFrom = "";
+        String Now=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+        String sql = "select * from " + relationName;
+        sql += createJoinSql(relationName, "monitoring_data", "car_code", "car_code");
+        String where = "";
+
+        if (checkParamValid(param, "id")) {
+            where = relationName + ".id=" + param.getString("id");
+        }
+
+
+
+        where = useWhere(param,"speed",where,true);
+        where = useWhere(param, "car_code", where,false);
+        where = useWhere(param,"lane_name",where,true);
+
+        // 判断是否有条件
+        if (!where.isEmpty()) {
+            sql = sql + " where " + where;
+        }
+
+
+        showDebug(sql);
+        return sql;
+    }
+
 
     public void getExportDeviceRecordToExcel(JSONObject json, Data data) throws JSONException, IOException {
         json.put("download_url", "/upload/maintain/illegal/export_device.xls");

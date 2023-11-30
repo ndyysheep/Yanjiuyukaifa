@@ -256,6 +256,7 @@ var Page = function() {
 				console.log(JSON.stringify(json));
 
 				var list = json.aaData;
+
 				if(list!=undefined&&list.length>0){
 					changeResultDataToChart(list,chartData);
 
@@ -357,14 +358,6 @@ var Page = function() {
 				"title": "legalCars",
 				"type": "column",
 				"valueField": "legalCars"
-			},{
-				"alphaField": "alpha",
-				"balloonText": "<span style='font-size:13px;'>[[title]] in [[category]]:<b>[[value]]</b> [[additional]]</span>",
-				"dashLengthField": "dashLengthColumn",
-				"fillAlphas": 1,
-				"title": "legalCars",
-				"type": "column",
-				"valueField": "legalCars"
 			}, {
 				"balloonText": "<span style='font-size:13px;'>[[title]] in [[category]]:<b>[[value]]</b> [[additional]]</span>",
 				"bullet": "round",
@@ -377,8 +370,30 @@ var Page = function() {
 				"bulletBorderThickness": 3,
 				"fillAlphas": 0,
 				"lineAlpha": 1,
-				"title": "Expenses",
-				"valueField": "expenses"
+				"title": "legalCars",
+				"valueField": "legalCars"
+			},{
+				"alphaField": "alpha",
+				"balloonText": "<span style='font-size:13px;'>[[title]] in [[category]]:<b>[[value]]</b> [[additional]]</span>",
+				"dashLengthField": "dashLengthColumn",
+				"fillAlphas": 1,
+				"title": "illegalCars",
+				"type": "column",
+				"valueField": "illegalCars"
+			}, {
+				"balloonText": "<span style='font-size:13px;'>[[title]] in [[category]]:<b>[[value]]</b> [[additional]]</span>",
+				"bullet": "round",
+				"dashLengthField": "dashLengthLine",
+				"lineThickness": 3,
+				"bulletSize": 7,
+				"bulletBorderAlpha": 1,
+				"bulletColor": "#FFFFFF",
+				"useLineColorForBulletBorder": true,
+				"bulletBorderThickness": 3,
+				"fillAlphas": 0,
+				"lineAlpha": 1,
+				"title": "illegalCars",
+				"valueField": "illegalCars"
 			}],
 			"categoryField": "hour",
 			"categoryAxis": {
@@ -772,11 +787,26 @@ var Page = function() {
 		var url = "../../monitor_file_servlet_action";
 		var data={};
 		var query = "query_monitor_record";
+		var time_from = $("#record_query_div #capture_time_from").val();
+		var time_to = $("#record_query_div #capture_time_to").val();
 		data.action="query_monitor_record";
 
 		data.id=$("#record_query_div #id").val();
 		data.car_code=$("#record_query_div #car_code").val();
 		data.vehicle_type=$("#record_query_div #vehicle_type").val();
+		data.illegal_status=explainIllegalCode_Contrary($("#record_add_div #illegal_status").val());
+		data.time_from = time_from;
+		data.time_to = time_to;
+		if(time_from!=="")
+		{
+			data.time_from+=" "+$("#record_query_div #capture_time_sec_from").val();
+		}
+
+		if(time_to!=="")
+		{
+			data.time_to+=" " +$("#record_query_div #capture_time_sec_to").val();
+		}
+
 		data.speed=$("#record_query_div #speed").val();
 		data.lane_name=$("#record_query_div #lane_name").val();
 
@@ -865,14 +895,58 @@ var Page = function() {
 	}
 
 	var changeResultDataToChart =function(list, chartData){
+		var myIndex =0;
+		var checkHour =[];
 
-		for(var i=0;i<list.length;i++){
-			if(list[i].time_interval=="0")
+		for(var index =0;index<24;index++)
+		{
+			checkHour.push(false);
+		}
+
+		for(var i=0;i<list.length;i++)
+		{
+			checkHour[parseInt(list[i].time_interval)] = true;
+		}
+
+		for(var j = 0;j<24;j++)
+		{
+			if(checkHour[j]===true)
 			{
-				list[i].time_interval+='0';
+
+				var hour = parseInt(list[myIndex].time_interval);
+				console.log( parseInt(list[myIndex].time_interval));
+				var hourStr="";
+				if(hour<10)
+				{
+					hourStr ="0"+ hour.toString()
+				}
+				else
+				{
+					hourStr = hour.toString();
+				}
+				var json={"hour":hourStr,"legalCars":list[myIndex].legal_total,"illegalCars":list[myIndex].illegal_total};
+				chartData.push(json);
+				myIndex++;
 			}
-			var json={"hour":list[i].time_interval,"legalCars":list[i].total,"expenses":list[i].total};
-			chartData.push(json);
+			else
+			{
+				var my_json ="";
+				if(j<10)
+				{
+					hourStr ="0"+j.toString();
+					my_json = {"hour": hourStr,"legalCars":0,"illegalCars":0};
+				}
+				else
+				{
+					hourStr =j.toString();
+					my_json = {"hour": hourStr,"legalCars":0,"illegalCars":0};
+				}
+				chartData.push(my_json);
+			}
+
+
+
+
 		}
 
 	}
@@ -901,6 +975,7 @@ var Page = function() {
 		}
 		else
 		{
+			console.log(code);
 			return "数据错误";
 		}
 
@@ -928,6 +1003,10 @@ var Page = function() {
 		else if(code === "正常行驶")
 		{
 			return 0;
+		}
+		else if(code==="")
+		{
+			return code;
 		}
 		else
 		{

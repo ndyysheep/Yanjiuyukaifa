@@ -256,6 +256,7 @@ var Page = function() {
 				console.log(JSON.stringify(json));
 
 				var list = json.aaData;
+
 				if(list!=undefined&&list.length>0){
 					changeResultDataToChart(list,chartData);
 
@@ -369,8 +370,30 @@ var Page = function() {
 				"bulletBorderThickness": 3,
 				"fillAlphas": 0,
 				"lineAlpha": 1,
-				"title": "Expenses",
-				"valueField": "expenses"
+				"title": "legalCars",
+				"valueField": "legalCars"
+			},{
+				"alphaField": "alpha",
+				"balloonText": "<span style='font-size:13px;'>[[title]] in [[category]]:<b>[[value]]</b> [[additional]]</span>",
+				"dashLengthField": "dashLengthColumn",
+				"fillAlphas": 1,
+				"title": "illegalCars",
+				"type": "column",
+				"valueField": "illegalCars"
+			}, {
+				"balloonText": "<span style='font-size:13px;'>[[title]] in [[category]]:<b>[[value]]</b> [[additional]]</span>",
+				"bullet": "round",
+				"dashLengthField": "dashLengthLine",
+				"lineThickness": 3,
+				"bulletSize": 7,
+				"bulletBorderAlpha": 1,
+				"bulletColor": "#FFFFFF",
+				"useLineColorForBulletBorder": true,
+				"bulletBorderThickness": 3,
+				"fillAlphas": 0,
+				"lineAlpha": 1,
+				"title": "illegalCars",
+				"valueField": "illegalCars"
 			}],
 			"categoryField": "hour",
 			"categoryAxis": {
@@ -872,14 +895,58 @@ var Page = function() {
 	}
 
 	var changeResultDataToChart =function(list, chartData){
+		var myIndex =0;
+		var checkHour =[];
 
-		for(var i=0;i<list.length;i++){
-			if(list[i].time_interval=="0")
+		for(var index =0;index<24;index++)
+		{
+			checkHour.push(false);
+		}
+
+		for(var i=0;i<list.length;i++)
+		{
+			checkHour[parseInt(list[i].time_interval)] = true;
+		}
+
+		for(var j = 0;j<24;j++)
+		{
+			if(checkHour[j]===true)
 			{
-				list[i].time_interval+='0';
+
+				var hour = parseInt(list[myIndex].time_interval);
+				console.log( parseInt(list[myIndex].time_interval));
+				var hourStr="";
+				if(hour<10)
+				{
+					hourStr ="0"+ hour.toString()
+				}
+				else
+				{
+					hourStr = hour.toString();
+				}
+				var json={"hour":hourStr,"legalCars":list[myIndex].legal_total,"illegalCars":list[myIndex].illegal_total};
+				chartData.push(json);
+				myIndex++;
 			}
-			var json={"hour":list[i].time_interval,"legalCars":list[i].total,"expenses":list[i].total};
-			chartData.push(json);
+			else
+			{
+				var my_json ="";
+				if(j<10)
+				{
+					hourStr ="0"+j.toString();
+					my_json = {"hour": hourStr,"legalCars":0,"illegalCars":0};
+				}
+				else
+				{
+					hourStr =j.toString();
+					my_json = {"hour": hourStr,"legalCars":0,"illegalCars":0};
+				}
+				chartData.push(my_json);
+			}
+
+
+
+
 		}
 
 	}

@@ -143,20 +143,6 @@ public class ServletActionRecordInfo extends HttpServlet {
 
             }
 
-            if (action.equals("edit_record")) {
-                actionOk = true;
-
-                try {
-
-                    modifyDeviceRecordForView(request, response, json);
-
-                } catch (Exception e) {
-
-                    e.printStackTrace();
-
-                }
-
-            }
 
             if (action.equals("illegal_statistics")) {
                 actionOk = true;
@@ -341,11 +327,7 @@ public class ServletActionRecordInfo extends HttpServlet {
         dao.getQueryRecord(data, json);
     }
 
-    private void modifyDeviceRecordForView(HttpServletRequest request, HttpServletResponse response, JSONObject json)
-            throws JSONException, SQLException {
-        IllegalDao dao = new IllegalDao();
-        dao.modifyDeviceRecordForView(data, json);
-    }
+
 
     private void deleteIllegalRecord(HttpServletRequest request, HttpServletResponse response, JSONObject json)
             throws JSONException, SQLException {
