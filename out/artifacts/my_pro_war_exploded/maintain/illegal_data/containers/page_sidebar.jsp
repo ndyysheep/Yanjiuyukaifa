@@ -65,21 +65,21 @@
                     <span class="arrow open"></span>
                 </a>
                 <ul class="sub-menu">
-                    <li>
+                    <li class="active">
                         <a href="../monitor/monitor_list.jsp">
                             <span class="badge badge-warning">new</span>车辆数据监控</a>
                     </li>
-                    <li class="active">
+                    <li>
+                        <a href="../monitor/monitor_statistics.jsp">
+                            车辆数据统计</a>
+                    </li>
+                    <li>
                         <a href="../illegal_data/illegal_data_list.jsp">
                             违法数据监控</a>
                     </li>
                     <li>
-                        <a href="layout_sidebar_closed.html">
-                            Sidebar Closed Page</a>
-                    </li>
-                    <li>
-                        <a href="layout_blank_page.html">
-                            Blank Page</a>
+                        <a href="../illegal_data/illegal_data_statistics.jsp">
+                            违法数据统计</a>
                     </li>
                     <li>
                         <a href="layout_boxed_page.html">
