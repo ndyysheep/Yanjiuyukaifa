@@ -98,7 +98,7 @@
             </form>
             <!-- END HEADER SEARCH BOX -->
             <!-- BEGIN TOP NAVIGATION MENU -->
-            <%@include file="containers/top_menu.jsp"%>
+            <%@include file="../../home/frame/top_menu.jsp"%>
             <!-- END TOP NAVIGATION MENU -->
         </div>
         <!-- END PAGE TOP -->
@@ -111,7 +111,7 @@
 <!-- BEGIN CONTAINER -->
 <div class="page-container">
     <!-- BEGIN SIDEBAR -->
-    <%@include file="containers/page_sidebar.jsp"%>
+    <%@include file="../../home/frame/page_sidebar.jsp"%>
     <!-- END SIDEBAR -->
 
     <!-- BEGIN CONTENT -->
@@ -301,4 +301,4 @@
 <%@include file="monitor_export_div.jsp"%>
 
 </html>
-<script src="../../assets/js/monitor.js" type="text/javascript"></script>
+<script src="containers/js/monitor.js" type="text/javascript"></script>

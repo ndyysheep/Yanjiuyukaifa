@@ -41,12 +41,12 @@ var Page = function() {
 
 	};
 	/*----------------------------------------入口函数  结束----------------------------------------*/
-
+	var resultList=[];
 	/*----------------------------------------业务函数  开始----------------------------------------*/
 	/*------------------------------针对各个页面的入口  开始------------------------------*/
 	var initIllegalDataList=function(){
 
-		onPageListener();
+		onPageListenerForMonitorList();
 		initIllegalDataListControlEvent();
 		initIllegalDataRecordList();
 		initDeviceFile();
@@ -79,8 +79,7 @@ var Page = function() {
 		if (r != null) return decodeURI(r[2]); return null; //返回参数值，如果是中文传递，就用decodeURI解决乱码，否则用unescape
 	}
 
-	var onPageListener = function()
-	{
+	var onPageListenerForMonitorList= function() {
 
 		var inputListener = $(".form-group input");
 		var colorContainer=inputListener.css("borderColor");
@@ -113,7 +112,7 @@ var Page = function() {
 
 	//init-device_list functions begin
 	var initIllegalDataListControlEvent=function(){
-		$('#ac_query_button').click(function() {onQueryRecord(),initDeviceQuery();});
+		$('#ac_query_button').click(function() {onQueryRecord(),initIllegalDataQuery();});
 		$('#export_button').click(function() {myExportAPI();});
 		$('#print_button').click(function() {myPrintAPI()});
 		$('#print_button_for_word').click(function() {myPrintAPI_Word()});
@@ -124,11 +123,11 @@ var Page = function() {
 		$("#illegal_record_query_div").modal("show");
 	}
 
-	var initDeviceQuery=function(){
-		initDeviceQueryControlEvent();
+	var initIllegalDataQuery=function(){
+		initIllegalDataQueryControlEvent();
 	}
-	var initDeviceQueryControlEvent=function(){
-		$("#help_button").click(function() {help();});
+
+	var initIllegalDataQueryControlEvent=function(){
 		$('#illegal_record_query_div #query_button').click(function() {myQuerySubmit();});
 	}
 	var initDeviceViewControlEvent=function(){
@@ -139,7 +138,7 @@ var Page = function() {
 
 	var initIllegalDataRecordList=function(){
 		//使用Datatable的数据表,统计总数据
-		getDeviceRecordDatatable();
+		getIllegalDataRecordDatatable();
 
 	}
 
@@ -253,8 +252,6 @@ var Page = function() {
 
 	}
 
-
-
 	var initDeviceRecordView=function(){
 		var id=getUrlParam("id");
 		console.log("运行");
@@ -286,11 +283,11 @@ var Page = function() {
 	}
 
 	//get_record functions begin
-	var resultList=[];
 
-	var getDeviceRecordDatatable =function(data){
+	var getIllegalDataRecordDatatable =function(data){
 
 		var servletRequest ="../../illegal_data_servlet_action";
+		resultList=[];
 		if(data==undefined)
 		{
 			data={};
@@ -353,8 +350,7 @@ var Page = function() {
 				},"orderable": true
 			},{
 				"mRender": function(data, type, full) {
-					var speed=speedAnalysis(full.start_lines_x1,full.start_lines_y1
-						,full.end_lines_x2,full.end_lines_y2,full.time_start,full.time_end)
+					var speed=full.speed;
 					sReturn = '<div>'+speed+'</div>';
 					return sReturn;
 				},"orderable": true
@@ -366,9 +362,17 @@ var Page = function() {
             },{
 				"mRender": function(data, type, full) {
 
-					sReturn = '<div>'+'<a href=\"'+full.image_url+'\"'
-						+ "class=\"btn default btn-xs blue\"" +' target=\"_blank\">'
-						+"<i class=\"fa fa-share\"></i>"+'查看</a>'+'</div>';
+					if(full.image_url!=null)
+					{
+						sReturn = '<div>'+'<a href=\"'+full.image_url+'\"'
+							+ "class=\"btn default btn-xs blue\"" +' target=\"_blank\">'
+							+"<i class=\"fa fa-share\"></i>"+'查看</a>'+'</div>';
+					}
+					else
+					{
+						sReturn = '<div>'+"无"+'</div>'
+					}
+
 					return sReturn;
 				},"orderable": true
 			},{
@@ -390,7 +394,12 @@ var Page = function() {
 			"ajax": {
 				"url": servletRequest,
 				"type": "POST",
-				"data":data
+				"data":data,
+				"dataSrc": function(json) {
+					console.log(json.aaData);
+					resultList = json.aaData;
+					return json.aaData; // 返回的 JSON 数据中的数据源位置
+				}
 			}
 			//"sAjaxSource": "../../illegal_data_servlet_action?action=get_illegal_record"
 		});
@@ -456,8 +465,6 @@ var Page = function() {
 	//init-illegal_file functions end
 
 
-
-
 	var onAjaxUploadFile=function(){
 		console.log("[onAjaxUploadFile]====");
 		var deviceId = $("#device_id").val();
@@ -494,20 +501,34 @@ var Page = function() {
 
 		var url = "../../illegal_data_servlet_action";
 		var data={};
-
+		var time_from = $("#illegal_record_query_div #capture_time_from").val();
+		var time_to = $("#illegal_record_query_div #capture_time_to").val();
 		data.action="query_illegal_data_record";
 
 		data.id=$("#illegal_record_query_div #id").val();
 		data.car_code=$("#illegal_record_query_div #car_code").val();
 		data.vehicle_type=$("#illegal_record_query_div #vehicle_type").val();
+		data.illegal_status=explainIllegalCode_Contrary($("#illegal_record_add_div #illegal_status").val());
+		data.time_from = time_from;
+		data.time_to = time_to;
+		if(time_from!=="")
+		{
+			data.time_from+=" "+$("#illegal_record_query_div #capture_time_sec_from").val();
+		}
+
+		if(time_to!=="")
+		{
+			data.time_to+=" " +$("#illegal_record_query_div #capture_time_sec_to").val();
+		}
+
 		data.speed=$("#illegal_record_query_div #speed").val();
 		data.lane_name=$("#illegal_record_query_div #lane_name").val();
 
 		if(checkValid($("#illegal_record_query_div")))
 		{
-			$("#record_query_div").modal("hide");
+			$("#illegal_record_query_div").modal("hide");
 
-			getDeviceRecordDatatable(data);
+			getIllegalDataRecordDatatable(data);
 		}
 		else
 		{
@@ -515,6 +536,7 @@ var Page = function() {
 		}
 
 	}
+
 	var myExportAPI = function(){
 		var url = "../../illegal_file_servlet_action";
 		var data={};
@@ -545,9 +567,8 @@ var Page = function() {
 		history.go(-1);
 	}
 
-	//数据解析模块
-	var explainIllegalCode = function(code)
-	{
+	//解析函数--开始
+	var explainIllegalCode = function(code) {
 		if(code == 1)
 		{
 			return "违停";
@@ -570,14 +591,14 @@ var Page = function() {
 		}
 		else
 		{
+			console.log(code);
 			return "数据错误";
 		}
 
 
 	}
 
-	var explainIllegalCode_Contrary = function(code)
-	{
+	var explainIllegalCode_Contrary = function(code) {
 		if(code === "违停")
 		{
 			return 1;
@@ -598,6 +619,10 @@ var Page = function() {
 		{
 			return 0;
 		}
+		else if(code==="")
+		{
+			return code;
+		}
 		else
 		{
 			return 9;
@@ -607,8 +632,7 @@ var Page = function() {
 	}
 
 	//进行路程解析
-	var routeAnalysis = function(start_x,start_y,end_x,end_y)
-	{
+	var routeAnalysis = function(start_x,start_y,end_x,end_y) {
 		if(start_x!=null&&start_y!=null&&end_x!=null&&end_y!=null)
 		{
 			var num = (end_x-start_x)*(end_x-start_x)+(end_y-start_y)*(end_y-start_y);
@@ -626,8 +650,7 @@ var Page = function() {
 	}
 
 	//进行速度解析
-	var speedAnalysis = function(start_x,start_y,end_x,end_y,start_time,end_time)
-	{
+	var speedAnalysis = function(start_x,start_y,end_x,end_y,start_time,end_time) {
 		if(start_time!=null&&end_time!=null)
 		{
 			var distance= routeAnalysis(start_x,start_y,end_x,end_y);
@@ -642,7 +665,7 @@ var Page = function() {
 			console.log(secondsDiff);
 			var speed =distance/secondsDiff;
 
-			return speed.toFixed(2);
+			return speed;
 		}
 		else
 		{
@@ -652,9 +675,10 @@ var Page = function() {
 
 	}
 
+	//解析函数--结束
 
-	var checkInputValid = function(key)
-	{
+	//输入判断函数--开始
+	var checkInputValid = function(key) {
 		var invalidKeys=['-','=','+','{','}','\'','/',',',
 			'\\','"',':',';','?','!','%','&','*','#','$','^','(',')']
 
@@ -670,8 +694,7 @@ var Page = function() {
 
 	}
 
-	var checkValid = function(element)
-	{
+	var checkValid = function(element) {
 		var inputElements = element.find("input");
 		var check =  true;
 		var str = "";
@@ -688,9 +711,7 @@ var Page = function() {
 
 		return check;
 	}
-
-
-	//数据解析模块 结束
+	//输入判断函数--结束
 
 	//Page return 开始
 	return {

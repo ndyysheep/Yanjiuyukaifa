@@ -11,4 +11,4 @@
 </body>
 </html>
 <script src="jquery.min.js"></script>
-<script src="../../assets/js/monitor.js"></script>
+<script src="containers/js/monitor.js"></script>

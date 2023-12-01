@@ -57,7 +57,7 @@ License: You must have a valid license purchased only from themeforest(the above
     <link id="style_color" href="../../assets/admin/layout4/css/themes/light.css" rel="stylesheet" type="text/css"/>
     <link href="../../assets/admin/layout4/css/custom.css" rel="stylesheet" type="text/css"/>
     <!-- END THEME STYLES -->
-    <link rel="shortcut icon" href="favicon.ico"/>
+    <link rel="shortcut icon" href="containers/favicon.ico"/>
 </head>
 <!-- END HEAD -->
 <!-- BEGIN BODY -->
@@ -139,7 +139,7 @@ License: You must have a valid license purchased only from themeforest(the above
             </form>
             <!-- END HEADER SEARCH BOX -->
             <!-- BEGIN TOP NAVIGATION MENU -->
-            <%@include file="containers/top_menu.jsp"%>
+            <%@include file="../../home/frame/top_menu.jsp"%>
 
             <!-- END TOP NAVIGATION MENU -->
         </div>
@@ -153,7 +153,7 @@ License: You must have a valid license purchased only from themeforest(the above
 <!-- BEGIN CONTAINER -->
 <div class="page-container">
     <!-- BEGIN SIDEBAR -->
-    <%@include file="containers/page_sidebar.jsp"%>
+    <%@include file="../../home/frame/page_sidebar.jsp"%>
     <!-- END SIDEBAR -->
     <!-- BEGIN CONTENT -->
     <div class="page-content-wrapper">
@@ -390,7 +390,7 @@ License: You must have a valid license purchased only from themeforest(the above
 <script src="../../assets/global/scripts/metronic.js" type="text/javascript"></script>
 <script src="../../assets/admin/layout4/scripts/layout.js" type="text/javascript"></script>
 <script src="../../assets/admin/layout4/scripts/demo.js" type="text/javascript"></script>
-<script src="../../assets/js/monitor.view.js" type="text/javascript"></script>
+<script src="containers/js/monitor.view.js" type="text/javascript"></script>
 <script>
 
 </script>

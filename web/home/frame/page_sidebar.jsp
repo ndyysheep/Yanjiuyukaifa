@@ -66,19 +66,19 @@
                 </a>
                 <ul class="sub-menu">
                     <li class="active">
-                        <a href="../monitor/monitor_list.jsp">
+                        <a href="../../maintain/monitor/monitor_list.jsp">
                             <span class="badge badge-warning">new</span>车辆数据监控</a>
                     </li>
                     <li>
-                        <a href="../monitor/monitor_statistics.jsp">
+                        <a href="../../maintain/monitor/monitor_statistics.jsp">
                             车辆数据统计</a>
                     </li>
                     <li>
-                         <a href="../illegal_data/illegal_data_list.jsp">
+                        <a href="../../maintain/illegal_data/illegal_data_list.jsp">
                             违法数据监控</a>
                     </li>
                     <li>
-                        <a href="../illegal_data/illegal_data_statistics.jsp">
+                        <a href="../../maintain/illegal_data/illegal_data_statistics.jsp">
                             违法数据统计</a>
                     </li>
                     <li>
