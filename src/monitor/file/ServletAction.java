@@ -441,6 +441,7 @@ public class ServletAction extends HttpServlet {
             throws JSONException, SQLException {
         MonitorDao dao = new MonitorDao();
         dao.toStatistics(data, json);
+        dao.getRecordForStatistics(data,json);
     }
 
     private void exportMonitorRecord(HttpServletRequest request, HttpServletResponse response, JSONObject json)

@@ -49,6 +49,7 @@ var Page = function() {
 	var columnsData=undefined;
 	var recordResult=undefined;
 	var chartData=[];
+	var recordData = [];
 	/*----------------------------------------业务函数  开始----------------------------------------*/
 	/*------------------------------针对各个页面的入口  开始------------------------------*/
 	var initMonitorList=function(){
@@ -85,6 +86,7 @@ var Page = function() {
 		initMonitorRecordForStatistics(time_from,time_to);
 		$.ajaxSettings.async=true;
 		initChartSets();
+		initChartSample7();
 	}
 
 
@@ -130,6 +132,8 @@ var Page = function() {
 
 		//使用Datatable的数据表,统计总数据
 		getMonitorRecordDatatable();
+
+
 
 	}
 	var initMonitorRecordForPrint=function(){
@@ -255,15 +259,17 @@ var Page = function() {
 			if(json.result_code==0){
 				console.log(JSON.stringify(json));
 
-				var list = json.aaData;
+				var list = json.my_aaData;
+				var type_list = json.aaData;
 
-				if(list!=undefined&&list.length>0){
-					changeResultDataToChart(list,chartData);
-
-					console.log(JSON.stringify(chartData));
-
+				if(list!=undefined&&list.length>0)
+				{
+					changeResultDataToChartForHours(list);
 				}
-
+				if(type_list!=undefined&&type_list.length>0)
+				{
+					changeResultDataToChartForTypes(type_list);
+				}
 
 			}else{
 				alert("与后端交互错误!"+json.result_Msg);
@@ -863,15 +869,26 @@ var Page = function() {
 			}
 		}
 
-		var time_from = $("#time_from").val()+" "+forTimeCheck[0];
-		var time_to = $("#time_to").val()+" "+forTimeCheck[1];
+		var time_from = $("#time_from").val();
+		var time_to = $("#time_to").val();
+
+		if(time_from !== "")
+		{
+			time_from+=" "+forTimeCheck[0];
+		}
+
+		if(time_to !== "")
+		{
+			time_to+=" "+forTimeCheck[1];
+		}
+
 
 		//自定义变量,用于获取元素并改变元素的样式
 		var barContainer = document.getElementById("warning");
 		var beginMinuteContainer = document.getElementById("time_from_minute");
 		var endMinuteContainer = document.getElementById("time_to_minute");
 
-		if(time_from>time_to)
+		if(time_from>time_to||time_from===""||time_to==="")
 		{
 			barContainer.style.display="block";
 			beginMinuteContainer.style.borderColor="#a94442";
@@ -894,9 +911,10 @@ var Page = function() {
 		history.go(-1);
 	}
 
-	var changeResultDataToChart =function(list, chartData){
+	var changeResultDataToChartForHours =function(list){
 		var myIndex =0;
 		var checkHour =[];
+		chartData = [];
 
 		for(var index =0;index<24;index++)
 		{
@@ -945,10 +963,21 @@ var Page = function() {
 			}
 
 
-
-
 		}
 
+	}
+
+	var changeResultDataToChartForTypes = function(list)
+	{
+		var json = "";
+		recordData = [];
+		for (var i = 0; i < list.length; i++)
+		{
+			json = {"vehicle_type":list[i].vehicle_type,"num":parseInt(list[i].num)};
+			recordData.push(json);
+		}
+		console.log(chartData);
+		console.log(recordData);
 	}
 
 	var explainIllegalCode = function(code)
@@ -1153,7 +1182,48 @@ var Page = function() {
 	}
 
 
+	var initChartSample7 = function() {
+		var chart = AmCharts.makeChart("chart_7", {
+			"type": "pie",
+			"theme": "light",
 
+			"fontFamily": 'Open Sans',
+
+			"color":    '#888',
+
+			"dataProvider":recordData,
+			"valueField": "num",
+			"titleField": "vehicle_type",
+			"outlineAlpha": 0.4,
+			"depth3D": 15,
+			"balloonText": "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>",
+			"angle": 30,
+			"exportConfig": {
+				menuItems: [{
+					icon: '/lib/3/images/export.png',
+					format: 'png'
+				}]
+			}
+		});
+
+		jQuery('.chart_7_chart_input').off().on('input change', function() {
+			var property = jQuery(this).data('property');
+			var target = chart;
+			var value = Number(this.value);
+			chart.startDuration = 0;
+
+			if (property == 'innerRadius') {
+				value += "%";
+			}
+
+			target[property] = value;
+			chart.validateNow();
+		});
+
+		$('#chart_7').closest('.portlet').find('.fullscreen').click(function() {
+			chart.invalidateSize();
+		});
+	}
 
 	//Page return 开始
 	return {
