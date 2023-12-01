@@ -243,6 +243,13 @@ public class MonitorDao {
         queryRecord(data, json);
     }
 
+    public void getRecordForStatistics(Data data, JSONObject json) throws JSONException, SQLException {
+        // 构造sql语句，根据传递过来的查询条件参数
+        String sql = createStatisticsSql(data); // 构造sql语句，根据传递过来的查询条件参数
+        data.getParam().put("sql", sql);
+        queryRecord(data, json);
+    }
+
     /**
      * 这是一个样板的函数，可以拷贝做修改用
      */
@@ -320,16 +327,12 @@ public class MonitorDao {
         /*--------------------返回数据 结束--------------------*/
     }
 
-
-
     public void toStatistics(Data data, JSONObject json) throws JSONException {
         /*--------------------获取变量 开始--------------------*/
         String resultMsg = "ok";
         String timeTo = "";
         String timeFrom = "";
         String Now=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
-
-
 
         String where = "";
         JSONObject param = data.getParam();
@@ -409,7 +412,7 @@ public class MonitorDao {
         /*--------------------返回数据 开始--------------------*/
 
         showDebug(jsonList.toString());
-        json.put("aaData", jsonList);
+        json.put("my_aaData", jsonList);
         json.put("result_msg", resultMsg); // 如果发生错误就设置成"error"等
         json.put("result_code", resultCode); // 返回0表示正常，不等于0就表示有错误产生，错误代码
         /*--------------------返回数据 结束--------------------*/
@@ -431,7 +434,6 @@ public class MonitorDao {
 
     private String createViewRecordSql(Data data) throws JSONException {
         JSONObject param = data.getParam();
-
         String sql = "select * from " + relationName ;
         String where="";
         sql += createJoinSql(relationName, "lane_data", "lane_id", "lane_id");
@@ -447,6 +449,49 @@ public class MonitorDao {
         sql+=where;
         return sql;
 
+    }
+
+    private String createStatisticsSql(Data data) throws JSONException
+    {
+        String timeTo = "";
+        String timeFrom = "";
+        String Now=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+
+        String where = "";
+        JSONObject param = data.getParam();
+        String sql = " select vehicle_type,count(vehicle_type) as num "
+                +" from " + relationName;
+        sql += where;
+        sql += " group by vehicle_type";
+        showDebug("[percentageToStatistics]构造的SQL语句是：" + sql);
+
+        if(checkParamValid(param, "time_from") || checkParamValid(param, "time_to"))
+        {
+            if(checkParamValid(param, "time_from"))
+            {
+                timeFrom = param.getString("time_from");
+            }
+            else
+            {
+                timeFrom = Now;
+            }
+
+            if(checkParamValid(param, "time_to"))
+            {
+                timeTo = param.getString("time_to");
+            }
+            else
+            {
+                timeTo = Now;
+            }
+
+
+            where =" where "+"capture_time between '" + timeFrom + "' and '" + timeTo
+                    + "'";
+
+        }
+
+        return sql;
     }
 
     /**
