@@ -189,6 +189,21 @@ public class ServletActionRecordInfo extends HttpServlet {
 
             }
 
+            if (action.equals("view_illegal_record")) {
+                actionOk = true;
+
+                try {
+
+                    viewIllegalDataRecord(request, response, json);
+
+                } catch (Exception e) {
+
+                    e.printStackTrace();
+
+                }
+
+            }
+
             if (action.equals("upload_file")) {
                 actionOk = true;
 
@@ -340,7 +355,8 @@ public class ServletActionRecordInfo extends HttpServlet {
     private void statisticsIllegalRecord(HttpServletRequest request, HttpServletResponse response, JSONObject json)
             throws JSONException, SQLException {
         IllegalDao dao = new IllegalDao();
-        dao.toStatistics(data, json);
+        dao.getRecordForStatisticsHour(data, json);
+        dao.getRecordForStatisticsType(data, json);
     }
 
     private void exportDeviceRecord(HttpServletRequest request, HttpServletResponse response, JSONObject json)
@@ -364,6 +380,12 @@ public class ServletActionRecordInfo extends HttpServlet {
         dao.getIllegalRecord(data, json);
     }
 
+    private void viewIllegalDataRecord(HttpServletRequest request, HttpServletResponse response, JSONObject json)
+            throws JSONException, SQLException
+    {
+        IllegalDao dao = new IllegalDao();
+        dao.viewIllegalDataRecord(data,json);
+    }
     /*
      * ========================================CRUD业务函数结束========================================
      */

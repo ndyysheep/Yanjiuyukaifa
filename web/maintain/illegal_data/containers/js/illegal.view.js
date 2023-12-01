@@ -1,4 +1,4 @@
-var module="monitor";
+var module="illegal";
 var sub="data";
 var check = 0;
 
@@ -157,18 +157,18 @@ var FormEditable = function () {
             var r = window.location.search.substr(1).match(reg);  //匹配目标参数
             if (r != null) return decodeURI(r[2]); return null; //返回参数值，如果是中文传递，就用decodeURI解决乱码，否则用unescape
         }
-        $('#record_view_div #DeviceId').editable({
+        $('#illegal_record_view_div #DeviceId').editable({
             url: ' ../../monitor_file_servlet_action?action=edit_record',
             type: 'text',
             pk:''+getUrlParam("id")+''
         });
-        $('#record_view_div #car_code').editable({
+        $('#illegal_record_view_div #car_code').editable({
             url: ' ../../monitor_file_servlet_action?action=edit_record',
             type: 'text',
             pk:''+getUrlParam("id")+''
         });
 
-        $('#record_view_div #capture_time').editable({
+        $('#illegal_record_view_div #capture_time').editable({
             rtl : Metronic.isRTL(),
             url: ' ../../monitor_file_servlet_action?action=edit_record',
             type: 'text',
@@ -264,24 +264,24 @@ var FormEditable = function () {
 
 }();
 
-
 var Page = function(){
     /*----------------------------------------入口函数  开始----------------------------------------*/
-    var initPageControl=function()
-    {
+    var initPageControl=function() {
         initMonitorView();
     };
     /*----------------------------------------入口函数  结束----------------------------------------*/
-    var initMonitorView = function()
-    {
+
+    /*-----------------------------------针对View页面的入口函数 开始-----------------------------*/
+    var initMonitorView = function() {
         initMonitorRecordView();
     }
+    /*-----------------------------------针对View页面的入口函数 结束-----------------------------*/
 
     var initMonitorRecordView=function(){
         var id=getUrlParam("id");
         console.log("运行");
         var data={};
-        data.action="view_monitor_record";
+        data.action="view_illegal_record";
         data.id=id;
         $.post("../../"+module+"_"+sub+"_servlet_action",data,function(json){
             console.log(JSON.stringify(json));
@@ -291,12 +291,12 @@ var Page = function(){
                     for(var i=0;i<list.length;i++){
                         var record=list[i];
                         $("#small_title").text("车辆序号:"+record.id);
-                        $("#record_view_div  #car_code").text(record.car_code);
-                        $("#record_view_div  #vehicle_type").text(record.vehicle_type);
-                        $("#record_view_div  #illegal_status").text(explainIllegalCode(record.illegal_status));
-                        $("#record_view_div  #capture_time").text(record.capture_time);
-                        $("#record_view_div #speed").text(record.speed);
-                        $("#record_view_div #lane_name").text(record.lane_name);
+                        $("#illegal_record_view_div  #car_code").text(record.car_code);
+                        $("#illegal_record_view_div  #vehicle_type").text(record.vehicle_type);
+                        $("#illegal_record_view_div  #illegal_status").text(explainIllegalCode(record.illegal_status));
+                        $("#illegal_record_view_div  #capture_time").text(record.capture_time);
+                        $("#illegal_record_view_div #speed").text(record.speed);
+                        $("#illegal_record_view_div #lane_name").text(record.lane_name);
                         $(".tiles .name").text(record.id);
                         $(".tiles #image_container").attr("src",record.image_url);
                         $(".tiles #url_container").attr("href",record.image_url);
@@ -309,16 +309,8 @@ var Page = function(){
         })
     }
 
-    var getUrlParam=function(name){
-        //获取url中的参数
-        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
-        var r = window.location.search.substr(1).match(reg);  //匹配目标参数
-        if (r != null) return decodeURI(r[2]); return null; //返回参数值，如果是中文传递，就用decodeURI解决乱码，否则用unescape
-    }
-
     //数据解析模块
-    var explainIllegalCode = function(code)
-    {
+    var explainIllegalCode = function(code) {
         if(code == 1)
         {
             return "违停";
@@ -347,8 +339,7 @@ var Page = function(){
 
     }
 
-    var explainIllegalCode_Contrary = function(code)
-    {
+    var explainIllegalCode_Contrary = function(code) {
         if(code === "违停")
         {
             return 1;
@@ -376,8 +367,15 @@ var Page = function(){
 
 
     }
+    //数据解析模块--结束
 
 
+    var getUrlParam=function(name){
+        //获取url中的参数
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+        var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+        if (r != null) return decodeURI(r[2]); return null; //返回参数值，如果是中文传递，就用decodeURI解决乱码，否则用unescape
+    }
     //Page return 开始
     return {
         init: function() {

@@ -30,8 +30,8 @@ License: You must have a valid license purchased only from themeforest(the above
     <%@include file="../../home/frame/frame_style.jsp"%>
 
     <!-- END THEME STYLES -->
-    <link rel="shortcut icon" href="favicon.ico"/>
-    <link href="dataTables.bootstrap.css" rel="stylesheet" type="text/css"/>
+    <link rel="shortcut icon" href="containers/favicon.ico"/>
+    <link href="containers/css/dataTables.bootstrap.css" rel="stylesheet" type="text/css"/>
 
 </head>
 
@@ -152,7 +152,7 @@ License: You must have a valid license purchased only from themeforest(the above
 
 <!-- BEGIN JAVASCRIPT -->
 <%@include file="../../home/frame/frame_javascript.jsp"%>
-<script src="../../assets/js/illegal.data.js" type="text/javascript"></script>
+<script src="containers/js/illegal.data.js" type="text/javascript"></script>
 <script src="../../assets/js/dataTables.bootstrap.js" type="text/javascript"></script>
 <script src="../../assets/js/jquery.dataTables.min.js" type="text/javascript"></script>
 

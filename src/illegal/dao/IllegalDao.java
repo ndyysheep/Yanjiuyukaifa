@@ -26,9 +26,8 @@ public class IllegalDao {
      * 声明数据库名
      */
     private String dbName = "yjykfsj8";
-    private String relationName = "record_info";
+    private String relationName = "monitoring_data";
 
-    private ArrayList<String> dbColomn = new Db(dbName).getColomns(relationName);
 
     // private int[] lines = new int[5];
 
@@ -121,6 +120,58 @@ public class IllegalDao {
     }
 
     /**
+     * 拼接where-between时间段查询语句
+     * @param param json数据对象
+     * @param where 原where语句
+     * @param timeFromKey json中开始时间键值
+     * @param timeToKey json中截止时间键值
+     * @return sql中的where部分语句
+     * @throws JSONException 抛出Json类异常
+     */
+    private String useTimeWhere(JSONObject param,String where, String timeFromKey,String timeToKey)throws JSONException
+    {
+        String timeWhere = where;
+        String timeTo = "";
+        String timeFrom  = "";
+        String Now=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+        if(checkParamValid(param, timeFromKey) || checkParamValid(param, timeToKey))
+        {
+            if(checkParamValid(param, timeFromKey))
+            {
+                timeFrom = param.getString(timeFromKey);
+            }
+            else
+            {
+                timeFrom = Now;
+            }
+
+            if(checkParamValid(param, timeToKey))
+            {
+                timeTo = param.getString(timeToKey);
+            }
+            else
+            {
+                timeTo = Now;
+            }
+
+            if (!where.isEmpty())
+            {
+                timeWhere += " and capture_time between '" + timeFrom + "' and '"
+                        + timeTo + "'";
+            }
+            else
+            {
+                timeWhere =" where "+"capture_time between '" + timeFrom + "' and '" + timeTo
+                        + "'";
+            }
+
+        }
+
+        return timeWhere ;
+    }
+
+
+    /**
      * 删除设备记录
      * 
      * @param data 接收的第一个参数,json对象中的数据信息
@@ -145,7 +196,7 @@ public class IllegalDao {
      */
     public void getIllegalRecord(Data data, JSONObject json) throws JSONException, SQLException {
         // 构造sql语句，根据传递过来的查询条件参数
-        String sql = createGetRecordSql(data); // 构造sql语句，根据传递过来的查询条件参数
+        String sql = createGetQueryRecordSql(data); // 构造sql语句，根据传递过来的查询条件参数
         data.getParam().put("sql", sql);
         queryRecord(data, json);
     }
@@ -157,9 +208,92 @@ public class IllegalDao {
         queryRecord(data, json);
     }
 
+    public void viewIllegalDataRecord(Data data, JSONObject json) throws JSONException, SQLException {
+        // 构造sql语句，根据传递过来的查询条件参数
+        String sql = createViewRecordSql(data); // 构造sql语句，根据传递过来的查询条件参数
+        data.getParam().put("sql", sql);
+        queryRecord(data, json);
+    }
+
+    public void getRecordForStatisticsHour(Data data, JSONObject json) throws JSONException {
+        /*--------------------获取变量 开始--------------------*/
+        String resultMsg = "ok";
+
+        String where = "";
+        JSONObject param = data.getParam();
+        where = useTimeWhere(param,where,"time_from","timeTo");
+
+        int resultCode = 0;
+        List jsonList = new ArrayList();
+        /*--------------------获取变量 完毕--------------------*/
+        /*--------------------数据操作 开始--------------------*/
+        Db queryDb = new Db(dbName);
+
+        String sql = "select DATE_FORMAT(capture_time,\"%H\") as time_interval,"
+                +"count(CASE WHEN illegal_status = 1 THEN 1 END) AS status1,"
+                +"count(CASE WHEN illegal_status = 2 THEN 1 END) AS status2,"
+                +"count(CASE WHEN illegal_status = 3 THEN 1 END) AS status3,"
+                +"count(CASE WHEN illegal_status = 4 THEN 1 END) AS status4"
+                +" from " + relationName;
+
+        sql += where;
+        sql += " group by time_interval";
+        showDebug("[toStatistics]构造的SQL语句是：" + sql);
+
+        try {
+
+            ResultSet rs = queryDb.executeQuery(sql);
+            ResultSetMetaData rsmd = rs.getMetaData();
+            int fieldCount = rsmd.getColumnCount();
+
+            while (rs.next()) {
+
+                int time = rs.getInt("time_interval");
+                HashMap map = new HashMap();
+                map.put("time_interval", time);
+                map.put("status1", rs.getInt("status1"));
+                map.put("status2", rs.getInt("status2"));
+                map.put("status3", rs.getInt("status3"));
+                map.put("status4", rs.getInt("status4"));
+
+
+                jsonList.add(map);
+
+            }
+
+            rs.close();
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+            showDebug("[toStatistics]查询数据库出现错误：" + sql);
+            resultCode = 10;
+            resultMsg = "查询数据库出现错误！" + e.getMessage();
+
+        }
+
+        queryDb.close();
+        /*--------------------数据操作 结束--------------------*/
+        /*--------------------返回数据 开始--------------------*/
+
+        showDebug(jsonList.toString());
+        json.put("hour_aaData", jsonList);
+        json.put("result_msg", resultMsg); // 如果发生错误就设置成"error"等
+        json.put("result_code", resultCode); // 返回0表示正常，不等于0就表示有错误产生，错误代码
+        /*--------------------返回数据 结束--------------------*/
+    }
+
+    public void getRecordForStatisticsType(Data data, JSONObject json) throws JSONException, SQLException {
+        // 构造sql语句，根据传递过来的查询条件参数
+        String sql = createStatisticsSqlForType(data); // 构造sql语句，根据传递过来的查询条件参数
+        data.getParam().put("sql", sql);
+        queryRecord(data, json);
+    }
+
 
     /**
      * 这是一个样板的函数，可以拷贝做修改用
+     * 修改数据库数据时调用
      */
     private void updateRecord(Data data, JSONObject json) throws JSONException {
         /*--------------------获取变量 开始--------------------*/
@@ -180,7 +314,12 @@ public class IllegalDao {
         /*--------------------返回数据 结束--------------------*/
     }
 
-    // 已解决
+    /**
+     * 进行主要的数据库查询处理和交互(接口)
+     * @param data Data类对象,是json对象的容器
+     * @param json json对象,储存交互信息
+     * @throws JSONException 抛出json类异常
+     */
     private void queryRecord(Data data, JSONObject json) throws JSONException {
         /*--------------------获取变量 开始--------------------*/
         String resultMsg = "ok";
@@ -235,130 +374,6 @@ public class IllegalDao {
         /*--------------------返回数据 结束--------------------*/
     }
 
-
-    /**
-     * 静态数据统计
-     * @param data data字段信息
-     * @param json json对象
-     * @throws JSONException 抛出json类异常
-     */
-    public void toStatistics(Data data, JSONObject json) throws JSONException {
-        /*--------------------获取变量 开始--------------------*/
-        String resultMsg = "ok";
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DATE, -1);
-        String timeFrom = (new SimpleDateFormat("yyyy-MM-dd 00:00:00")).format(cal.getTime());
-        String timeTo = (new SimpleDateFormat("yyyy-MM-dd 23:59:59")).format(cal.getTime());
-
-        if(data.getParam().has("time_to")&&data.getParam().has("time_from"))
-        {
-            timeFrom = data.getParam().getString("time_from");
-            timeTo =data.getParam().getString("time_to");
-        }
-
-
-        int resultCode = 0;
-        List jsonList = new ArrayList();
-        /*--------------------获取变量 完毕--------------------*/
-        /*--------------------数据操作 开始--------------------*/
-        Db queryDb = new Db(dbName);
-        String sql = "select DATE_FORMAT(capture_time,\"%H\") as time_interval,count(*) as total from " + relationName;
-        sql += " where capture_time between '" + timeFrom + "' and '" + timeTo + "'";
-        sql += " group by DATE_FORMAT(capture_time,\"%H\")";
-        showDebug("[toStatistics]构造的SQL语句是：" + sql);
-
-        try {
-
-            ResultSet rs = queryDb.executeQuery(sql);
-            ResultSetMetaData rsmd = rs.getMetaData();
-            int fieldCount = rsmd.getColumnCount();
-            int i = 0;
-            boolean[] check = new boolean[24];
-
-            for (boolean it : check) {
-                it = false;
-            }
-
-            while (rs.next()) {
-
-                int time = rs.getInt("time_interval");
-
-                for (; i < time; i++) {
-                    HashMap map = new HashMap();
-                    map.put("time_interval", i < 10 ? "0" + i : i);
-                    map.put("total", 0);
-                    jsonList.add(map);
-                }
-
-                HashMap map = new HashMap();
-                map.put("time_interval", time);
-                map.put("total", rs.getInt("total"));
-                i = time + 1;
-                jsonList.add(map);
-
-            }
-
-            for (; i < 24; i++) {
-                HashMap map = new HashMap();
-                map.put("time_interval", i < 10 ? "0" + i : i);
-                map.put("total", 0);
-                jsonList.add(map);
-            }
-
-            rs.close();
-
-        } catch (Exception e) {
-
-            e.printStackTrace();
-            showDebug("[toStatistics]查询数据库出现错误：" + sql);
-            resultCode = 10;
-            resultMsg = "查询数据库出现错误！" + e.getMessage();
-
-        }
-
-        queryDb.close();
-        /*--------------------数据操作 结束--------------------*/
-        /*--------------------返回数据 开始--------------------*/
-
-        json.put("aaData", jsonList);
-        json.put("result_msg", resultMsg); // 如果发生错误就设置成"error"等
-        json.put("result_code", resultCode); // 返回0表示正常，不等于0就表示有错误产生，错误代码
-        /*--------------------返回数据 结束--------------------*/
-    }
-
-    /**
-     * 构建Sql语句函数
-     * @param data data字段信息
-     * @return 返回构建好的Sql语句
-     * @throws JSONException 抛出json类异常
-     */
-    private String createGetRecordSql(Data data) throws JSONException {
-        JSONObject param = data.getParam();
-
-        String sql = "select * from " + relationName;
-        sql += createJoinSql(relationName, "lane_data", "lane_id", "lane_id");
-        sql += createJoinSql(relationName, "monitoring_data", "monitor_id", "id");
-
-        String where = "";
-
-        if (checkParamValid(param, "monitor_id")) {
-            where = "monitor_id=" + param.getString("monitor_id");
-        }
-
-
-        where = useWhere(param, "car_code", where,false);
-        where = useWhere(param,"lane_name",where,true);
-
-        // 判断是否有条件
-        if (!where.isEmpty()) {
-            sql = sql + " where " + where;
-        }
-
-
-        return sql;
-
-    }
-
     /**
      * 查询用,构建Sql语句
      * @param data json.data 字段信息
@@ -368,26 +383,22 @@ public class IllegalDao {
     public String createGetQueryRecordSql(Data data) throws JSONException {
         JSONObject param = data.getParam();
 
-        String timeTo = "";
-        String timeFrom = "";
-        String Now=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
-        String sql = "select * from " + relationName;
-        sql += createJoinSql(relationName, "monitoring_data", "car_code", "car_code");
-        String where = "";
+        String sql = "select "+relationName+".*,"+"illegal_info.image_url,lane_name from " + relationName;
+        sql += createJoinSql(relationName, "lane_data", "lane_id", "lane_id");
+        sql += createJoinSql(relationName,"illegal_info","id","monitor_id");
+        String where = " where illegal_status<>0 ";
 
-        if (checkParamValid(param, "id")) {
-            where = relationName + ".id=" + param.getString("id");
-        }
-
-
-
+        where = useWhere(param,"id",where,false);
+        where = useTimeWhere(param,where,"time_from","time_to");
         where = useWhere(param,"speed",where,true);
         where = useWhere(param, "car_code", where,false);
         where = useWhere(param,"lane_name",where,true);
 
+
+
         // 判断是否有条件
         if (!where.isEmpty()) {
-            sql = sql + " where " + where;
+            sql += where;
         }
 
 
@@ -395,6 +406,43 @@ public class IllegalDao {
         return sql;
     }
 
+    private String createStatisticsSqlForType(Data data) throws JSONException
+    {
+
+        String where = "";
+        JSONObject param = data.getParam();
+
+        String sql = " select vehicle_type,count(vehicle_type) as num "
+                +" from " + relationName;
+
+        where = useTimeWhere(param,where,"time_from","time_to");
+        sql += where;
+        sql += " group by vehicle_type";
+        showDebug("[percentageToStatistics]构造的SQL语句是：" + sql);
+
+
+
+
+        return sql;
+    }
+
+    private String createViewRecordSql(Data data) throws JSONException {
+        JSONObject param = data.getParam();
+        String sql = "select * from " + relationName ;
+        String where="";
+        sql += createJoinSql(relationName, "lane_data", "lane_id", "lane_id");
+        sql += createJoinSql(relationName,"illegal_info","id","monitor_id");
+
+        if(checkParamValid(param,"id"))
+        {
+            where +=" where "+relationName+"."+"id="+param.getString("id");
+        }
+
+        showDebug(sql);
+        sql+=where;
+        return sql;
+
+    }
 
     public void getExportDeviceRecordToExcel(JSONObject json, Data data) throws JSONException, IOException {
         json.put("download_url", "/upload/maintain/illegal/export_device.xls");

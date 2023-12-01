@@ -145,6 +145,7 @@ public class ServletAction extends HttpServlet {
                 }
 
             }
+
             if (action.equals("delete_monitor_record")) {
                 actionOk = true;
                 try {
@@ -278,19 +279,19 @@ public class ServletAction extends HttpServlet {
     }
 
     /*
-     * ========================================函数分流
-     * 结束========================================
+     * ========================================函数分流结束========================================
      */
     /*
-     * ========================================公共函数
-     * 开始========================================
+     * ========================================公共函数开始========================================
      */
     private Data getPageParameters(HttpServletRequest request, HttpServletResponse response) throws JSONException {
         Data data = new Data();
         HttpSession session = request.getSession();
         /*----------------------------------------获取所有表单信息 开始----------------------------------------*/
         showDebug(
-                "[getPageParameters]----------------------------------------获取所有表单信息 开始----------------------------------------");
+                "[getPageParameters]---------------------"
+                        + "-------------------获取所有表单信息 开始"
+                        +"----------------------------------------");
         JSONObject param = data.getParam();
         Enumeration requestNames = request.getParameterNames();
 
@@ -367,12 +368,10 @@ public class ServletAction extends HttpServlet {
     }
 
     /*
-     * ========================================公共函数
-     * 结束========================================
+     * ========================================公共函数结束========================================
      */
     /*
-     * ========================================MySQL HTTP操作通用函数
-     * 开始========================================
+     * ========================================MySQL HTTP操作通用函数 开始========================================
      */
     private void updateRecord(HttpServletRequest request, HttpServletResponse response, JSONObject json)
             throws JSONException, SQLException {
@@ -380,19 +379,11 @@ public class ServletAction extends HttpServlet {
         dao.updateRecord(data, json);
     }
 
-    private void queryRecord(HttpServletRequest request, HttpServletResponse response, JSONObject json)
-            throws JSONException, SQLException {
-        MySQLDao dao = new MySQLDao();
-        dao.queryRecord(data, json);
-    }
-
     /*
-     * ========================================MySQL HTTP操作通用函数
-     * 结束========================================
+     * ========================================MySQL HTTP操作通用函数 结束========================================
      */
     /*
-     * ========================================CRUD业务函数
-     * 开始========================================
+     * ========================================CRUD业务函数 开始========================================
      */
     private void getMonitorRecord(HttpServletRequest request, HttpServletResponse response, JSONObject json)
             throws JSONException, SQLException {
@@ -440,8 +431,8 @@ public class ServletAction extends HttpServlet {
     private void statisticsGPSRecord(HttpServletRequest request, HttpServletResponse response, JSONObject json)
             throws JSONException, SQLException {
         MonitorDao dao = new MonitorDao();
-        dao.toStatistics(data, json);
-        dao.getRecordForStatistics(data,json);
+        dao.getRecordForStatisticsHour(data, json);
+        dao.getRecordForStatisticsType(data,json);
     }
 
     private void exportMonitorRecord(HttpServletRequest request, HttpServletResponse response, JSONObject json)
@@ -468,12 +459,10 @@ public class ServletAction extends HttpServlet {
     }
 
     /*
-     * ========================================CRUD业务函数
-     * 结束========================================
+     * ========================================CRUD业务函数 结束========================================
      */
     /*
-     * ========================================上传文件函数
-     * 开始========================================
+     * ========================================上传文件函数 开始========================================
      */
     private void uploadFile(HttpServletRequest request, HttpServletResponse response, JSONObject json)
             throws JSONException, SQLException {
@@ -606,7 +595,6 @@ public class ServletAction extends HttpServlet {
         dao.saveUploadFileRecord(json, data);
     }
     /*
-     * ========================================上传文件函数
-     * 结束========================================
+     * ========================================上传文件函数 结束========================================
      */
 }

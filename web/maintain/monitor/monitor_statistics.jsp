@@ -101,7 +101,7 @@
             </form>
             <!-- END HEADER SEARCH BOX -->
             <!-- BEGIN TOP NAVIGATION MENU -->
-            <%@include file="containers/top_menu.jsp"%>
+            <%@include file="../../home/frame/top_menu.jsp"%>
             <!-- END TOP NAVIGATION MENU -->
         </div>
         <!-- END PAGE TOP -->
@@ -114,7 +114,7 @@
 <!-- BEGIN CONTAINER -->
 <div class="page-container">
     <!-- BEGIN SIDEBAR -->
-    <%@include file="containers/page_sidebar.jsp"%>
+    <%@include file="../../home/frame/page_sidebar.jsp"%>
     <!-- END SIDEBAR -->
 
     <!-- BEGIN CONTENT -->
@@ -285,7 +285,7 @@
             </div>
             <!-- END ROW -->
 
-
+            <!--饼状图-->
             <div class="row">
                 <div class="col-md-12">
                     <!-- BEGIN CHART PORTLET-->
@@ -374,4 +374,4 @@
 <script src="../../assets/global/plugins/amcharts/ammap/maps/js/worldLow.js" type="text/javascript"></script>
 <script src="../../assets/global/plugins/amcharts/amstockcharts/amstock.js" type="text/javascript"></script>
 
-<script src="../../assets/js/monitor.js" type="text/javascript"></script>
+<script src="containers/js/monitor.js" type="text/javascript"></script>

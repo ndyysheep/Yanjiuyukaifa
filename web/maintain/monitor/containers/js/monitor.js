@@ -41,23 +41,25 @@ var Page = function() {
 
 		if(pageId==="monitor_statistics"){
 			//打印页面
-			initMonitorStatisticsControl();
+			initMonitorStatisticsControlEvent();
 			initMonitorStatistics();
 		}
 	};
 	/*----------------------------------------入口函数  结束----------------------------------------*/
-	var columnsData=undefined;
-	var recordResult=undefined;
+	//全局变量数组
 	var chartData=[];
 	var recordData = [];
+	var resultList=[];
 	/*----------------------------------------业务函数  开始----------------------------------------*/
 	/*------------------------------针对各个页面的入口  开始------------------------------*/
 	var initMonitorList=function(){
-		onPageListener();
+
+		onPageListenerForMonitorList();
 		initMonitorListControlEvent();
 		initMonitorRecordList();
 		initDeviceFile();
 	}
+
 	var initMonitorAdd=function(){
 		initMonitorAddControlEvent();
 	}
@@ -71,13 +73,11 @@ var Page = function() {
 		initDeviceFileControlEvent();
 	}
 
-
 	var initMonitorPrint = function(){
 		initMonitorRecordForPrint();
 	}
 
 	var initMonitorPrint_Word = function(){
-		//initDevicePrintControlEvent();
 		initMonitorRecordForPrint_Word();
 	}
 
@@ -90,159 +90,54 @@ var Page = function() {
 	}
 
 
-
-
-
 	/*------------------------------针对各个页面的入口 结束------------------------------*/
-	var getUrlParam=function(name){
-		//获取url中的参数
-		var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
-		var r = window.location.search.substr(1).match(reg);  //匹配目标参数
-		if (r != null) return decodeURI(r[2]); return null; //返回参数值，如果是中文传递，就用decodeURI解决乱码，否则用unescape
-	}
 
-	//init-device_list functions begin
+	//事件处理初始化--开始
 	var initMonitorListControlEvent=function(){
+		//添加信息
 		$('#ac_add_button').click(function() {onAddRecord(),initMonitorAdd();});
+		//查询信息
 		$('#ac_query_button').click(function() {onQueryRecord(),initDeviceQuery();});
+		//修改信息
 		$('#record_modify_div #submit_button').click(function() {myModifySubmit();});
+		//导出信息
 		$('#export_button').click(function() {myExportAPI();});
+		//打印信息
 		$('#print_button').click(function() {myPrintAPI()});
 		$('#print_button_for_word').click(function() {myPrintAPI_Word()});
+		//统计细心
 		$('#statistics_button').click(function() {myStatisticsAPI()});
 
 	}
+
 	var initMonitorAddControlEvent=function(){
-		$("#help_button").click(function() {help();});
 		$('#record_add_div #submit_button').click(function() {submitAddRecord();});
 	}
+
 	var initMonitorQueryControlEvent=function(){
 		$("#help_button").click(function() {help();});
 		$('#record_query_div #query_button').click(function() {myQuerySubmit();});
 	}
 
-	var initMonitorStatisticsControl = function(){
+	var initMonitorStatisticsControlEvent = function(){
 
-		pageListener();
+		onPageListenerForStatisitcs();
 		$("#time_submit_button").click(function(){onTimeLimitSubmit()})
 	}
+	//事件处理初始化--结束
 
-
+	//数据获取初始化--开始
 	var initMonitorRecordList=function(){
-
 		//使用Datatable的数据表,统计总数据
 		getMonitorRecordDatatable();
-
-
-
 	}
+
 	var initMonitorRecordForPrint=function(){
 		getMonitorRecordPrint();
 	}
+
 	var initMonitorRecordForPrint_Word=function(){
 		getMonitorRecordPrint_Word();
-	}
-
-	var  getMonitorRecordPrint = function(){
-		var url = "../../monitor_file_servlet_action";
-		var data={};
-		data.action="monitor_print";
-		$.post(url,data,function(json){
-			if(json.result_code==0){
-				console.log(JSON.stringify(json));
-
-				var list = json.aaData;
-
-				var myhtml="";
-				if(list!=undefined && list.length>0)
-				{
-					for(var i=0;i<list.length;i++) {
-
-						var record=list[i];
-						myhtml+="<tr><td class=\"highlight\">" +record.id+"</td>";
-						myhtml+="<td>" +record.car_code+" </td>"
-						myhtml+="<td>"+record.vehicle_type +"</td>";
-						myhtml+="<td class=\"highlight\">"+explainIllegalCode(record.illegal_status) +"</td> "
-						myhtml+="<td class=\"highlight\">"+record.capture_time+"</td>";
-						myhtml+="<td>"+record.speed+"</td>";
-						myhtml+="<td class=\"highlight\">"+record.lane_name+ "</td>";
-						myhtml+="</tr>";
-					}
-				}
-			}
-			$("#print_list").html(myhtml);
-		});
-
-
-	}
-
-	var  getMonitorRecordPrint_Word = function(){
-		var url = "../../monitor_file_servlet_action";
-		var data={};
-		data.action="monitor_print";
-		$.post(url,data,function(json){
-			if(json.result_code==0){
-				console.log(JSON.stringify(json));
-
-				var list = json.aaData;
-
-				var html="";
-				if(list!=undefined && list.length>0)
-				{
-					for(var i=0;i<list.length;i++) {
-
-						var record=list[i];
-						html=html+"<tr style='height:26.95pt'>";
-						html=html+" <td width=63 valign=top style='width:46.95pt;border:none;border-right:solid #C9C9C9 1.0pt;";
-						html=html+"  background:white;padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>";
-						html=html+" <p class=MsoNormal align=center style='text-align:center'><i><span";
-						html=html+" lang=EN-US style='font-family:\"微软雅黑\",sans-serif'>"+record.id+"</span></i></p>";
-						html=html+" </td>";
-						html=html+" <td width=63 valign=top style='width:47.05pt;border-top:none;border-left:";
-						html=html+" none;border-bottom:solid #C9C9C9 1.0pt;border-right:solid #C9C9C9 1.0pt;";
-						html=html+" padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>";
-						html=html+" <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US";
-						html=html+" style='font-family:\"微软雅黑\",sans-serif'>"+record.car_code+"</span></p>";
-						html=html+" </td>";
-						html=html+" <td width=106 valign=top style='width:79.4pt;border-top:none;border-left:";
-						html=html+"  none;border-bottom:solid #C9C9C9 1.0pt;border-right:solid #C9C9C9 1.0pt;";
-						html=html+"  padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>";
-						html=html+" <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US";
-						html=html+" style='font-family:\"微软雅黑\",sans-serif'>"+record.vehicle_type+"</span></p>";
-						html=html+" </td>";
-						html=html+" <td width=63 valign=top style='width:47.05pt;border-top:none;border-left:";
-						html=html+"  none;border-bottom:solid #C9C9C9 1.0pt;border-right:solid #C9C9C9 1.0pt;";
-						html=html+"  padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>";
-						html=html+" <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US";
-						html=html+" style='font-family:\"微软雅黑\",sans-serif'>"+explainIllegalCode(record.illegal_status)+"</span></p>";
-						html=html+" </td>";
-						html=html+" <td width=63 valign=top style='width:47.05pt;border-top:none;border-left:";
-						html=html+" none;border-bottom:solid #C9C9C9 1.0pt;border-right:solid #C9C9C9 1.0pt;";
-						html=html+" padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>";
-						html=html+" <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US";
-						html=html+" style='font-family:\"微软雅黑\",sans-serif'>"+record.capture_time+"</span></p>";
-						html=html+" </td>";
-						html=html+" <td width=63 valign=top style='width:47.05pt;border-top:none;border-left:";
-						html=html+"  none;border-bottom:solid #C9C9C9 1.0pt;border-right:solid #C9C9C9 1.0pt;";
-						html=html+"  padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>";
-						html=html+" <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US";
-						html=html+" style='font-family:\"微软雅黑\",sans-serif'>"+record.speed+"</span></p>";
-						html=html+" </td>";
-						html=html+" <td width=63 valign=top style='width:47.05pt;border-top:none;border-left:";
-						html=html+"  none;border-bottom:solid #C9C9C9 1.0pt;border-right:solid #C9C9C9 1.0pt;";
-						html=html+"  padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>";
-						html=html+" <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US";
-						html=html+" style='font-family:\"微软雅黑\",sans-serif'>"+record.lane_name+"</span></p>";
-						html=html+" </td>";
-						html=html+" </tr>";
-
-					}
-				}
-			}
-			$("#print_list_for_word").html(html);
-		});
-
-
 	}
 
 	var initMonitorRecordForStatistics =function(time_from,time_to){
@@ -279,62 +174,15 @@ var Page = function() {
 
 
 	}
-	var pageListener = function(){
 
-		//自定义变量,用于获取元素并改变元素的样式
-		var barContainer = document.getElementById("warning");
-		var beginContainer = document.getElementById("time_from");
-		var endContainer = document.getElementById("time_to");
-
-
-		//自定义变量,用于获取元素并监听
-		var beginListener = undefined;
-		var endListener =  undefined;
-
-
-
-		//监听开始年月日
-		$("#time_from").change(function(){
-			beginListener=$("#time_from").val();
-			console.log(beginListener);
-			if(endListener!==undefined)
-			{
-				if(beginListener>endListener)
-				{
-					barContainer.style.display="block";
-					beginContainer.style.borderColor="#a94442";
-				}
-				else
-				{
-					barContainer.style.display="none";
-					beginContainer.style.borderColor="#d6e9c6";
-				}
-			}
-		});
-
-		//监听结束年月日
-		$("#time_to").change(function(){
-			endListener=($("#time_to").val());
-			console.log(beginListener);
-			console.log(endListener);
-			console.log(beginListener>endListener);
-			if(beginListener!==undefined)
-			{
-				if(beginListener>endListener)
-				{
-					barContainer.style.display="block";
-					endContainer.style.borderColor="#a94442";
-				}
-				else
-				{
-					barContainer.style.display="none";
-					endContainer.style.borderColor="#d6e9c6";
-
-				}
-			}
-		});
-
+	//init-monitor_file functions begin
+	var initDeviceFileControlEvent=function(id){
+		$('#jump_div #upload_button').click(function() {onJumpUploadFile();});
+		$('#upload_button').click(function() {onAjaxUploadFile();});
+		console.log("[initDeviceFileControlEvent]");
 	}
+	//init-monitor_file functions end
+
 	var initChartSets = function(){
 
 		var chart = AmCharts.makeChart("chart_1", {
@@ -415,19 +263,147 @@ var Page = function() {
 
 	}
 
+	var initChartSample7 = function() {
+		var chart = AmCharts.makeChart("chart_7", {
+			"type": "pie",
+			"theme": "light",
+
+			"fontFamily": 'Open Sans',
+
+			"color":    '#888',
+
+			"dataProvider":recordData,
+			"valueField": "num",
+			"titleField": "vehicle_type",
+			"outlineAlpha": 0.4,
+			"depth3D": 15,
+			"balloonText": "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>",
+			"angle": 30,
+			"exportConfig": {
+				menuItems: [{
+					icon: '/lib/3/images/export.png',
+					format: 'png'
+				}]
+			}
+		});
+
+		jQuery('.chart_7_chart_input').off().on('input change', function() {
+			var property = jQuery(this).data('property');
+			var target = chart;
+			var value = Number(this.value);
+			chart.startDuration = 0;
+
+			if (property == 'innerRadius') {
+				value += "%";
+			}
+
+			target[property] = value;
+			chart.validateNow();
+		});
+
+		$('#chart_7').closest('.portlet').find('.fullscreen').click(function() {
+			chart.invalidateSize();
+		});
+	}
+	//数据获取初始化--结束
 
 
-	//table functions begin
 
-	//table functions end
+	//页面监听函数--开始
+	var onPageListenerForMonitorList= function() {
 
-	//get_record functions begin
-	var resultList=[];
+		var inputListener = $(".form-group input");
+		var colorContainer=inputListener.css("borderColor");
+		inputListener.click(function(event){
 
+			var element = $(event.target);
+			element.keypress(function(leafEvent){
+				var value=leafEvent.key;
+				console.log(value.toString());
+				if(!checkInputValid(value))
+				{
+
+					element.css({
+						"border-color" : "#a94442"
+					})
+					alert("不允许输入特殊字符");
+				}
+				else
+				{
+					element.css({
+						"border-color" : colorContainer
+					})
+				}
+
+			})
+
+		})
+
+	}
+
+	var onPageListenerForStatisitcs = function(){
+
+		//自定义变量,用于获取元素并改变元素的样式
+		var barContainer = document.getElementById("warning");
+		var beginContainer = document.getElementById("time_from");
+		var endContainer = document.getElementById("time_to");
+
+
+		//自定义变量,用于获取元素并监听
+		var beginListener = undefined;
+		var endListener =  undefined;
+
+
+
+		//监听开始年月日
+		$("#time_from").change(function(){
+			beginListener=$("#time_from").val();
+			console.log(beginListener);
+			if(endListener!==undefined)
+			{
+				if(beginListener>endListener)
+				{
+					barContainer.style.display="block";
+					beginContainer.style.borderColor="#a94442";
+				}
+				else
+				{
+					barContainer.style.display="none";
+					beginContainer.style.borderColor="#d6e9c6";
+				}
+			}
+		});
+
+		//监听结束年月日
+		$("#time_to").change(function(){
+			endListener=($("#time_to").val());
+			console.log(beginListener);
+			console.log(endListener);
+			console.log(beginListener>endListener);
+			if(beginListener!==undefined)
+			{
+				if(beginListener>endListener)
+				{
+					barContainer.style.display="block";
+					endContainer.style.borderColor="#a94442";
+				}
+				else
+				{
+					barContainer.style.display="none";
+					endContainer.style.borderColor="#d6e9c6";
+
+				}
+			}
+		});
+
+	}
+	//页面监听函数--结束
+
+
+	//数据获取函数--开始
 	var getMonitorRecordDatatable =function(data){
 
 		var servletRequest ="../../monitor_file_servlet_action";
-		var counter = -1;
 		resultList=[];
 
 		if(data==undefined)
@@ -565,39 +541,108 @@ var Page = function() {
 
 	}
 
-	var onPageListener = function()
-	{
+	var  getMonitorRecordPrint = function(){
+		var url = "../../monitor_file_servlet_action";
+		var data={};
+		data.action="monitor_print";
+		$.post(url,data,function(json){
+			if(json.result_code==0){
+				console.log(JSON.stringify(json));
 
-		var inputListener = $(".form-group input");
-		var colorContainer=inputListener.css("borderColor");
-		inputListener.click(function(event){
+				var list = json.aaData;
 
-			var element = $(event.target);
-			element.keypress(function(leafEvent){
-				var value=leafEvent.key;
-				console.log(value.toString());
-				if(!checkInputValid(value))
+				var myhtml="";
+				if(list!=undefined && list.length>0)
 				{
+					for(var i=0;i<list.length;i++) {
 
-					element.css({
-						"border-color" : "#a94442"
-					})
-					alert("不允许输入特殊字符");
+						var record=list[i];
+						myhtml+="<tr><td class=\"highlight\">" +record.id+"</td>";
+						myhtml+="<td>" +record.car_code+" </td>"
+						myhtml+="<td>"+record.vehicle_type +"</td>";
+						myhtml+="<td class=\"highlight\">"+explainIllegalCode(record.illegal_status) +"</td> "
+						myhtml+="<td class=\"highlight\">"+record.capture_time+"</td>";
+						myhtml+="<td>"+record.speed+"</td>";
+						myhtml+="<td class=\"highlight\">"+record.lane_name+ "</td>";
+						myhtml+="</tr>";
+					}
 				}
-				else
-				{
-					element.css({
-						"border-color" : colorContainer
-					})
-				}
+			}
+			$("#print_list").html(myhtml);
+		});
 
-			})
-
-		})
 
 	}
 
-	//get_record functions end
+	var  getMonitorRecordPrint_Word = function(){
+		var url = "../../monitor_file_servlet_action";
+		var data={};
+		data.action="monitor_print";
+		$.post(url,data,function(json){
+			if(json.result_code==0){
+				console.log(JSON.stringify(json));
+
+				var list = json.aaData;
+
+				var html="";
+				if(list!=undefined && list.length>0)
+				{
+					for(var i=0;i<list.length;i++) {
+
+						var record=list[i];
+						html=html+"<tr style='height:26.95pt'>";
+						html=html+" <td width=63 valign=top style='width:46.95pt;border:none;border-right:solid #C9C9C9 1.0pt;";
+						html=html+"  background:white;padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>";
+						html=html+" <p class=MsoNormal align=center style='text-align:center'><i><span";
+						html=html+" lang=EN-US style='font-family:\"微软雅黑\",sans-serif'>"+record.id+"</span></i></p>";
+						html=html+" </td>";
+						html=html+" <td width=63 valign=top style='width:47.05pt;border-top:none;border-left:";
+						html=html+" none;border-bottom:solid #C9C9C9 1.0pt;border-right:solid #C9C9C9 1.0pt;";
+						html=html+" padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>";
+						html=html+" <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US";
+						html=html+" style='font-family:\"微软雅黑\",sans-serif'>"+record.car_code+"</span></p>";
+						html=html+" </td>";
+						html=html+" <td width=106 valign=top style='width:79.4pt;border-top:none;border-left:";
+						html=html+"  none;border-bottom:solid #C9C9C9 1.0pt;border-right:solid #C9C9C9 1.0pt;";
+						html=html+"  padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>";
+						html=html+" <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US";
+						html=html+" style='font-family:\"微软雅黑\",sans-serif'>"+record.vehicle_type+"</span></p>";
+						html=html+" </td>";
+						html=html+" <td width=63 valign=top style='width:47.05pt;border-top:none;border-left:";
+						html=html+"  none;border-bottom:solid #C9C9C9 1.0pt;border-right:solid #C9C9C9 1.0pt;";
+						html=html+"  padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>";
+						html=html+" <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US";
+						html=html+" style='font-family:\"微软雅黑\",sans-serif'>"+explainIllegalCode(record.illegal_status)+"</span></p>";
+						html=html+" </td>";
+						html=html+" <td width=63 valign=top style='width:47.05pt;border-top:none;border-left:";
+						html=html+" none;border-bottom:solid #C9C9C9 1.0pt;border-right:solid #C9C9C9 1.0pt;";
+						html=html+" padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>";
+						html=html+" <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US";
+						html=html+" style='font-family:\"微软雅黑\",sans-serif'>"+record.capture_time+"</span></p>";
+						html=html+" </td>";
+						html=html+" <td width=63 valign=top style='width:47.05pt;border-top:none;border-left:";
+						html=html+"  none;border-bottom:solid #C9C9C9 1.0pt;border-right:solid #C9C9C9 1.0pt;";
+						html=html+"  padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>";
+						html=html+" <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US";
+						html=html+" style='font-family:\"微软雅黑\",sans-serif'>"+record.speed+"</span></p>";
+						html=html+" </td>";
+						html=html+" <td width=63 valign=top style='width:47.05pt;border-top:none;border-left:";
+						html=html+"  none;border-bottom:solid #C9C9C9 1.0pt;border-right:solid #C9C9C9 1.0pt;";
+						html=html+"  padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>";
+						html=html+" <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US";
+						html=html+" style='font-family:\"微软雅黑\",sans-serif'>"+record.lane_name+"</span></p>";
+						html=html+" </td>";
+						html=html+" </tr>";
+
+					}
+				}
+			}
+			$("#print_list_for_word").html(html);
+		});
+
+
+	}
+	//数据获取函数--结束
 
 	//on-functions begin
 	var onAddRecord=function(){
@@ -654,33 +699,8 @@ var Page = function() {
 	}
 
 	var onViewRecord = function(id){
-		window.location.href = "monitor_view.jsp?id="+id;
+		window.location.href = "illegal_data_view.jsp?id="+id;
 	}
-	//on-functions end
-
-
-	//init-monitor_file functions begin
-	var initDeviceFileControlEvent=function(id){
-		$('#jump_div #upload_button').click(function() {onJumpUploadFile();});
-		$('#upload_button').click(function() {onAjaxUploadFile();});
-		console.log("[initDeviceFileControlEvent]");
-	}
-	//init-monitor_file functions end
-
-
-	var onJumpUploadFile=function(){
-		console.log("[onJumpUploadFile]====");
-		var deviceId=$("#device_id").val();
-		var deviceName=$("#device_name").val();
-		jump_form.action="../../monitor_file_servlet_action?action=upload_file&device_id="+deviceId+"&device_name="+deviceName;
-		//jump_form.action="http://192.168.3.111:8888?action=upload_file&device_id="+deviceId+"&device_name="+deviceName;			/*设置提交到TCP工具来接收，TCP工具设置好监听端口例如8888和接收自动存入文件*/
-		jump_form.submit();
-	}
-	//如果出现“No resource with given identifier found”，注意：在谷歌浏览器调试界面找到Network界面导航栏中找到Preserve log，把勾去掉就好了。
-	//https://blog.csdn.net/m0_46296300/article/details/126130250
-	//发送ajax请求后页面自动刷新的问题
-	//https://blog.csdn.net/GCTTTTTT/article/details/123824126
-
 
 	var onAjaxUploadFile=function(){
 		console.log("[onAjaxUploadFile]====");
@@ -716,7 +736,7 @@ var Page = function() {
 		};
 		$("#ajax_form").ajaxSubmit(options);
 	}
-
+	//on-functions end
 
 	//submit functions begin
 	var submitAddRecord=function(){
@@ -852,6 +872,7 @@ var Page = function() {
 		window.open("monitor_print_word.jsp");
 
 	}
+
 	var myStatisticsAPI = function() {
 
 		window.open("monitor_statistics.jsp");
@@ -967,8 +988,7 @@ var Page = function() {
 
 	}
 
-	var changeResultDataToChartForTypes = function(list)
-	{
+	var changeResultDataToChartForTypes = function(list) {
 		var json = "";
 		recordData = [];
 		for (var i = 0; i < list.length; i++)
@@ -980,8 +1000,8 @@ var Page = function() {
 		console.log(recordData);
 	}
 
-	var explainIllegalCode = function(code)
-	{
+	//解析函数--开始
+	var explainIllegalCode = function(code) {
 		if(code == 1)
 		{
 			return "违停";
@@ -1011,8 +1031,7 @@ var Page = function() {
 
 	}
 
-	var explainIllegalCode_Contrary = function(code)
-	{
+	var explainIllegalCode_Contrary = function(code) {
 		if(code === "违停")
 		{
 			return 1;
@@ -1046,8 +1065,7 @@ var Page = function() {
 	}
 
 	//进行路程解析
-	var routeAnalysis = function(start_x,start_y,end_x,end_y)
-	{
+	var routeAnalysis = function(start_x,start_y,end_x,end_y) {
 		if(start_x!=null&&start_y!=null&&end_x!=null&&end_y!=null)
 		{
 			var num = (end_x-start_x)*(end_x-start_x)+(end_y-start_y)*(end_y-start_y);
@@ -1065,8 +1083,7 @@ var Page = function() {
 	}
 
 	//进行速度解析
-	var speedAnalysis = function(start_x,start_y,end_x,end_y,start_time,end_time)
-	{
+	var speedAnalysis = function(start_x,start_y,end_x,end_y,start_time,end_time) {
 		if(start_time!=null&&end_time!=null)
 		{
 			var distance= routeAnalysis(start_x,start_y,end_x,end_y);
@@ -1091,62 +1108,10 @@ var Page = function() {
 
 	}
 
-	var checkTime = function(type,time)
-	{
-		var collection = "";
-		var status = false;
-		if(type==="hour")
-		{
-			for(var i=0;i<24;i++)
-			{
-				if(i<10)
-				{
-					collection = "0"+i.toString();
-				}
-				else
-				{
-					collection = i.toString();
-				}
+	//解析函数--结束
 
-				if(time===collection)
-				{
-					status = true;
-					return true;
-				}
-
-			}
-
-		}
-		else if (type==="minutes"||type==="seconds")
-		{
-			for(var i=0;i<60;i++)
-			{
-				if(i<10)
-				{
-					collection = "0"+i.toString();
-				}
-				else
-				{
-					collection = i.toString();
-				}
-
-				if(time===collection)
-				{
-					status = true;
-					return true;
-				}
-			}
-		}
-		else
-		{
-			console.log("error!");
-		}
-
-		return false;
-	}
-
-	var checkInputValid = function(key)
-	{
+	//输入判断函数--开始
+	var checkInputValid = function(key) {
 		var invalidKeys=['-','=','+','{','}','\'','/',',',
 			'\\','"',':',';','?','!','%','&','*','#','$','^','(',')']
 
@@ -1162,8 +1127,7 @@ var Page = function() {
 
 	}
 
-	var checkValid = function(element)
-	{
+	var checkValid = function(element) {
 		var inputElements = element.find("input");
 		var check =  true;
 		var str = "";
@@ -1180,50 +1144,9 @@ var Page = function() {
 
 		return check;
 	}
+	//输入判断函数--结束
 
 
-	var initChartSample7 = function() {
-		var chart = AmCharts.makeChart("chart_7", {
-			"type": "pie",
-			"theme": "light",
-
-			"fontFamily": 'Open Sans',
-
-			"color":    '#888',
-
-			"dataProvider":recordData,
-			"valueField": "num",
-			"titleField": "vehicle_type",
-			"outlineAlpha": 0.4,
-			"depth3D": 15,
-			"balloonText": "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>",
-			"angle": 30,
-			"exportConfig": {
-				menuItems: [{
-					icon: '/lib/3/images/export.png',
-					format: 'png'
-				}]
-			}
-		});
-
-		jQuery('.chart_7_chart_input').off().on('input change', function() {
-			var property = jQuery(this).data('property');
-			var target = chart;
-			var value = Number(this.value);
-			chart.startDuration = 0;
-
-			if (property == 'innerRadius') {
-				value += "%";
-			}
-
-			target[property] = value;
-			chart.validateNow();
-		});
-
-		$('#chart_7').closest('.portlet').find('.fullscreen').click(function() {
-			chart.invalidateSize();
-		});
-	}
 
 	//Page return 开始
 	return {

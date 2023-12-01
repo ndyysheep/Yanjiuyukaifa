@@ -26,9 +26,6 @@ public class MonitorDao {
     private String dbName = "yjykfsj8";
     private String relationName = "monitoring_data";
 
-    private ArrayList<String> dbColomn = new Db(dbName).getColomns(relationName);
-
-    // private int[] lines = new int[5];
 
     /**
      * 生成调试信息
@@ -117,6 +114,58 @@ public class MonitorDao {
 
         return subStr;
     }
+
+    /**
+     * 拼接where-between时间段查询语句
+     * @param param json数据对象
+     * @param where 原where语句
+     * @param timeFromKey json中开始时间键值
+     * @param timeToKey json中截止时间键值
+     * @return sql中的where部分语句
+     * @throws JSONException 抛出Json类异常
+     */
+    private String useTimeWhere(JSONObject param,String where, String timeFromKey,String timeToKey)throws JSONException
+    {
+        String timeWhere = where;
+        String timeTo = "";
+        String timeFrom  = "";
+        String Now=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+        if(checkParamValid(param, timeFromKey) || checkParamValid(param, timeToKey))
+        {
+            if(checkParamValid(param, timeFromKey))
+            {
+                timeFrom = param.getString(timeFromKey);
+            }
+            else
+            {
+                timeFrom = Now;
+            }
+
+            if(checkParamValid(param, timeToKey))
+            {
+                timeTo = param.getString(timeToKey);
+            }
+            else
+            {
+                timeTo = Now;
+            }
+
+            if (!where.isEmpty())
+            {
+                timeWhere += " and capture_time between '" + timeFrom + "' and '"
+                        + timeTo + "'";
+            }
+            else
+            {
+                timeWhere =" where "+"capture_time between '" + timeFrom + "' and '" + timeTo
+                        + "'";
+            }
+
+        }
+
+        return timeWhere ;
+    }
+
 
     /**
      * 添加设备记录
@@ -224,7 +273,7 @@ public class MonitorDao {
      */
     public void getMonitorRecord(Data data, JSONObject json) throws JSONException, SQLException {
         // 构造sql语句，根据传递过来的查询条件参数
-        String sql = createGetRecordSql(data); // 构造sql语句，根据传递过来的查询条件参数
+        String sql = createGetQueryRecordSql(data,true); // 构造sql语句，根据传递过来的查询条件参数
         data.getParam().put("sql", sql);
         queryRecord(data, json);
     }
@@ -238,131 +287,18 @@ public class MonitorDao {
 
     public void getQueryRecord(Data data, JSONObject json) throws JSONException, SQLException {
         // 构造sql语句，根据传递过来的查询条件参数
-        String sql = createGetQueryRecordSql(data); // 构造sql语句，根据传递过来的查询条件参数
+        String sql = createGetQueryRecordSql(data,false); // 构造sql语句，根据传递过来的查询条件参数
         data.getParam().put("sql", sql);
         queryRecord(data, json);
     }
 
-    public void getRecordForStatistics(Data data, JSONObject json) throws JSONException, SQLException {
-        // 构造sql语句，根据传递过来的查询条件参数
-        String sql = createStatisticsSql(data); // 构造sql语句，根据传递过来的查询条件参数
-        data.getParam().put("sql", sql);
-        queryRecord(data, json);
-    }
-
-    /**
-     * 这是一个样板的函数，可以拷贝做修改用
-     */
-    private void updateRecord(Data data, JSONObject json) throws JSONException {
-        /*--------------------获取变量 开始--------------------*/
-        JSONObject param = data.getParam();
-        int resultCode = 0;
-        String resultMsg = "ok";
-        /*--------------------获取变量 完毕--------------------*/
-        /*--------------------数据操作 开始--------------------*/
-        Db updateDb = new Db(dbName);
-        String sql = data.getParam().getString("sql");
-        showDebug("[updateRecord]" + sql);
-        updateDb.executeUpdate(sql);
-        updateDb.close();
-        /*--------------------数据操作 结束--------------------*/
-        /*--------------------返回数据 开始--------------------*/
-        json.put("result_msg", resultMsg); // 如果发生错误就设置成"error"等
-        json.put("result_code", resultCode); // 返回0表示正常，不等于0就表示有错误产生，错误代码
-        /*--------------------返回数据 结束--------------------*/
-    }
-
-    // 已解决
-    private void queryRecord(Data data, JSONObject json) throws JSONException {
+    public void getRecordForStatisticsHour(Data data, JSONObject json) throws JSONException {
         /*--------------------获取变量 开始--------------------*/
         String resultMsg = "ok";
-        int resultCode = 0;
-        List jsonList = new ArrayList();
-        List jsonColumnList = new ArrayList();
-        /*--------------------获取变量 完毕--------------------*/
-        /*--------------------数据操作 开始--------------------*/
-        Db queryDb = new Db(dbName);
-        String sql = data.getParam().getString("sql");
-        showDebug("[queryRecord]构造的SQL语句是：" + sql);
-
-        try {
-
-            ResultSet rs = queryDb.executeQuery(sql);
-            ResultSetMetaData rsmd = rs.getMetaData();
-            int fieldCount = rsmd.getColumnCount();
-
-            while (rs.next()) {
-                Map map = new HashMap();
-
-                for (int i = 0; i < fieldCount; i++) {
-                    String columnName = rsmd.getColumnName(i + 1);
-                    String contains = rs.getString(columnName);
-                    map.put(columnName, contains);
-                }
-
-                jsonList.add(map);
-            }
-
-            rs.close();
-
-            for (int i = 0; i < fieldCount; i++) {
-                jsonColumnList.add(rsmd.getColumnLabel(i + 1));
-            }
-
-        } catch (Exception e) {
-
-            e.printStackTrace();
-            showDebug("[queryRecord]查询数据库出现错误：" + sql);
-            resultCode = 10;
-            resultMsg = "查询数据库出现错误！" + e.getMessage();
-
-        }
-        queryDb.close();
-        /*--------------------数据操作 结束--------------------*/
-        /*--------------------返回数据 开始--------------------*/
-        json.put("aaColumn", jsonColumnList);
-        json.put("aaData", jsonList);
-        json.put("result_msg", resultMsg); // 如果发生错误就设置成"error"等
-        json.put("result_code", resultCode); // 返回0表示正常，不等于0就表示有错误产生，错误代码
-        /*--------------------返回数据 结束--------------------*/
-    }
-
-    public void toStatistics(Data data, JSONObject json) throws JSONException {
-        /*--------------------获取变量 开始--------------------*/
-        String resultMsg = "ok";
-        String timeTo = "";
-        String timeFrom = "";
-        String Now=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
 
         String where = "";
         JSONObject param = data.getParam();
-
-
-        if(checkParamValid(param, "time_from") || checkParamValid(param, "time_to"))
-        {
-            if(checkParamValid(param, "time_from"))
-            {
-                timeFrom = param.getString("time_from");
-            }
-            else
-            {
-                timeFrom = Now;
-            }
-
-            if(checkParamValid(param, "time_to"))
-            {
-                timeTo = param.getString("time_to");
-            }
-            else
-            {
-                timeTo = Now;
-            }
-
-
-                where =" where "+"capture_time between '" + timeFrom + "' and '" + timeTo
-                        + "'";
-
-        }
+        where = useTimeWhere(param,where,"time_from","timeTo");
 
         int resultCode = 0;
         List jsonList = new ArrayList();
@@ -418,18 +354,145 @@ public class MonitorDao {
         /*--------------------返回数据 结束--------------------*/
     }
 
-    private String createGetRecordSql(Data data) throws JSONException {
+    public void getRecordForStatisticsType(Data data, JSONObject json) throws JSONException, SQLException {
+        // 构造sql语句，根据传递过来的查询条件参数
+        String sql = createStatisticsSqlForType(data); // 构造sql语句，根据传递过来的查询条件参数
+        data.getParam().put("sql", sql);
+        queryRecord(data, json);
+    }
+
+    //数据库交互接口函数-----开始
+    /**
+     * 这是一个样板的函数，可以拷贝做修改用
+     * 修改数据库数据时调用
+     */
+    private void updateRecord(Data data, JSONObject json) throws JSONException {
+        /*--------------------获取变量 开始--------------------*/
         JSONObject param = data.getParam();
+        int resultCode = 0;
+        String resultMsg = "ok";
+        /*--------------------获取变量 完毕--------------------*/
+        /*--------------------数据操作 开始--------------------*/
+        Db updateDb = new Db(dbName);
+        String sql = data.getParam().getString("sql");
+        showDebug("[updateRecord]" + sql);
+        updateDb.executeUpdate(sql);
+        updateDb.close();
+        /*--------------------数据操作 结束--------------------*/
+        /*--------------------返回数据 开始--------------------*/
+        json.put("result_msg", resultMsg); // 如果发生错误就设置成"error"等
+        json.put("result_code", resultCode); // 返回0表示正常，不等于0就表示有错误产生，错误代码
+        /*--------------------返回数据 结束--------------------*/
+    }
 
+    /**
+     * 进行主要的数据库查询处理和交互(接口)
+     * @param data Data类对象,是json对象的容器
+     * @param json json对象,储存交互信息
+     * @throws JSONException 抛出json类异常
+     */
+    private void queryRecord(Data data, JSONObject json) throws JSONException {
+        /*--------------------获取变量 开始--------------------*/
+        String resultMsg = "ok";
+        int resultCode = 0;
+        List jsonList = new ArrayList();
+        List jsonColumnList = new ArrayList();
+        /*--------------------获取变量 完毕--------------------*/
+        /*--------------------数据操作 开始--------------------*/
+        Db queryDb = new Db(dbName);
+        String sql = data.getParam().getString("sql");
+        showDebug("[queryRecord]构造的SQL语句是：" + sql);
+
+        try {
+
+            ResultSet rs = queryDb.executeQuery(sql);
+            ResultSetMetaData rsmd = rs.getMetaData();
+            int fieldCount = rsmd.getColumnCount();
+
+            while (rs.next()) {
+                Map map = new HashMap();
+
+                for (int i = 0; i < fieldCount; i++) {
+                    String columnName = rsmd.getColumnName(i + 1);
+                    String contains = rs.getString(columnName);
+                    map.put(columnName, contains);
+                }
+
+                jsonList.add(map);
+            }
+
+            rs.close();
+
+            for (int i = 0; i < fieldCount; i++) {
+                jsonColumnList.add(rsmd.getColumnLabel(i + 1));
+            }
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+            showDebug("[queryRecord]查询数据库出现错误：" + sql);
+            resultCode = 10;
+            resultMsg = "查询数据库出现错误！" + e.getMessage();
+
+        }
+        queryDb.close();
+        /*--------------------数据操作 结束--------------------*/
+        /*--------------------返回数据 开始--------------------*/
+        json.put("aaColumn", jsonColumnList);
+        json.put("aaData", jsonList);
+        json.put("result_msg", resultMsg); // 如果发生错误就设置成"error"等
+        json.put("result_code", resultCode); // 返回0表示正常，不等于0就表示有错误产生，错误代码
+        /*--------------------返回数据 结束--------------------*/
+    }
+
+
+    //数据库交互接口函数-----结束
+
+    //构建SQL语句函数-----开始
+    /**
+     * 构建Sql语句,供查询功能使用
+     * @param data 自定义Data变量
+     * @return sql语句
+     * @throws JSONException 抛出json异常
+     */
+    public String createGetQueryRecordSql(Data data, boolean isNeedJoin) throws JSONException {
+        JSONObject param = data.getParam();
         String sql = "select * from " + relationName;
-        String where="";
-        sql += createJoinSql(relationName, "lane_data", "lane_id", "lane_id");
-        where=useWhere(param,"id",where,false);
 
-        showDebug("111"+"sql");
-        sql+=where;
+        if(!isNeedJoin)
+        {
+            if(data.getParam().has("lane_name"))
+            {
+                sql += createJoinSql(relationName, "lane_data", "lane_id", "lane_id");
+            }
+        }
+        else
+        {
+            sql += createJoinSql(relationName, "lane_data", "lane_id", "lane_id");
+
+        }
+
+
+        String where = "";
+
+        if (checkParamValid(param, "id")) {
+            where = "id=" + param.getString("id");
+        }
+
+        where=  useTimeWhere(param,where,"time_from","time_to");
+        where = useWhere(param, "car_code", where,true);
+        where = useWhere(param, "vehicle_type", where,false);
+        where = useWhere(param, "speed", where,false);
+        where = useWhere(param, "lane_name", where,true);
+        where = useWhere(param,"illegal_status",where,false);
+
+        showDebug(where);
+        // 判断是否有条件
+        if (!where.isEmpty()) {
+            sql = sql + where;
+        }
+        showDebug(sql);
         return sql;
-
     }
 
     private String createViewRecordSql(Data data) throws JSONException {
@@ -437,21 +500,20 @@ public class MonitorDao {
         String sql = "select * from " + relationName ;
         String where="";
         sql += createJoinSql(relationName, "lane_data", "lane_id", "lane_id");
-        sql += createJoinSql(relationName,"record_info","id","monitor_id");
+        sql += createJoinSql(relationName,"illegal_info","id","monitor_id");
 
         if(checkParamValid(param,"id"))
         {
             where +=" where "+relationName+"."+"id="+param.getString("id");
         }
 
-
-        showDebug("111"+"sql");
+        showDebug(sql);
         sql+=where;
         return sql;
 
     }
 
-    private String createStatisticsSql(Data data) throws JSONException
+    private String createStatisticsSqlForType(Data data) throws JSONException
     {
         String timeTo = "";
         String timeFrom = "";
@@ -461,114 +523,21 @@ public class MonitorDao {
         JSONObject param = data.getParam();
         String sql = " select vehicle_type,count(vehicle_type) as num "
                 +" from " + relationName;
+        where = useTimeWhere(param, where,"time_from", "time_to");
         sql += where;
         sql += " group by vehicle_type";
         showDebug("[percentageToStatistics]构造的SQL语句是：" + sql);
 
-        if(checkParamValid(param, "time_from") || checkParamValid(param, "time_to"))
-        {
-            if(checkParamValid(param, "time_from"))
-            {
-                timeFrom = param.getString("time_from");
-            }
-            else
-            {
-                timeFrom = Now;
-            }
 
-            if(checkParamValid(param, "time_to"))
-            {
-                timeTo = param.getString("time_to");
-            }
-            else
-            {
-                timeTo = Now;
-            }
-
-
-            where =" where "+"capture_time between '" + timeFrom + "' and '" + timeTo
-                    + "'";
-
-        }
 
         return sql;
     }
-
-    /**
-     * @param data 自定义Data变量
-     * @return sql语句
-     * @throws JSONException 抛出json异常
-     */
-    public String createGetQueryRecordSql(Data data) throws JSONException {
-        JSONObject param = data.getParam();
+    //构建SQL语句函数-----结束
 
 
-        String sql = "select * from " + relationName;
-        String timeTo = "";
-        String timeFrom = "";
-        String Now=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
-
-        if(data.getParam().has("lane_name"))
-        {
-            sql += createJoinSql(relationName, "lane_data", "lane_id", "lane_id");
-        }
-
-        String where = "";
-
-        if (checkParamValid(param, "id")) {
-            where = "id=" + param.getString("id");
-        }
 
 
-        if(checkParamValid(param, "time_from") || checkParamValid(param, "time_to"))
-        {
-            if(checkParamValid(param, "time_from"))
-            {
-                timeFrom = param.getString("time_from");
-            }
-            else
-            {
-                timeFrom = Now;
-            }
-
-            if(checkParamValid(param, "time_to"))
-            {
-                timeTo = param.getString("time_to");
-            }
-            else
-            {
-                timeTo = Now;
-            }
-
-            if (!where.isEmpty())
-            {
-                where += " and create_time between '" + timeFrom + "' and '"
-                        + timeTo + "'";
-            }
-            else
-            {
-                where =" where "+"create_time between '" + timeFrom + "' and '" + timeTo
-                        + "'";
-            }
-
-        }
-
-        where = useWhere(param, "car_code", where,true);
-        where = useWhere(param, "speed", where,false);
-        where = useWhere(param, "lane_name", where,true);
-        where = useWhere(param,"illegal_status",where,false);
-
-        showDebug("111"+where);
-        // 判断是否有条件
-        if (!where.isEmpty()) {
-            sql = sql + where;
-        }
-
-
-        showDebug(sql);
-        return sql;
-    }
-
+    //导出处理函数-----开始
     public void getExportMonitorRecordToPDF(JSONObject json, Data data) {
 
     }
@@ -613,7 +582,9 @@ public class MonitorDao {
     public void getExportMonitorRecordToFile(JSONObject json, Data data) throws JSONException {
 
     }
+    //导出处理函数-----结束
 
+    //上传文件函数-----开始
     public void saveUploadFileRecord(JSONObject json, Data data) throws JSONException, SQLException {
         // 构造sql语句，根据传递过来的查询条件参数
         // 首先分析json里有多少文件，多个文件需要用循环构造多个sql语句
@@ -650,4 +621,5 @@ public class MonitorDao {
         }
 
     }
+    //上传文件函数-----结束
 }

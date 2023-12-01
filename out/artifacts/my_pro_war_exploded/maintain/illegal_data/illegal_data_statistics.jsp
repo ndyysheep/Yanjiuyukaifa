@@ -106,7 +106,7 @@
             </form>
             <!-- END HEADER SEARCH BOX -->
             <!-- BEGIN TOP NAVIGATION MENU -->
-            <%@include file="containers/top_menu.jsp"%>
+            <%@include file="../../home/frame/top_menu.jsp"%>
             <!-- END TOP NAVIGATION MENU -->
         </div>
         <!-- END PAGE TOP -->
@@ -119,7 +119,7 @@
 <!-- BEGIN CONTAINER -->
 <div class="page-container">
     <!-- BEGIN SIDEBAR -->
-    <%@include file="containers/page_sidebar.jsp"%>
+    <%@include file="../../home/frame/page_sidebar.jsp"%>
     <!-- END SIDEBAR -->
 
     <!-- BEGIN CONTENT -->
@@ -263,8 +263,8 @@
                         <div class="portlet-title">
                             <div class="caption">
                                 <i class="icon-bar-chart font-green-haze"></i>
-                                <span class="caption-subject bold uppercase font-green-haze"> Bar Charts</span>
-                                <span class="caption-helper">column and line mix</span>
+                                <span class="caption-subject bold uppercase font-green-haze">违法数据表</span>
+                                <span class="caption-helper">0时至11时</span>
                             </div>
                             <div class="tools">
                                 <a href="javascript:;" class="collapse">
@@ -289,6 +289,90 @@
                 </div>
             </div>
             <!-- END ROW -->
+
+            <!-- BEGIN ROW -->
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- BEGIN CHART PORTLET-->
+                    <div class="portlet light bordered">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="icon-bar-chart font-green-haze"></i>
+                                <span class="caption-subject bold uppercase font-green-haze">违法数据表</span>
+                                <span class="caption-helper">12时至24时</span>
+                            </div>
+                            <div class="tools">
+                                <a href="javascript:;" class="collapse">
+                                </a>
+                                <a href="#portlet-config" data-toggle="modal" class="config">
+                                </a>
+                                <a href="javascript:;" class="reload">
+                                </a>
+                                <a href="javascript:;" class="fullscreen">
+                                </a>
+                                <a href="javascript:;" class="remove">
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="portlet-body">
+                            <div id="chart_2" class="chart" style="height: 500px;">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END CHART PORTLET-->
+                </div>
+            </div>
+            <!-- END ROW -->
+
+            <!--饼状图-->
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- BEGIN CHART PORTLET-->
+                    <div class="portlet light">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="icon-bar-chart font-green-haze"></i>
+                                <span class="caption-subject bold uppercase font-green-haze">违法类型占比图</span>
+                                <span class="caption-helper">违法类型占比</span>
+                            </div>
+                            <div class="tools">
+                                <a href="javascript:;" class="collapse">
+                                </a>
+                                <a href="#portlet-config" data-toggle="modal" class="config">
+                                </a>
+                                <a href="javascript:;" class="reload">
+                                </a>
+                                <a href="javascript:;" class="fullscreen">
+                                </a>
+                                <a href="javascript:;" class="remove">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="portlet-body">
+                            <div id="chart_7" class="chart" style="height: 400px;">
+                            </div>
+                            <div class="well margin-top-20">
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <label class="text-left">Top Radius:</label>
+                                        <input class="chart_7_chart_input" data-property="topRadius" type="range" min="0" max="1.5" value="1" step="0.01"/>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <label class="text-left">Angle:</label>
+                                        <input class="chart_7_chart_input" data-property="angle" type="range" min="0" max="89" value="30" step="1"/>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <label class="text-left">Depth:</label>
+                                        <input class="chart_7_chart_input" data-property="depth3D" type="range" min="1" max="120" value="40" step="1"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END CHART PORTLET-->
+                </div>
+            </div>
 
 
             <!-- END PAGE CONTENT-->
@@ -325,4 +409,4 @@
 <script src="../../assets/global/plugins/amcharts/ammap/maps/js/worldLow.js" type="text/javascript"></script>
 <script src="../../assets/global/plugins/amcharts/amstockcharts/amstock.js" type="text/javascript"></script>
 
-<script src="../../assets/js/illegal.statistics.js" type="text/javascript"></script>
+<script src="containers/js/illegal.statistics.js" type="text/javascript"></script>
