@@ -142,7 +142,7 @@ var Page = function() {
 	}
 
 	var initMonitorRecordForStatistics =function(time_from,time_to){
-		var url = "../../monitor_file_servlet_action";
+		var url = "../../monitor_data_servlet_action";
 		var data={};
 		data.action="monitor_statistics";
 		if(time_from!=undefined&&time_to!=undefined)
@@ -404,7 +404,7 @@ var Page = function() {
 	//数据获取函数--开始
 	var getMonitorRecordDatatable =function(data){
 
-		var servletRequest ="../../monitor_file_servlet_action";
+		var servletRequest ="../../monitor_data_servlet_action";
 		resultList=[];
 
 		if(data==undefined)
@@ -543,7 +543,7 @@ var Page = function() {
 	}
 
 	var  getMonitorRecordPrint = function(){
-		var url = "../../monitor_file_servlet_action";
+		var url = "../../monitor_data_servlet_action";
 		var data={};
 		data.action="monitor_print";
 		$.post(url,data,function(json){
@@ -576,7 +576,7 @@ var Page = function() {
 	}
 
 	var  getMonitorRecordPrint_Word = function(){
-		var url = "../../monitor_file_servlet_action";
+		var url = "../../monitor_data_servlet_action";
 		var data={};
 		data.action="monitor_print";
 		$.post(url,data,function(json){
@@ -657,7 +657,7 @@ var Page = function() {
 	var onDeleteRecord = function(id){
 		if(confirm("您确定要删除这条记录吗？")){
 			if(id>-1){
-				var url="../../monitor_file_servlet_action";
+				var url="../../monitor_data_servlet_action";
 				var data={};
 				data.action="delete_monitor_record";
 				data.id=id;
@@ -709,7 +709,7 @@ var Page = function() {
 		var deviceName = $("#device_name").val();
 		var options = {
 			type : 'post', /*设置表单以post方法提交*/
-			url : '../../monitor_file_servlet_action?action=upload_file&device_id='+deviceId+"&device_name="+deviceName, /*设置post提交到的页面*/
+			url : '../../monitor_data_servlet_action?action=upload_file&device_id='+deviceId+"&device_name="+deviceName, /*设置post提交到的页面*/
 			success : function(json) {
 				console.log("[onAjaxUploadFile]上传文件返回结果="+JSON.stringify(json));
 				if(json.upload_files.length>0){
@@ -742,7 +742,7 @@ var Page = function() {
 	//submit functions begin
 	var submitAddRecord=function(){
 		alert("开始操作!");
-		var url="../../monitor_file_servlet_action";
+		var url="../../monitor_data_servlet_action";
 		var data={};
 		data.action="add_monitor_record";
 
@@ -777,7 +777,7 @@ var Page = function() {
 	var myModifySubmit = function(id){
 		if(confirm("您确定要修改该记录吗？")){
 			var id=$("#record_modify_div #_id").text();
-			var url="../../monitor_file_servlet_action";
+			var url="../../monitor_data_servlet_action";
 			var data={};
 			data.action="modify_monitor_record";
 			data.id=id;
@@ -811,7 +811,7 @@ var Page = function() {
 
 	var myQuerySubmit = function(){
 
-		var url = "../../monitor_file_servlet_action";
+		var url = "../../monitor_data_servlet_action";
 		var data={};
 		var query = "query_monitor_record";
 		var time_from = $("#record_query_div #capture_time_from").val();
@@ -851,7 +851,7 @@ var Page = function() {
 	}
 
 	var myExportAPI = function(){
-		var url = "../../monitor_file_servlet_action";
+		var url = "../../monitor_data_servlet_action";
 		var data={};
 		data.action="export_record";
 		$.post(url,data,function(json){
