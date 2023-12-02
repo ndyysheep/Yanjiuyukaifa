@@ -283,8 +283,8 @@ public class FlowDao {
 
         String where = "";
         JSONObject param = data.getParam();
-        where = useTimeWhere(param,where,"time_from","timeTo","start_time");
-        where = useTimeWhere(param,where,"time_from","timeTo","end_time");
+        where = useTimeWhere(param,where,"time_from","time_to","start_time");
+        where = useTimeWhere(param,where,"time_from","time_to","end_time");
 
         int resultCode = 0;
         List jsonList = new ArrayList();
@@ -462,8 +462,8 @@ public class FlowDao {
             where = "id=" + param.getString("id");
         }
 
-        where = useTimeWhere(param,where,"time_from","timeTo","start_time");
-        where = useTimeWhere(param,where,"time_from","timeTo","end_time");
+        where = useTimeWhere(param,where,"time_from","time_to","start_time");
+        where = useTimeWhere(param,where,"time_from","time_to","end_time");
         where = useWhere(param, "total_num", where,false);
 
         showDebug(where);
@@ -498,8 +498,8 @@ public class FlowDao {
         String where = "";
         String conColumn =" total_num/(end_time - start_time)";
         JSONObject param = data.getParam();
-        where = useTimeWhere(param,where,"time_from","timeTo","start_time");
-        where = useTimeWhere(param,where,"time_from","timeTo","end_time");
+        where = useTimeWhere(param,where,"time_from","time_to","start_time");
+        where = useTimeWhere(param,where,"time_from","time_to","end_time");
 
         String sql = "select lane_name,"+conColumn+" as num"
                 +" from "+relationName ;

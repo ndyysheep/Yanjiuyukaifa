@@ -152,7 +152,7 @@ var Page = function() {
 	}
 
 	var  getDeviceRecordPrint = function(){
-		var url = "../../illegal_file_servlet_action";
+		var url = "../../illegal_data_servlet_action";
 		var data={};
 		data.action="illegal_data_print";
 		$.post(url,data,function(json){
@@ -185,7 +185,7 @@ var Page = function() {
 	}
 
 	var  getIllegalRecordPrint_Word = function(){
-		var url = "../../illegal_file_servlet_action";
+		var url = "../../illegal_data_servlet_action";
 		var data={};
 		data.action="illegal_data_print";
 		$.post(url,data,function(json){
@@ -539,7 +539,7 @@ var Page = function() {
 	}
 
 	var myExportAPI = function(){
-		var url = "../../illegal_file_servlet_action";
+		var url = "../../illegal_data_servlet_action";
 		var data={};
 		data.action="export_record";
 		$.post(url,data,function(json){

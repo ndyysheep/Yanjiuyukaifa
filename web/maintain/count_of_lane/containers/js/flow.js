@@ -157,7 +157,7 @@ var Page = function() {
     //数据获取函数--开始
     var getFlowRecordDatatable =function(data){
 
-        var servletRequest ="../../flow_file_servlet_action";
+        var servletRequest ="../../flow_data_servlet_action";
         resultList=[];
 
         if(data==undefined)
@@ -284,7 +284,7 @@ var Page = function() {
     }
 
     var  getFlowRecordPrint = function(){
-        var url = "../../flow_file_servlet_action";
+        var url = "../../flow_data_servlet_action";
         var data={};
         data.action="flow_print";
         $.post(url,data,function(json){
@@ -315,7 +315,7 @@ var Page = function() {
     }
 
     var  getFlowRecordPrint_Word = function(){
-        var url = "../../flow_file_servlet_action";
+        var url = "../../flow_data_servlet_action";
         var data={};
         data.action="flow_print";
         $.post(url,data,function(json){
@@ -384,7 +384,7 @@ var Page = function() {
     var onDeleteRecord = function(id){
         if(confirm("您确定要删除这条记录吗？")){
             if(id>-1){
-                var url="../../flow_file_servlet_action";
+                var url="../../flow_data_servlet_action";
                 var data={};
                 data.action="delete_flow_record";
                 data.id=id;
@@ -438,7 +438,7 @@ var Page = function() {
     //submit functions begin
     var submitAddRecord=function(){
         alert("开始操作!");
-        var url="../../flow_file_servlet_action";
+        var url="../../flow_data_servlet_action";
         var data={};
         data.action="add_flow_record";
 
@@ -474,7 +474,7 @@ var Page = function() {
     var myFlowModifySubmit = function(id){
         if(confirm("您确定要修改该记录吗？")){
             var id=$("#record_modify_div #_id").text();
-            var url="../../flow_file_servlet_action";
+            var url="../../flow_data_servlet_action";
             var data={};
             data.action="modify_flow_record";
             data.id=id;
@@ -516,7 +516,7 @@ var Page = function() {
 
     var myQuerySubmit = function(){
 
-        var url = "../../flow_file_servlet_action";
+        var url = "../../flow_data_servlet_action";
         var data={};
         var time_from = $("#record_query_div #capture_time_begin").val();
         var time_to = $("#record_query_div #capture_time_end").val();
@@ -553,7 +553,7 @@ var Page = function() {
     }
 
     var myExportAPI = function(){
-        var url = "../../flow_file_servlet_action";
+        var url = "../../flow_data_servlet_action";
         var data={};
         data.action="export_record";
         $.post(url,data,function(json){

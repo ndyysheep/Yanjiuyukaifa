@@ -49,15 +49,6 @@
 	</servlet-mapping>
 
 	<servlet>
-		<servlet-name>illegal_file_servlet_action</servlet-name>
-		<servlet-class>illegal.file.ServletActionRecordInfo</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>illegal_file_servlet_action</servlet-name>
-		<url-pattern>/illegal_file_servlet_action</url-pattern>
-	</servlet-mapping>
-
-	<servlet>
 		<servlet-name>flow_data_servlet_action</servlet-name>
 		<servlet-class>flow.file.FlowServletAction</servlet-class>
 	</servlet>
@@ -66,13 +57,15 @@
 		<url-pattern>/flow_data_servlet_action</url-pattern>
 	</servlet-mapping>
 
+
+
 	<servlet>
-		<servlet-name>flow_file_servlet_action</servlet-name>
-		<servlet-class>flow.file.FlowServletAction</servlet-class>
+		<servlet-name>analysis_data_servlet_action</servlet-name>
+		<servlet-class>analysis.file.AnalysisServletAction</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>flow_file_servlet_action</servlet-name>
-		<url-pattern>/flow_file_servlet_action</url-pattern>
+		<servlet-name>analysis_data_servlet_action</servlet-name>
+		<url-pattern>/analysis_data_servlet_action</url-pattern>
 	</servlet-mapping>
 	
   </web-app>

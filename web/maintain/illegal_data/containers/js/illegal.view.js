@@ -158,19 +158,19 @@ var FormEditable = function () {
             if (r != null) return decodeURI(r[2]); return null; //返回参数值，如果是中文传递，就用decodeURI解决乱码，否则用unescape
         }
         $('#illegal_record_view_div #DeviceId').editable({
-            url: ' ../../monitor_file_servlet_action?action=edit_record',
+            url: ' ../../monitor_data_servlet_action?action=edit_record',
             type: 'text',
             pk:''+getUrlParam("id")+''
         });
         $('#illegal_record_view_div #car_code').editable({
-            url: ' ../../monitor_file_servlet_action?action=edit_record',
+            url: ' ../../monitor_data_servlet_action?action=edit_record',
             type: 'text',
             pk:''+getUrlParam("id")+''
         });
 
         $('#illegal_record_view_div #capture_time').editable({
             rtl : Metronic.isRTL(),
-            url: ' ../../monitor_file_servlet_action?action=edit_record',
+            url: ' ../../monitor_data_servlet_action?action=edit_record',
             type: 'text',
             pk:''+getUrlParam("id")+''
         });

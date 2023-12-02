@@ -99,8 +99,8 @@
                 </a>
                 <ul class="sub-menu">
                     <li>
-                        <a href="ui_general.html">
-                            General Components</a>
+                        <a href="../../maintain/comprehensive_statistics/daily_statistics.jsp">
+                            监测数据周报表</a>
                     </li>
                     <li>
                         <a href="ui_buttons.html">
