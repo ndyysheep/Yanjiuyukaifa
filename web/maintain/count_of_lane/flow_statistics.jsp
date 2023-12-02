@@ -25,6 +25,14 @@
     <meta content="" name="description"/>
     <meta content="" name="author"/>
 
+
+    <link rel="stylesheet" type="text/css" href="../../assets/global/plugins/clockface/css/clockface.css"/>
+    <link rel="stylesheet" type="text/css" href="../../assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../../assets/global/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../../assets/global/plugins/bootstrap-colorpicker/css/colorpicker.css"/>
+    <link rel="stylesheet" type="text/css" href="../../assets/global/plugins/bootstrap-daterangepicker/daterangepicker-bs3.css"/>
+    <link rel="stylesheet" type="text/css" href="../../assets/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css"/>
+
     <%@include file="../../home/frame/frame_style.jsp"%>
 
 </head>
@@ -161,15 +169,15 @@
             <div class="page-bar">
                 <ul class="page-breadcrumb breadcrumb">
                     <li>
-                        <a href="../monitor/monitor_list.jsp">Home</a>
+                        <a href="index.html">Home</a>
                         <i class="fa fa-circle"></i>
                     </li>
                     <li>
-                        <a href="../monitor/monitor_list.jsp">车辆监测数据</a>
+                        <a href="#">Page Layouts</a>
                         <i class="fa fa-circle"></i>
                     </li>
                     <li>
-                        <a href="../monitor/monitor_list.jsp">车辆数据监控</a>
+                        <a href="#">Sidebar Fixed Page</a>
                     </li>
                 </ul>
             </div>
@@ -178,63 +186,86 @@
             <!-- END PAGE HEADER-->
             <!-- BEGIN PAGE CONTENT-->
 
-
-            <!--视频预览区块-->
-            <div class="row" id="video_row"></div>
-            <!--视频预览区块结束-->
-
-            <!--上传文件处理-->
+            <input  type="hidden" id="page_id" name="page_id" value="flow_data_statistics">
             <div class="row">
-                <div class="col-md-12">
-                    <div id="current_attachment_name" name="current_attachment_name" value=""></div>
-                    <input type="hidden" id="current_attachment_object_id" name="current_attachment_object_id" value="">
-                    <form id="ajax_form" name="ajax_form" class="form-horizontal" method="post" enctype="multipart/form-data">
-                        <div id="ajax_div" name="ajax_div">
-                            <div id="record_list_div" name="record_list_div"></div>
-                            <span class="btn green fileinput-button">
-                                    <i class="fa fa-plus"></i>
-                                    <span>Add files... </span>
-                                    <input type="file" id="upload_file" name="upload_file">
-                                </span>
+                <div id="warning" class="alert alert-danger display-hide" style="display: none;" >
+                    <button class="close" data-close="alert"></button>
+                    请重新填写日期和时间!
+                </div>
 
-                            <button type="button" class="btn red fileinput-button" id="upload_button" name="upload_button">
-                                <i class="fa fa-upload"></i>
-                                <span>Start upload </span>
-                            </button>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <div class="input-group input-medium date date-picker" data-date="2023-01-01" data-date-format="yyyy-mm-dd" data-date-viewmode="years">
+                            <input type="text" class="form-control" readOnly="" id="time_from">
+                            <span class="input-group-btn">
+                            <button class="btn default" type="button"><i class="fa fa-calendar"></i></button>
+                             </span>
                         </div>
 
-                    </form>
-                    <hr>
+                        <!-- /input-group -->
+                        <span class="help-block" id="beginHelper">选择起始时间 </span>
+                    </div>
+
+                    <div class="col-md-2">
+                        <div class="input-group">
+                            <input type="text" class="form-control timepicker timepicker-24"  maxlength="4" id ="time_from_minute">
+                            <span class="input-group-btn">
+                            <button class="btn default" type="button"><i class="fa fa-clock-o"></i></button>
+                        </span>
+                        </div>
+                    </div>
+
                 </div>
 
             </div>
-            <%--上传文件处理结束--%>
 
-            <%--开始当前自写板块--%>
-            <input  type="hidden" id="page_id" name="page_id" value="monitor_list">
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <div class="input-group input-medium date date-picker" data-date="2023-01-01" data-date-format="yyyy-mm-dd" data-date-viewmode="years">
+                            <input type="text" class="form-control" readOnly="" id="time_to">
+                            <span class="input-group-btn">
+                                    <button class="btn default" type="button"><i class="fa fa-calendar"></i></button>
+                                </span>
+                        </div>
+                        <!-- /input-group -->
+                        <span class="help-block" id="endHelper">选择结束时间</span>
+                    </div>
 
+                    <div class="col-md-2">
+                        <div class="input-group">
+                            <input type="text" class="form-control timepicker timepicker-24"  id ="time_to_minute">
+                            <span class="input-group-btn">
+                            <button class="btn default" type="button"><i class="fa fa-clock-o"></i></button>
+                        </span>
+                        </div>
+                    </div>
+
+
+
+                </div>
+            </div>
 
             <div class="row">
                 <div class="col-md-12">
-                    <button type="button" id="ac_add_button" name ="ac_add_button" class="btn default red-stripe">添加记录</button>
-                    <button type="button" id="export_button" name ="export_button" class="btn default blue-stripe">导出记录</button>
-                    <button type="button" id="print_button" name="print_button" class="btn default red-stripe">打印</button>
-                    <button type="button" id="print_button_for_word" name="print_button_for_word" class="btn default blue-stripe">用word打印</button>
-                    <button type="button" id="statistics_button" name="statistics_button" class="btn default blue-stripe">统计</button>
-                    <button type="button" id="ac_query_button" name ="query_button" class="btn default blue-stripe">查询</button>
+                    <button type="button" id="time_submit_button" class="btn red">查询车流量</button>
                 </div>
-
             </div>
 
-            <br/>
 
-            <%--datatable数据表--%>
-            <div class="row" id="row_db">
+            <hr />
+
+
+            <!-- BEGIN ROW -->
+            <div class="row">
                 <div class="col-md-12">
-                    <div class="portlet box blue-hoki">
+                    <!-- BEGIN CHART PORTLET-->
+                    <div class="portlet light bordered">
                         <div class="portlet-title">
                             <div class="caption">
-                                <i class="fa fa-comments"></i>车辆数据监控表
+                                <i class="icon-bar-chart font-green-haze"></i>
+                                <span class="caption-subject bold uppercase font-green-haze">车流量数据表</span>
+                                <span class="caption-helper">总流量前十统计</span>
                             </div>
                             <div class="tools">
                                 <a href="javascript:;" class="collapse">
@@ -243,33 +274,58 @@
                                 </a>
                                 <a href="javascript:;" class="reload">
                                 </a>
+                                <a href="javascript:;" class="fullscreen">
+                                </a>
                                 <a href="javascript:;" class="remove">
                                 </a>
                             </div>
                         </div>
 
                         <div class="portlet-body">
-                            <div class="table-scrollable">
-                                <table class="table table-striped table-bordered table-hover datatable" id="sample_1">
-                                    <thead>
-                                    <tr>
-                                        <th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#monitor_list .checkboxes" /></th>
-                                        <th>序号</th>
-                                        <th>车牌号</th>
-                                        <th>车辆类型</th>
-                                        <th>违法类型</th>
-                                        <th>抓拍时间</th>
-                                        <th>车速</th>
-                                        <th>抓拍路段</th>
-                                        <th>操作</th>
-                                    </tr>
-                                    </thead>
-                                </table>
+                            <div id="chart_1" class="chart" style="height: 500px;">
                             </div>
                         </div>
                     </div>
+                    <!-- END CHART PORTLET-->
                 </div>
             </div>
+            <!-- END ROW -->
+
+            <!-- BEGIN ROW -->
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- BEGIN CHART PORTLET-->
+                    <div class="portlet light bordered">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="icon-bar-chart font-green-haze"></i>
+                                <span class="caption-subject bold uppercase font-green-haze">单次车流量数据表</span>
+                                <span class="caption-helper">单次车流量前十统计</span>
+                            </div>
+                            <div class="tools">
+                                <a href="javascript:;" class="collapse">
+                                </a>
+                                <a href="#portlet-config" data-toggle="modal" class="config">
+                                </a>
+                                <a href="javascript:;" class="reload">
+                                </a>
+                                <a href="javascript:;" class="fullscreen">
+                                </a>
+                                <a href="javascript:;" class="remove">
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="portlet-body">
+                            <div id="chart_2" class="chart" style="height: 500px;">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END CHART PORTLET-->
+                </div>
+            </div>
+            <!-- END ROW -->
+
 
             <!-- END PAGE CONTENT-->
 
@@ -290,11 +346,19 @@
 </body>
 <!-- END BODY -->
 
-<!--修改数据-->
-<%@include file="monitor_add_div.jsp"%>
-<%@include file="monitor_query_div.jsp"%>
-<%@include file="monitor_modify_div.jsp"%>
-<%@include file="monitor_export_div.jsp"%>
 
 </html>
-<script src="containers/js/monitor.js" type="text/javascript"></script>
+
+<script src="../../assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js" type="text/javascript"></script>
+<script src="../../assets/global/plugins/amcharts/amcharts/amcharts.js" type="text/javascript"></script>
+<script src="../../assets/global/plugins/amcharts/amcharts/serial.js" type="text/javascript"></script>
+<script src="../../assets/global/plugins/amcharts/amcharts/pie.js" type="text/javascript"></script>
+<script src="../../assets/global/plugins/amcharts/amcharts/radar.js" type="text/javascript"></script>
+<script src="../../assets/global/plugins/amcharts/amcharts/themes/light.js" type="text/javascript"></script>
+<script src="../../assets/global/plugins/amcharts/amcharts/themes/patterns.js" type="text/javascript"></script>
+<script src="../../assets/global/plugins/amcharts/amcharts/themes/chalk.js" type="text/javascript"></script>
+<script src="../../assets/global/plugins/amcharts/ammap/ammap.js" type="text/javascript"></script>
+<script src="../../assets/global/plugins/amcharts/ammap/maps/js/worldLow.js" type="text/javascript"></script>
+<script src="../../assets/global/plugins/amcharts/amstockcharts/amstock.js" type="text/javascript"></script>
+
+<script src="containers/js/flow.statistics.js" type="text/javascript"></script>

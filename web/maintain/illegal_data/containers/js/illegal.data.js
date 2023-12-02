@@ -21,6 +21,7 @@ var Page = function() {
 	var initPageControl=function(){
 		pageId = $("#page_id").val();
 		if(pageId==="illegal_list"){
+			$(".sub-menu #illegal_data_list").addClass("active");
 			//设备列表页面
 			initIllegalDataList();
 		}
