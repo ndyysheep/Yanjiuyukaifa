@@ -22,6 +22,7 @@ var Page = function() {
 		pageId = $("#page_id").val();
 
 		if(pageId==="illegal_data_statistics"){
+			$(".sub-menu #illegal_data_statistics").addClass("active");
 			//打印页面,进程图表初始化
 			initIllegalStatistics();
 			//设置页面监听
@@ -56,13 +57,13 @@ var Page = function() {
 
 	//页面控制模块-----开始
 	var initIllegalStatisticsControl = function(){
-		onPageListenerForStatisitcs();
+		onPageListenerForStatistics();
 		$("#time_submit_button").click(function(){onTimeLimitSubmit()})
 	}
 	//页面控制模块-----结束
 
 	//页面监听操作函数-----开始
-	var onPageListenerForStatisitcs = function(){
+	var onPageListenerForStatistics = function(){
 
 		//自定义变量,用于获取元素并改变元素的样式
 		var barContainer = document.getElementById("warning");
@@ -73,7 +74,6 @@ var Page = function() {
 		//自定义变量,用于获取元素并监听
 		var beginListener = undefined;
 		var endListener =  undefined;
-
 
 
 		//监听开始年月日

@@ -65,36 +65,36 @@
                     <span class="arrow open"></span>
                 </a>
                 <ul class="sub-menu">
-                    <li class="active">
+                    <li id ="monitor_list">
                         <a href="../../maintain/monitor/monitor_list.jsp">
                             <span class="badge badge-warning">new</span>车辆数据监控</a>
                     </li>
-                    <li>
+                    <li id ="monitor_statistics">
                         <a href="../../maintain/monitor/monitor_statistics.jsp">
                             车辆数据统计</a>
                     </li>
-                    <li>
+                    <li id ="illegal_data_list">
                         <a href="../../maintain/illegal_data/illegal_data_list.jsp">
                             违法数据监控</a>
-                    </li>
-                    <li>
+                    </li >
+                    <li id ="illegal_data_statistics">
                         <a href="../../maintain/illegal_data/illegal_data_statistics.jsp">
                             违法数据统计</a>
                     </li>
-                    <li>
-                        <a href="layout_boxed_page.html">
-                            Boxed Page</a>
+                    <li id="flow_list">
+                        <a href="../../maintain/count_of_lane/flow_list.jsp">
+                            车流量监控</a>
                     </li>
-                    <li>
-                        <a href="layout_language_bar.html">
-                            Language Switch Bar</a>
+                    <li id="flow_data_statistics">
+                        <a href="../../maintain/count_of_lane/flow_statistics.jsp">
+                            车流量统计</a>
                     </li>
                 </ul>
             </li>
             <li>
                 <a href="javascript:;">
                     <i class="icon-diamond"></i>
-                    <span class="title">UI Features</span>
+                    <span class="title">流量统计分析</span>
                     <span class="arrow "></span>
                 </a>
                 <ul class="sub-menu">

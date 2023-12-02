@@ -21,11 +21,11 @@ var Page = function() {
 	var initPageControl=function(){
 		pageId = $("#page_id").val();
 		if(pageId==="monitor_list"){
+			$(".sub-menu #monitor_list").addClass("active");
 			//设备列表页面
 			initMonitorList();
 		}
 		if(pageId==="monitor_file"){
-
 			//文件
 			initDeviceFile();
 		}
@@ -40,6 +40,7 @@ var Page = function() {
 		}
 
 		if(pageId==="monitor_statistics"){
+			$(".sub-menu #monitor_statistics").addClass("active");
 			//打印页面
 			initMonitorStatisticsControlEvent();
 			initMonitorStatistics();
@@ -699,7 +700,7 @@ var Page = function() {
 	}
 
 	var onViewRecord = function(id){
-		window.location.href = "illegal_data_view.jsp?id="+id;
+		window.location.href = "monitor_view.jsp?id="+id;
 	}
 
 	var onAjaxUploadFile=function(){
@@ -820,7 +821,7 @@ var Page = function() {
 		data.id=$("#record_query_div #id").val();
 		data.car_code=$("#record_query_div #car_code").val();
 		data.vehicle_type=$("#record_query_div #vehicle_type").val();
-		data.illegal_status=explainIllegalCode_Contrary($("#record_add_div #illegal_status").val());
+		data.illegal_status=explainIllegalCode_Contrary($("#record_query_div #illegal_status").val());
 		data.time_from = time_from;
 		data.time_to = time_to;
 		if(time_from!=="")

@@ -145,7 +145,7 @@
             <div class="page-head">
                 <!-- BEGIN PAGE TITLE -->
                 <div class="page-title">
-                    <h1>车辆监控<small> 违法数据信息表</small></h1>
+                    <h1>车流量监控<small> 车流量数据信息表</small></h1>
                 </div>
                 <!-- END PAGE TITLE -->
 
@@ -161,7 +161,7 @@
             <div class="page-bar">
                 <ul class="page-breadcrumb breadcrumb">
                     <li>
-                        <a href="../monitor/monitor_list.jsp">Home</a>
+                        <a href="../monitor/monitor_list.jsp">主页</a>
                         <i class="fa fa-circle"></i>
                     </li>
                     <li>
@@ -169,7 +169,7 @@
                         <i class="fa fa-circle"></i>
                     </li>
                     <li>
-                        <a href="../monitor/monitor_list.jsp">车辆数据监控</a>
+                        <a href="../monitor/monitor_list.jsp">车流量监控</a>
                     </li>
                 </ul>
             </div>
@@ -179,39 +179,8 @@
             <!-- BEGIN PAGE CONTENT-->
 
 
-            <!--视频预览区块-->
-            <div class="row" id="video_row"></div>
-            <!--视频预览区块结束-->
-
-            <!--上传文件处理-->
-            <div class="row">
-                <div class="col-md-12">
-                    <div id="current_attachment_name" name="current_attachment_name" value=""></div>
-                    <input type="hidden" id="current_attachment_object_id" name="current_attachment_object_id" value="">
-                    <form id="ajax_form" name="ajax_form" class="form-horizontal" method="post" enctype="multipart/form-data">
-                        <div id="ajax_div" name="ajax_div">
-                            <div id="record_list_div" name="record_list_div"></div>
-                            <span class="btn green fileinput-button">
-                                    <i class="fa fa-plus"></i>
-                                    <span>Add files... </span>
-                                    <input type="file" id="upload_file" name="upload_file">
-                                </span>
-
-                            <button type="button" class="btn red fileinput-button" id="upload_button" name="upload_button">
-                                <i class="fa fa-upload"></i>
-                                <span>Start upload </span>
-                            </button>
-                        </div>
-
-                    </form>
-                    <hr>
-                </div>
-
-            </div>
-            <%--上传文件处理结束--%>
-
             <%--开始当前自写板块--%>
-            <input  type="hidden" id="page_id" name="page_id" value="monitor_list">
+            <input  type="hidden" id="page_id" name="page_id" value="flow_list">
 
 
             <div class="row">
@@ -253,14 +222,12 @@
                                 <table class="table table-striped table-bordered table-hover datatable" id="sample_1">
                                     <thead>
                                     <tr>
-                                        <th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#monitor_list .checkboxes" /></th>
+                                        <th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#flow_list .checkboxes" /></th>
                                         <th>序号</th>
-                                        <th>车牌号</th>
-                                        <th>车辆类型</th>
-                                        <th>违法类型</th>
-                                        <th>抓拍时间</th>
-                                        <th>车速</th>
                                         <th>抓拍路段</th>
+                                        <th>计时开始时间</th>
+                                        <th>计时结束时间</th>
+                                        <th>车流量</th>
                                         <th>操作</th>
                                     </tr>
                                     </thead>
@@ -291,10 +258,11 @@
 <!-- END BODY -->
 
 <!--修改数据-->
-<%@include file="monitor_add_div.jsp"%>
-<%@include file="monitor_query_div.jsp"%>
-<%@include file="monitor_modify_div.jsp"%>
-<%@include file="monitor_export_div.jsp"%>
+<%@include file="flow_add_div.jsp"%>
+<%@include file="flow_query_div.jsp"%>
+<%@include file="flow_modify_div.jsp"%>
+<%@include file="flow_export_div.jsp"%>
+
 
 </html>
-<script src="containers/js/monitor.js" type="text/javascript"></script>
+<script src="containers/js/flow.js" type="text/javascript"></script>
