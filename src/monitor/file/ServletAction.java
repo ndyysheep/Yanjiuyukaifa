@@ -84,6 +84,7 @@ public class ServletAction extends HttpServlet {
             json.put("result_msg", "ok");
 
             // 这几个常规增删改查功能
+            // 获取表数据
             if (action.equals("get_monitor_record")) {
                 actionOk = true;
 
@@ -99,20 +100,7 @@ public class ServletAction extends HttpServlet {
 
             }
 
-            if (action.equals("view_monitor_record")) {
-                actionOk = true;
 
-                try {
-
-                    viewMonitorRecord(request, response, json);
-
-                } catch (Exception e) {
-
-                    e.printStackTrace();
-
-                }
-
-            }
 
             if (action.equals("add_monitor_record")) {
                 actionOk = true;
@@ -175,6 +163,20 @@ public class ServletAction extends HttpServlet {
 
             }
 
+            if (action.equals("view_monitor_record")) {
+                actionOk = true;
+
+                try {
+
+                    viewMonitorRecord(request, response, json);
+
+                } catch (Exception e) {
+
+                    e.printStackTrace();
+
+                }
+
+            }
             if (action.equals("update_record")) {
                 actionOk = true;
                 try {

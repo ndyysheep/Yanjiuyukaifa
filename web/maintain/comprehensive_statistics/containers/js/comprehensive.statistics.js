@@ -176,6 +176,11 @@ var Page = function() {
                 },"orderable": true
             },{
                 "mRender": function(data, type, full) {
+                    sReturn = '<div>'+full.total+'</div>';
+                    return sReturn;
+                },"orderable": true
+            },{
+                "mRender": function(data, type, full) {
 
                     sReturn = '<div>'+full.status0+'</div>';
                     return sReturn;
@@ -216,6 +221,13 @@ var Page = function() {
                 "dataSrc": function(json) {
                     console.log(json.daily_aaData);
                     resultList = json.daily_aaData;
+                    var total = 0;
+                    for(var i = 0;i<resultList.length ;i++)
+                    {
+                        total += resultList[i].status0+resultList[i].status1+resultList[i].status2
+                            +resultList[i].status3+resultList[i].status4;
+                    }
+                    json.daily_aaData.total = total;
                     return json.daily_aaData; // 返回的 JSON 数据中的数据源位置
                 }
 

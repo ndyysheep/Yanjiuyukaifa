@@ -157,11 +157,8 @@ var FormEditable = function () {
             var r = window.location.search.substr(1).match(reg);  //匹配目标参数
             if (r != null) return decodeURI(r[2]); return null; //返回参数值，如果是中文传递，就用decodeURI解决乱码，否则用unescape
         }
-        $('#record_view_div #DeviceId').editable({
-            url: ' ../../monitor_data_servlet_action?action=edit_record',
-            type: 'text',
-            pk:''+getUrlParam("id")+''
-        });
+
+
         $('#record_view_div #car_code').editable({
             url: ' ../../monitor_data_servlet_action?action=edit_record',
             type: 'text',

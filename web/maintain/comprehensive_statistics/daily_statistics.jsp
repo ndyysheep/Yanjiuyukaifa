@@ -224,7 +224,6 @@
                                 <table class="table table-striped table-bordered table-hover datatable" id="sample_1">
                                     <thead>
                                     <tr>
-                                        <th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#monitor_list .checkboxes" /></th>
                                         <th>道路名称</th>
                                         <th>记录车辆总数</th>
                                         <th>正常行驶</th>
