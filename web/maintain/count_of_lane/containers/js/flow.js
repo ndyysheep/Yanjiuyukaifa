@@ -437,7 +437,7 @@ var Page = function() {
 
     //submit functions begin
     var submitAddRecord=function(){
-        alert("开始操作!");
+
         var url="../../flow_data_servlet_action";
         var data={};
         data.action="add_flow_record";
@@ -654,21 +654,25 @@ var Page = function() {
         })
 
         //判断是否出现结束时间>开始时间的情况
-        if(elementArray[0].val()!==""&&elementArray[1].val()!==""
-            &&elementArray[2].val()!==""&&elementArray[3].val()!=="")
+        if(elementArray.length!==0)
         {
-            start_time = elementArray[0].val()+elementArray[1].val();
-            end_time = elementArray[2].val()+elementArray[3].val();
-
-            if(start_time>end_time)
+            if(elementArray[0].val()!==""&&elementArray[1].val()!==""
+                &&elementArray[2].val()!==""&&elementArray[3].val()!=="")
             {
-                check = false;
-                for(var i = 0;i<elementArray.length;i++)
+                start_time = elementArray[0].val()+elementArray[1].val();
+                end_time = elementArray[2].val()+elementArray[3].val();
+
+                if(start_time>end_time)
                 {
-                    illegalInput.push(elementArray[i]);
+                    check = false;
+                    for(var i = 0;i<elementArray.length;i++)
+                    {
+                        illegalInput.push(elementArray[i]);
+                    }
                 }
             }
         }
+
         return check;
     }
     //输入判断函数--结束

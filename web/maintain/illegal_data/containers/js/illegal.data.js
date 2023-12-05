@@ -14,7 +14,7 @@ jQuery(document).ready(function() {
 });
 /* ================================================================================ */
 
-
+var illegalInput = [];
 //关于页面的控件生成等操作都放在Page里
 var Page = function() {
 	/*----------------------------------------入口函数  开始----------------------------------------*/
@@ -696,23 +696,94 @@ var Page = function() {
 	}
 
 	var checkValid = function(element) {
+
+		resetInputCss();
+		illegalInput = [];
 		var inputElements = element.find("input");
 		var check =  true;
 		var str = "";
 
+		var elementArray = [];
+		var checkTimeArray = ["capture_time_begin","capture_time_sec_begin"
+			,"capture_time_end","capture_time_sec_end"]
+
+		var start_time;
+		var end_time;
+
+		//判断总车流量是不是数字
+		if(jQuery.type(element.find("#total_num"))!=="number")
+		{
+			illegalInput.push($(this));
+			check = false;
+		}
 		inputElements.each(function(){
 
-			str = $(this).val();
+			var recentElem = $(this);
+			str = recentElem.val();
 			for(var i = 0;i<str.length;i++)
 			{
 				var myCh = str[i];
-				check = checkInputValid(myCh);
+				if(!checkInputValid(myCh))
+				{
+					check = false;
+					illegalInput.push($(this));
+				}
 			}
+
+			//取timepicker中每个不为空的输入栏
+			for(var i = 0;i<4;i++)
+			{
+				if(recentElem.attr("id")===checkTimeArray[i])
+				{
+					elementArray[i] = recentElem;
+				}
+			}
+
+			inValidManager();
 		})
+
+		//判断是否出现结束时间>开始时间的情况
+		if(elementArray.length!==0)
+		{
+			if(elementArray[0].val()!==""&&elementArray[1].val()!==""
+				&&elementArray[2].val()!==""&&elementArray[3].val()!=="")
+			{
+				start_time = elementArray[0].val()+elementArray[1].val();
+				end_time = elementArray[2].val()+elementArray[3].val();
+
+				if(start_time>end_time)
+				{
+					check = false;
+					for(var i = 0;i<elementArray.length;i++)
+					{
+						illegalInput.push(elementArray[i]);
+					}
+				}
+			}
+		}
 
 		return check;
 	}
 	//输入判断函数--结束
+
+	var inValidManager = function(){
+		for(var i = 0;i<illegalInput.length;i++)
+		{
+			illegalInput[i].css({
+				"border-color" : "#a94442"
+			});
+		}
+	}
+
+	var resetInputCss = function()
+	{
+		for(var i = 0;i<illegalInput.length;i++)
+		{
+			illegalInput[i].css({
+				"border-color" : "#cccccc"
+			});
+		}
+	}
 
 	//Page return 开始
 	return {
