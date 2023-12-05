@@ -17,13 +17,13 @@ public class Db {
 
     public Db(String dbName) {
         /* 访问数据库地址 */
-        String ipAddress = "localhost";
+        String ipAddress = "101.35.232.25";
         /* 访问数据库端口 */
         String myPort = "3306";
         /* 访问数据库用户名 */
-        String user = "dbuser";
+        String user = "tmxq";
         /* 访问数据库密码 */
-        String passWord = "gjr389113";
+        String passWord = "123456";
 
         /* 开始连接数据库，如果是发布了的Tomcat环境，需要先把mysql-connector-java-5.0.4-bin.jar */
         /* 和json.jar拷贝到ROOT/WEB-INF/lib下 */

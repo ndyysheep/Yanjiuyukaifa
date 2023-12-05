@@ -475,10 +475,7 @@ public class MonitorDao {
 
         String where = "";
 
-        if (checkParamValid(param, "id")) {
-            where = "id=" + param.getString("id");
-        }
-
+        where = useWhere(param,"id",where,false);
         where=  useTimeWhere(param,where,"time_from","time_to");
         where = useWhere(param, "car_code", where,true);
         where = useWhere(param, "vehicle_type", where,false);
