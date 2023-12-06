@@ -91,6 +91,21 @@ public class AnalysisServletAction extends HttpServlet {
 
             }
 
+            if (action.equals("daily_report_all")) {
+                actionOk = true;
+
+                try {
+
+                    getAnalysisDailyReport(request, response, json);
+
+                } catch (Exception e) {
+
+                    e.printStackTrace();
+
+                }
+
+            }
+
             if (action.equals("query_analysis_record")) {
                 actionOk = true;
 
@@ -278,6 +293,7 @@ public class AnalysisServletAction extends HttpServlet {
             throws JSONException, SQLException {
         AnalysisDao dao = new AnalysisDao();
         dao.getRecordForDailyReport(data, json);
+        dao.getRecordForDailyAll(data,json);
     }
 
     private void getQueryRecord(HttpServletRequest request, HttpServletResponse response, JSONObject json)

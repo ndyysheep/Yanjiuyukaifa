@@ -100,8 +100,7 @@ public class ServletAction extends HttpServlet {
 
             }
 
-
-
+            //添加记录
             if (action.equals("add_monitor_record")) {
                 actionOk = true;
                 try {
@@ -120,6 +119,7 @@ public class ServletAction extends HttpServlet {
 
             }
 
+            //修改监视记录
             if (action.equals("modify_monitor_record")) {
                 actionOk = true;
                 try {
@@ -134,6 +134,7 @@ public class ServletAction extends HttpServlet {
 
             }
 
+            //删除监视记录
             if (action.equals("delete_monitor_record")) {
                 actionOk = true;
                 try {
@@ -148,6 +149,7 @@ public class ServletAction extends HttpServlet {
 
             }
 
+            //查询监视记录
             if (action.equals("query_monitor_record")) {
                 actionOk = true;
 
@@ -163,6 +165,7 @@ public class ServletAction extends HttpServlet {
 
             }
 
+            //详情页记录
             if (action.equals("view_monitor_record")) {
                 actionOk = true;
 
@@ -177,6 +180,8 @@ public class ServletAction extends HttpServlet {
                 }
 
             }
+
+            //详情页更新记录
             if (action.equals("update_record")) {
                 actionOk = true;
                 try {
@@ -191,6 +196,7 @@ public class ServletAction extends HttpServlet {
 
             }
 
+            //详情页编辑
             if (action.equals("edit_record")) {
                 actionOk = true;
 
@@ -206,6 +212,7 @@ public class ServletAction extends HttpServlet {
 
             }
 
+            //统计接口
             if (action.equals("monitor_statistics")) {
                 actionOk = true;
 
@@ -221,6 +228,7 @@ public class ServletAction extends HttpServlet {
 
             }
 
+            //导出记录接口
             if (action.equals("export_record")) {
                 actionOk = true;
 
@@ -236,6 +244,7 @@ public class ServletAction extends HttpServlet {
 
             }
 
+            //打印表接口
             if (action.equals("monitor_print")) {
                 actionOk = true;
 
@@ -251,6 +260,7 @@ public class ServletAction extends HttpServlet {
 
             }
 
+            //上传文件接口
             if (action.equals("upload_file")) {
                 actionOk = true;
 

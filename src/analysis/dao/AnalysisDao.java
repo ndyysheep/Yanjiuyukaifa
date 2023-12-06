@@ -360,6 +360,77 @@ public class AnalysisDao {
         /*--------------------返回数据 结束--------------------*/
     }
 
+    public void getRecordForDailyAll(Data data, JSONObject json) throws JSONException {
+        /*--------------------获取变量 开始--------------------*/
+        String resultMsg = "ok";
+
+        String where = "";
+        JSONObject param = data.getParam();
+        where = useTimeWhere(param,where,"time_from","time_to","capture_time");
+
+        int resultCode = 0;
+        List jsonList = new ArrayList();
+        /*--------------------获取变量 完毕--------------------*/
+        /*--------------------数据操作 开始--------------------*/
+        Db queryDb = new Db(dbName);
+
+        String sql = "select lane_name,DATE_FORMAT(capture_time,\"%Y-%m-%d\")as date,"
+                +"count(CASE WHEN illegal_status = 0 THEN 1 END) AS status0,"
+                +"count(CASE WHEN illegal_status = 1 THEN 1 END) AS status1,"
+                +"count(CASE WHEN illegal_status = 2 THEN 1 END) AS status2,"
+                +"count(CASE WHEN illegal_status = 3 THEN 1 END) AS status3,"
+                +"count(CASE WHEN illegal_status = 4 THEN 1 END) AS status4"
+                +" from " + relationName;
+        sql += createJoinSql(relationName,"lane_data","lane_id","lane_id");
+        sql += " where capture_time BETWEEN DATE_SUB(NOW(),INTERVAL 3 DAY)\n" +
+                "AND DATE_ADD(NOW(),INTERVAL 3 DAY) ";
+        sql += " group by lane_name,date";
+        showDebug("[toStatistics]构造的SQL语句是：" + sql);
+
+        try {
+
+            ResultSet rs = queryDb.executeQuery(sql);
+            ResultSetMetaData rsmd = rs.getMetaData();
+            int fieldCount = rsmd.getColumnCount();
+
+            while (rs.next()) {
+
+                HashMap map = new HashMap();
+                map.put("lane_name", rs.getString("lane_name"));
+                map.put("date", rs.getString("date"));
+                map.put("status0", rs.getInt("status0"));
+                map.put("status1", rs.getInt("status1"));
+                map.put("status2", rs.getInt("status2"));
+                map.put("status3", rs.getInt("status3"));
+                map.put("status4", rs.getInt("status4"));
+
+
+                jsonList.add(map);
+
+            }
+
+            rs.close();
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+            showDebug("[toStatistics]查询数据库出现错误：" + sql);
+            resultCode = 10;
+            resultMsg = "查询数据库出现错误！" + e.getMessage();
+
+        }
+
+        queryDb.close();
+        /*--------------------数据操作 结束--------------------*/
+        /*--------------------返回数据 开始--------------------*/
+
+        showDebug(jsonList.toString());
+        json.put("aaData", jsonList);
+        json.put("result_msg", resultMsg); // 如果发生错误就设置成"error"等
+        json.put("result_code", resultCode); // 返回0表示正常，不等于0就表示有错误产生，错误代码
+        /*--------------------返回数据 结束--------------------*/
+    }
+
     //构建SQL语句函数-----结束
 
 

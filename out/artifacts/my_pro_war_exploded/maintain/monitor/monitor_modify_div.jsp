@@ -37,9 +37,15 @@
                             </div>
 
                             <div class="form-group">
-                                <label class="col-md-3 control-label">违法类型：</label>
+                                <label class="col-md-3 control-label">违法行为：</label>
                                 <div class="col-md-9">
-                                    <input type="text" class="form-control" id="illegal_status" name="illegal_status" placeholder="Enter text">
+                                    <select class="form-control" id="illegal_status" name="illegal_status">
+                                        <option>正常行驶</option>
+                                        <option>违停</option>
+                                        <option>闯红灯</option>
+                                        <option>压双黄线</option>
+                                        <option>逆行</option>
+                                    </select>
                                     <span class="help-block">
 											A block of help text. </span>
                                 </div>

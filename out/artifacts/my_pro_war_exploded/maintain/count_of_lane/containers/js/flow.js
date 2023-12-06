@@ -624,8 +624,6 @@ var Page = function() {
         //判断总车流量是不是数字
         var totalNum = element.find("#total_num");
         var totalIsNum =totalNum.val();
-        console.log(totalIsNum);
-
         for(var i =0;i<totalIsNum.length;i++)
         {
             if(isNaN(parseInt(totalIsNum[i])))
