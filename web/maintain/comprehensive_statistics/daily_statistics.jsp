@@ -153,7 +153,7 @@
             <div class="page-head">
                 <!-- BEGIN PAGE TITLE -->
                 <div class="page-title">
-                    <h1>违法结果统计分析<small> 周报表</small></h1>
+                    <h1>违法结果统计分析<small>日报表</small></h1>
                 </div>
                 <!-- END PAGE TITLE -->
 
@@ -251,8 +251,8 @@
                         <div class="portlet-title">
                             <div class="caption">
                                 <i class="icon-bar-chart font-green-haze"></i>
-                                <span class="caption-subject bold uppercase font-green-haze">车流量数据表</span>
-                                <span class="caption-helper">总流量前十统计</span>
+                                <span class="caption-subject bold uppercase font-green-haze">当天各路段违法情况统计图</span>
+                                <span class="caption-helper">各路段统计</span>
                             </div>
                             <div class="tools">
                                 <a href="javascript:;" class="collapse">
@@ -286,8 +286,8 @@
                         <div class="portlet-title">
                             <div class="caption">
                                 <i class="icon-bar-chart font-green-haze"></i>
-                                <span class="caption-subject bold uppercase font-green-haze">单次车流量数据表</span>
-                                <span class="caption-helper">单次车流量前十统计</span>
+                                <span class="caption-subject bold uppercase font-green-haze">违法车辆总数统计图</span>
+                                <span class="caption-helper">前十统计</span>
                             </div>
                             <div class="tools">
                                 <a href="javascript:;" class="collapse">
@@ -314,6 +314,29 @@
             <!-- END ROW -->
 
 
+            <!-- BEGIN INTERACTIVE CHART PORTLET-->
+            <div class="portlet box red">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="fa fa-gift"></i>Interactive Chart
+                    </div>
+                    <div class="tools">
+                        <a href="javascript:;" class="collapse">
+                        </a>
+                        <a href="#portlet-config" data-toggle="modal" class="config">
+                        </a>
+                        <a href="javascript:;" class="reload">
+                        </a>
+                        <a href="javascript:;" class="remove">
+                        </a>
+                    </div>
+                </div>
+                <div class="portlet-body">
+                    <div id="chart_3" class="chart">
+                    </div>
+                </div>
+            </div>
+            <!-- END INTERACTIVE CHART PORTLET-->
             <!-- END PAGE CONTENT-->
 
         </div>
@@ -347,5 +370,17 @@
 <script src="../../assets/global/plugins/amcharts/ammap/ammap.js" type="text/javascript"></script>
 <script src="../../assets/global/plugins/amcharts/ammap/maps/js/worldLow.js" type="text/javascript"></script>
 <script src="../../assets/global/plugins/amcharts/amstockcharts/amstock.js" type="text/javascript"></script>
+
+
+<!-- BEGIN PAGE LEVEL PLUGINS -->
+<script src="../../assets/global/plugins/flot/jquery.flot.min.js"></script>
+<script src="../../assets/global/plugins/flot/jquery.flot.time.js"></script>
+<script src="../../assets/global/plugins/flot/jquery.flot.resize.min.js"></script>
+<script src="../../assets/global/plugins/flot/jquery.flot.pie.min.js"></script>
+<script src="../../assets/global/plugins/flot/jquery.flot.stack.min.js"></script>
+<script src="../../assets/global/plugins/flot/jquery.flot.crosshair.min.js"></script>
+<script src="../../assets/global/plugins/flot/jquery.flot.categories.min.js" type="text/javascript"></script>
+<!-- END PAGE LEVEL PLUGINS -->
+
 
 <script src="containers/js/comprehensive.statistics.js" type="text/javascript"></script>

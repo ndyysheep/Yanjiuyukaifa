@@ -488,6 +488,7 @@ public class MonitorDao {
         if (!where.isEmpty()) {
             sql = sql + where;
         }
+
         showDebug(sql);
         return sql;
     }

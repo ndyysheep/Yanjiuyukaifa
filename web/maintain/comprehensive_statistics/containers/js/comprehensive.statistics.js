@@ -14,7 +14,8 @@ jQuery(document).ready(function() {
 });
 /* ================================================================================ */
 var chartDataIllegalType=[];
-
+var chartDataIllegalTotal = [];
+var chartDataExtra = [];
 //关于页面的控件生成等操作都放在Page里
 var Page = function() {
     /*----------------------------------------入口函数  开始----------------------------------------*/
@@ -23,7 +24,9 @@ var Page = function() {
         if(pageId==="daily_report"){
             $(".sub-menu #daily_report").addClass("active");
             //设备列表页面
+            $.ajaxSettings.async=false;
             initAnalysisList();
+            $.ajaxSettings.async=true;
             initAnalysisStatistics();
         }
 
@@ -64,10 +67,118 @@ var Page = function() {
         initAnalysisRecordForStatistics(time_from,time_to);
         $.ajaxSettings.async=true;
         initChartSets();
+        initChartSetsForIllegalTotal();
+        InitChart3ForALL();
+
 
     }
     //统计初始化模块-----结束
+    function InitChart3ForALL() {
+        if ($('#chart_3').size() != 1) {
+            return;
+        }
 
+        function randValue() {
+            return (Math.floor(Math.random() * (1 + 40 - 20))) + 20;
+        }
+        var pageviews = chartDataExtra[0];
+
+        var visitors = chartDataExtra[1];
+        console.log(chartDataExtra);
+
+        var plot = $.plot($("#chart_3"), [{
+            data: pageviews,
+            label: "Unique Visits",
+            lines: {
+                lineWidth: 1,
+            },
+            shadowSize: 0
+
+        }, {
+            data: visitors,
+            label: "Page Views",
+            lines: {
+                lineWidth: 1,
+            },
+            shadowSize: 0
+        }], {
+            series: {
+                lines: {
+                    show: true,
+                    lineWidth: 2,
+                    fill: true,
+                    fillColor: {
+                        colors: [{
+                            opacity: 0.05
+                        }, {
+                            opacity: 0.01
+                        }]
+                    }
+                },
+                points: {
+                    show: true,
+                    radius: 3,
+                    lineWidth: 1
+                },
+                shadowSize: 2
+            },
+            grid: {
+                hoverable: true,
+                clickable: true,
+                tickColor: "#eee",
+                borderColor: "#eee",
+                borderWidth: 1
+            },
+            colors: ["#d12610", "#37b7f3", "#52e136"],
+            xaxis: {
+                mode: "time",
+                timeformat: "%Y-%m-%d",
+                tickColor: "#eee",
+            },
+            yaxis: {
+                ticks: 11,
+                tickDecimals: 0,
+                tickColor: "#eee",
+            }
+        });
+
+
+            function showTooltip(x, y, contents) {
+            $('<div id="tooltip">' + contents + '</div>').css({
+                position: 'absolute',
+                display: 'none',
+                top: y + 5,
+                left: x + 15,
+                border: '1px solid #333',
+                padding: '4px',
+                color: '#fff',
+                'border-radius': '3px',
+                'background-color': '#333',
+                opacity: 0.80
+            }).appendTo("body").fadeIn(200);
+        }
+
+        var previousPoint = null;
+        $("#chart_3").bind("plothover", function(event, pos, item) {
+            $("#x").text(pos.x.toFixed(2));
+            $("#y").text(pos.y.toFixed(2));
+
+            if (item) {
+                if (previousPoint != item.dataIndex) {
+                    previousPoint = item.dataIndex;
+
+                    $("#tooltip").remove();
+                    var x = item.datapoint[0].toFixed(2),
+                        y = item.datapoint[1].toFixed(2);
+
+                    showTooltip(item.pageX, item.pageY, item.series.label + " of " + x + " = " + y);
+                }
+            } else {
+                $("#tooltip").remove();
+                previousPoint = null;
+            }
+        });
+    }
 
 
     /*------------------------------针对各个页面的入口 结束------------------------------*/
@@ -101,21 +212,29 @@ var Page = function() {
     }
 
     var initAnalysisRecordForStatistics =function(time_from,time_to){
+        console.log(resultList);
+        changeResultDataToChartForIllegalTypes(resultList);
+        changeResultDataToChartForIllegalTotal(resultList);
         var url = "../../analysis_data_servlet_action";
         var data={};
-        data.action="daily_report";
-        var currentDate = new Date().toISOString().slice(0, 10);
+
+        data.action="daily_report_all";
+       /* var currentDate = new Date().toISOString().slice(0, 10);
         data.time_from = currentDate + " "+"00:00:00"
-        data.time_to = currentDate + " "+"23:59:59";
-        console.log(currentDate);
+        data.time_to = currentDate + " "+"23:59:59";*/
         $.post(url,data,function(json){
             if(json.result_code==0){
                 console.log(JSON.stringify(json));
 
-                var list = json.daily_aaData;
+                var list =json.aaData;
                 if(list!==undefined&&list.length>0){
-                    changeResultDataToChartForIllegalTypes(list);
+                    changeResultDataToChartForAll(list);
                 }
+
+
+                // if(list!==undefined&&list.length>0){
+                //     changeDataToChartForVehicleTypes(list);
+                // }
 
             }else{
                 alert("与后端交互错误!"+json.result_Msg);
@@ -221,13 +340,19 @@ var Page = function() {
                 "dataSrc": function(json) {
                     console.log(json.daily_aaData);
                     resultList = json.daily_aaData;
-                    var total = 0;
+
                     for(var i = 0;i<resultList.length ;i++)
                     {
+                        var total = 0;
                         total += resultList[i].status0+resultList[i].status1+resultList[i].status2
                             +resultList[i].status3+resultList[i].status4;
+
+                        var illegal_total = total - resultList[i].status0;
+                        json.daily_aaData[i].total = total;
+                        json.daily_aaData[i].illegal_total = illegal_total;
+
                     }
-                    json.daily_aaData.total = total;
+                    resultList = json.daily_aaData;
                     return json.daily_aaData; // 返回的 JSON 数据中的数据源位置
                 }
 
@@ -543,7 +668,8 @@ var Page = function() {
 
     }
 
-    var initChartSetsExtra = function(){
+    var initChartSetsForIllegalTotal = function(){
+
 
         var chart = AmCharts.makeChart("chart_2", {
             "type": "serial",
@@ -558,7 +684,7 @@ var Page = function() {
             "fontFamily": 'Open Sans',
             "color":    '#888',
 
-            "dataProvider": chartDataExtra,
+            "dataProvider":  chartDataIllegalTotal,
             "valueAxes": [{
                 "axisAlpha": 0,
                 "position": "left"
@@ -569,9 +695,9 @@ var Page = function() {
                 "balloonText": "<span style='font-size:13px;'>[[title]] in [[category]]:<b>[[value]]</b> [[additional]]</span>",
                 "dashLengthField": "dashLengthColumn",
                 "fillAlphas": 1,
-                "title": "num",
+                "title": "违法行驶数量",
                 "type": "column",
-                "valueField": "num"
+                "valueField": "违法行驶数量"
             }, {
                 "balloonText": "<span style='font-size:13px;'>[[title]] in [[category]]:<b>[[value]]</b> [[additional]]</span>",
                 "bullet": "round",
@@ -584,8 +710,8 @@ var Page = function() {
                 "bulletBorderThickness": 3,
                 "fillAlphas": 0,
                 "lineAlpha": 1,
-                "title": "num",
-                "valueField": "num"
+                "title": "违法行驶数量",
+                "valueField": "违法行驶数量"
             }],
             "categoryField": "lane_name",
             "categoryAxis": {
@@ -657,7 +783,59 @@ var Page = function() {
         }
 
     }
-    //图标处理函数-----结束
+
+    var changeResultDataToChartForIllegalTotal = function(list) {
+        chartDataIllegalTotal = [];
+        for (var i = 0; i < list.length; i++) {
+            var json = {"lane_name": list[i].lane_name, "违法行驶数量": list[i].illegal_total}
+            chartDataIllegalTotal.push(json);
+        }
+    }
+
+    var changeResultDataToChartForAll = function(list) {
+        chartDataExtra = [];
+        var laneStore =[];
+        var tempList = [];
+        var illegalTotal = 0;
+        var lastDate = new Date();
+        for (var i = 0; i < list.length; i++) {
+            var record =list[i];
+
+            if(!laneStore.includes(record.lane_name))
+            {
+                lastDate.setDate((new Date()).getDate()-7);
+                laneStore.push(record.lane_name);
+                if(tempList.length!==0)
+                {
+                    chartDataExtra.push(tempList.slice());
+                    tempList = [];
+                }
+            }
+
+            if(laneStore.includes(record.lane_name))
+            {
+                var thisDate =new Date(record.date);
+                for(var tmp = lastDate;tmp<thisDate;tmp.setDate(tmp.getDate()+1))
+                {
+                    var thisGroup = [new Date(tmp),0];
+                    tempList.push(thisGroup);
+                }
+
+                illegalTotal = record.status1+ record.status2
+                    + record.status3+ record.status4;
+                var group = [thisDate, illegalTotal];
+                lastDate.setDate(thisDate.getDate()+1)
+                tempList.push(group);
+            }
+        }
+        if(tempList.length!==0)
+        {
+            chartDataExtra.push(tempList.slice());
+            tempList = [];
+        }
+    }
+
+        //图标处理函数-----结束
     //submit functions end
 
     var returnBack = function(){

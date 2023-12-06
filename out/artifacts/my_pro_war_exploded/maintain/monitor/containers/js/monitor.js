@@ -52,6 +52,8 @@ var Page = function() {
 	var recordData = [];
 	var resultList=[];
 	var illegalInput = [];
+
+	var pageLength = 0;
 	/*----------------------------------------业务函数  开始----------------------------------------*/
 	/*------------------------------针对各个页面的入口  开始------------------------------*/
 	var initMonitorList=function(){
@@ -414,9 +416,10 @@ var Page = function() {
 			data.action="get_monitor_record";
 		}
 
-		$('.datatable').DataTable().destroy();
+		var table =$('.datatable').DataTable();
+		table.destroy();
 
-		$('.datatable').dataTable( {
+		table =$('.datatable').DataTable( {
 
 			"paging":true,
 			"searching":false,
@@ -515,8 +518,6 @@ var Page = function() {
 				}
 
 			}
-
-
 		});
 
 		$('.datatable').find('.group-checkable').change(function () {
@@ -540,6 +541,36 @@ var Page = function() {
 		var tableWrapper = $('#sample_1_wrapper'); // datatable creates the table wrapper by adding with id {your_table_jd}_wrapper
 
 		tableWrapper.find('.dataTables_length select').select2(); // initialize select2 dropdown
+
+		// table.on("page.dt",function(event){
+		// 	var pageLen = table.page.info().length;
+		// 	var currentPage = table.page.info().page+1;
+		//
+		// 	var pageDynamicBegin = currentPage;
+		// 	var pageDynamicEnd = pageDynamicBegin+5;
+		//
+		// 	var pageJumperBegin = pageDynamicBegin*pageLen;
+		// 	var pageJumperEnd = pageDynamicEnd*pageLen;
+		//
+		// 	var myData = {};
+		//
+		// 	myData.action = data.action;
+		// 	myData.pageJumperBegin = pageJumperBegin;
+		// 	myData.pageJumperEnd = pageJumperEnd;
+		//
+		// 	console.log(myData);
+		// 	$.post(servletRequest, myData,function(json){
+		// 			// 使用 API 方法更新数据
+		// 			table.rows.add(json.aaData).draw();
+		//
+		// 			// 设置回原来的页数
+		// 		console.log(currentPage);
+		//
+		//
+		// 	});
+		//
+		// });
+
 
 	}
 
@@ -1116,6 +1147,7 @@ var Page = function() {
 		var invalidKeys=['=','+','{','}','\'','/',',',
 			'\\','"',';','?','!','%','&','*','#','$','^','(',')']
 
+		for(var i = 0;i<invalidKeys.length;i++)
 		for(var i = 0;i<invalidKeys.length;i++)
 		{
 			if(key===invalidKeys[i])
