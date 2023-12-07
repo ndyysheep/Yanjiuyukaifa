@@ -100,15 +100,15 @@
                 <ul class="sub-menu">
                     <li>
                         <a href="../../maintain/comprehensive_statistics/daily_statistics.jsp">
-                            监测数据周报表</a>
+                            监测数据日报表</a>
                     </li>
                     <li>
                         <a href="ui_buttons.html">
-                            Buttons</a>
+                            监测数据周报表</a>
                     </li>
                     <li>
                         <a href="ui_icons.html">
-                            <span class="badge badge-danger">new</span>Font Icons</a>
+                            监测数据月报表</a>
                     </li>
                     <li>
                         <a href="ui_colors.html">
