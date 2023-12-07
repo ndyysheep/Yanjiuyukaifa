@@ -193,8 +193,14 @@
                     <button type="button" id="export_button" name ="export_button" class="btn default blue-stripe">导出记录</button>
                     <button type="button" id="print_button" name="print_button" class="btn default red-stripe">打印</button>
                     <button type="button" id="print_button_for_word" name="print_button_for_word" class="btn default blue-stripe">用word打印</button>
-                </div>
 
+                        <label class="col-md-1 control-label">日期：</label>
+                        <div class="col-md-3">
+                            <select class="form-control" id="date_selector" name="date_selector">
+
+                            </select>
+                        </div>
+                </div>
             </div>
 
             <br/>
@@ -318,7 +324,7 @@
             <div class="portlet box red">
                 <div class="portlet-title">
                     <div class="caption">
-                        <i class="fa fa-gift"></i>Interactive Chart
+                        <i class="fa fa-gift"></i>近7日各路段违法情况
                     </div>
                     <div class="tools">
                         <a href="javascript:;" class="collapse">
@@ -382,5 +388,5 @@
 <script src="../../assets/global/plugins/flot/jquery.flot.categories.min.js" type="text/javascript"></script>
 <!-- END PAGE LEVEL PLUGINS -->
 
-
+<script src="../../assets/global/plugins/moment.min.js" type="text/javascript"></script>
 <script src="containers/js/comprehensive.statistics.js" type="text/javascript"></script>

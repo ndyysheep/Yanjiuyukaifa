@@ -13,10 +13,7 @@ jQuery(document).ready(function() {
 
 });
 /* ================================================================================ */
-var chartDataIllegalType=[];
-var chartDataIllegalTotal = [];
-var chartDataExtra = [];
-var laneStore =[];
+
 //关于页面的控件生成等操作都放在Page里
 var Page = function() {
     /*----------------------------------------入口函数  开始----------------------------------------*/
@@ -28,12 +25,13 @@ var Page = function() {
             $.ajaxSettings.async=false;
             initAnalysisList();
             $.ajaxSettings.async=true;
+
             initAnalysisStatistics();
         }
 
-        if(pageId==="analysis_print"){
+        if(pageId==="daily_statistics_print"){
             //打印页面
-            initAnalysisPrint();
+            initDailyAnalysisPrint();
         }
         if(pageId==="analysis_print_word"){
             //Word打印页面
@@ -44,18 +42,29 @@ var Page = function() {
     /*----------------------------------------入口函数  结束----------------------------------------*/
     //全局变量数组
     var resultList=[];
-
     var illegalInput = [];
+
+    //统计用--开始
+    //用于统计违法类型
+    var chartDataIllegalType=[];
+    //统计违法总数
+    var chartDataIllegalTotal = [];
+    //统计近7天各个路段违法情况
+    var chartDataExtra = [];
+    //储存路段信息
+    var laneStore =[];
+    //统计用--结束
     /*----------------------------------------业务函数  开始----------------------------------------*/
     /*------------------------------针对各个页面的入口  开始------------------------------*/
     var initAnalysisList=function(){
 
+        initDailyDate();
         initAnalysisListControlEvent();
         initAnalysisRecordList();
     }
 
-    var initAnalysisPrint = function(){
-        initAnalysisRecordForPrint();
+    var initDailyAnalysisPrint = function(){
+        initDailyAnalysisRecordForPrint();
     }
 
     var initMonitorPrint_Word = function(){
@@ -74,113 +83,7 @@ var Page = function() {
 
     }
     //统计初始化模块-----结束
-    function InitChart3ForALL() {
-        if ($('#chart_3').size() != 1) {
-            return;
-        }
 
-        function randValue() {
-            return (Math.floor(Math.random() * (1 + 40 - 20))) + 20;
-        }
-        var pageviews = chartDataExtra[0];
-
-        var visitors = chartDataExtra[1];
-        console.log(chartDataExtra);
-
-        var plotData = [];
-        for(var i = 0;i<chartDataExtra.length;i++)
-        {
-            var plotItem = {
-                data: chartDataExtra[i],
-                label: laneStore[i],
-                lines: {
-                    lineWidth: 1,
-                },
-                shadowSize: 0
-
-            };
-
-            plotData.push(plotItem);
-        }
-
-        var plot = $.plot($("#chart_3"), plotData, {
-            series: {
-                lines: {
-                    show: true,
-                    lineWidth: 2,
-                    fill: true,
-                    fillColor: {
-                        colors: [{
-                            opacity: 0.05
-                        }, {
-                            opacity: 0.01
-                        }]
-                    }
-                },
-                points: {
-                    show: true,
-                    radius: 3,
-                    lineWidth: 1
-                },
-                shadowSize: 2
-            },
-            grid: {
-                hoverable: true,
-                clickable: true,
-                tickColor: "#eee",
-                borderColor: "#eee",
-                borderWidth: 1
-            },
-            colors: ["#d12610", "#37b7f3", "#52e136"],
-            xaxis: {
-                mode: "time",
-                timeformat: "%Y-%m-%d",
-                tickColor: "#eee",
-            },
-            yaxis: {
-                ticks: 11,
-                tickDecimals: 0,
-                tickColor: "#eee",
-            }
-        });
-
-
-            function showTooltip(x, y, contents) {
-            $('<div id="tooltip">' + contents + '</div>').css({
-                position: 'absolute',
-                display: 'none',
-                top: y + 5,
-                left: x + 15,
-                border: '1px solid #333',
-                padding: '4px',
-                color: '#fff',
-                'border-radius': '3px',
-                'background-color': '#333',
-                opacity: 0.80
-            }).appendTo("body").fadeIn(200);
-        }
-
-        var previousPoint = null;
-        $("#chart_3").bind("plothover", function(event, pos, item) {
-            $("#x").text(pos.x.toFixed(2));
-            $("#y").text(pos.y.toFixed(2));
-
-            if (item) {
-                if (previousPoint != item.dataIndex) {
-                    previousPoint = item.dataIndex;
-
-                    $("#tooltip").remove();
-                    var x = item.datapoint[0].toFixed(2),
-                        y = item.datapoint[1].toFixed(2);
-
-                    showTooltip(item.pageX, item.pageY, item.series.label + " of " + x + " = " + y);
-                }
-            } else {
-                $("#tooltip").remove();
-                previousPoint = null;
-            }
-        });
-    }
 
 
     /*------------------------------针对各个页面的入口 结束------------------------------*/
@@ -188,6 +91,7 @@ var Page = function() {
     //事件处理初始化--开始
     var initAnalysisListControlEvent=function(){
 
+        onPageAttachment($("#date_selector"));
         //导出信息
         $('#export_button').click(function() {myExportAPI();});
         //打印信息
@@ -204,9 +108,29 @@ var Page = function() {
         //使用Datatable的数据表,统计总数据
         getAnalysisRecordDatatable();
     }
+    var initDailyDate=function(){
+        var url = "../../analysis_data_servlet_action"
+        var data = {};
+        var currentDate=new Date().toISOString().slice(0, 10);
+        var container = $("#date_selector");
+        data.action = "get_daily_date"
+        $.post(url,data,function(json){
+            if(json.result_code===0)
+            {
+                var list = json.aaData;
+                var html = "<option>"+currentDate+"</option>";
+                for(var i = 0 ;i<list.length;i++)
+                {
+                    if(list[i].date!==currentDate)
+                    html +="<option>"+list[i].date+"</option>"
+                }
 
-    var initAnalysisRecordForPrint=function(){
-        getAnalysisRecordPrint();
+                container.html(html);
+            }
+        })
+    }
+    var initDailyAnalysisRecordForPrint=function(){
+        getDailyAnalysisRecordPrint();
     }
 
     var initAnalysisRecordForPrint_Word=function(){
@@ -219,18 +143,24 @@ var Page = function() {
         changeResultDataToChartForIllegalTotal(resultList);
         var url = "../../analysis_data_servlet_action";
         var data={};
-
+        var date = undefined;
         data.action="daily_report_all";
-       /* var currentDate = new Date().toISOString().slice(0, 10);
-        data.time_from = currentDate + " "+"00:00:00"
-        data.time_to = currentDate + " "+"23:59:59";*/
+        if(time_from!==undefined&&time_to!==undefined)
+        {
+            data.time_from = time_from;
+            data.time_to = time_to;
+
+            console.log(time_from);
+             date = time_from.toString().slice(0,10);
+        }
+
         $.post(url,data,function(json){
             if(json.result_code==0){
                 console.log(JSON.stringify(json));
 
                 var list =json.aaData;
                 if(list!==undefined&&list.length>0){
-                    changeResultDataToChartForAll(list);
+                    changeResultDataToChartForAll(list,date);
                 }
 
             }else{
@@ -244,19 +174,37 @@ var Page = function() {
 
     //数据获取初始化--结束
 
+    var onPageAttachment = function(element)
+    {
+        element.change(function(event){
+            var date = element.val();
+            var time_from = date + " "+"00:00:00"
+            var time_to = date + " "+"23:59:59";
+            $.ajaxSettings.async=false;
+            getAnalysisRecordDatatable(date);
+            $.ajaxSettings.async=true;
+            initAnalysisStatistics(time_from,time_to)
+
+
+        })
+    }
     //数据获取函数--开始
-    var getAnalysisRecordDatatable =function(data){
+    var getAnalysisRecordDatatable =function(date){
 
         var servletRequest ="../../analysis_data_servlet_action";
         resultList=[];
-
-        if(data==undefined)
+        var data={};
+        data.action="daily_report";
+        if(date==undefined)
         {
-            data={};
-            data.action="daily_report";
             var currentDate = new Date().toISOString().slice(0, 10);
             data.time_from = currentDate + " "+"00:00:00"
             data.time_to = currentDate + " "+"23:59:59";
+        }
+        else
+        {
+            data.time_from = date + " "+"00:00:00"
+            data.time_to = date + " "+"23:59:59";
         }
 
         $('.datatable').DataTable().destroy();
@@ -382,10 +330,10 @@ var Page = function() {
 
     }
 
-    var  getAnalysisRecordPrint = function(){
+    var  getDailyAnalysisRecordPrint = function(){
         var url = "../../analysis_data_servlet_action";
         var data={};
-        data.action="analysis_print";
+        data.action="daily_report";
         $.post(url,data,function(json){
             if(json.result_code==0){
                 console.log(JSON.stringify(json));
@@ -398,11 +346,14 @@ var Page = function() {
                     for(var i=0;i<list.length;i++) {
 
                         var record=list[i];
-                        myhtml+="<tr><td class=\"highlight\">" +record.id+"</td>";
-                        myhtml+="<td>" +record.lane_name+" </td>"
-                        myhtml+="<td>"+record.start_time +"</td>";
-                        myhtml+="<td class=\"highlight\">"+record.end_time+"</td>";
-                        myhtml+="<td>"+record.total_num+"</td>";
+                        myhtml+="<tr><td class=\"highlight\">" +record.lane_name+"</td>";
+                        myhtml+="<td>" +(record.status0+record.status1
+                            +record.status2+record.status3+record.status4)+" </td>"
+                        myhtml+="<td>"+record.status0 +"</td>";
+                        myhtml+="<td class=\"highlight\">"+record.status1+"</td>";
+                        myhtml+="<td>"+record.status2+"</td>";
+                        myhtml+="<td>"+record.status3 +"</td>";
+                        myhtml+="<td class=\"highlight\">"+record.status4+"</td>";
                         myhtml+="</tr>";
                     }
                 }
@@ -471,30 +422,109 @@ var Page = function() {
     }
     //数据获取函数--结束
 
-    var myExportAPI = function(){
-        var url = "../../analysis_data_servlet_action";
-        var data={};
-        data.action="export_record";
-        $.post(url,data,function(json){
+    //图表处理函数-----开始
+    var changeResultDataToChartForIllegalTypes = function(list) {
+        chartDataIllegalType=[];
+        for(var i = 0;i<list.length;i++)
+        {
+            var json = {"lane_name":list[i].lane_name,"正常行驶":list[i].status0,"违停":list[i].status1
+                ,"闯红灯":list[i].status2,"压双黄线":list[i].status3,"逆行":list[i].status4}
 
-            if(json.result_code_for_export==0){
-                console.log(JSON.stringify(json));
-                console.log(json.download_url);
-                $("#record_export_div #download_url").attr("download_url",json.download_url);
-                $("#record_export_div").modal("show");
+            chartDataIllegalType.push(json);
+        }
+
+    }
+
+    var changeResultDataToChartForIllegalTotal = function(list) {
+        chartDataIllegalTotal = [];
+        for (var i = 0; i < list.length; i++) {
+            var json = {"lane_name": list[i].lane_name, "违法行驶数量": list[i].illegal_total}
+            chartDataIllegalTotal.push(json);
+        }
+    }
+
+    var changeResultDataToChartForAll = function(list,date) {
+        chartDataExtra = [];
+        laneStore = [];
+        var tempList = [];
+        var illegalTotal = 0;
+        var lastDate = new Date();
+        if(date!==undefined)
+        {
+            lastDate = new Date(date);
+        }
+        lastDate.setHours(8);
+        lastDate.setMinutes(0);
+        lastDate.setSeconds(0);
+        lastDate.setMilliseconds(0);
+        for (var i = 0; i < list.length; i++) {
+            var record =list[i];
+
+            if(!laneStore.includes(record.lane_name))
+            {
+                if(i!==0)
+                {
+                    var thisDate = new Date();
+                    if(date!==undefined)
+                    {
+                        thisDate = new Date(date);
+                    }
+                    for(var tmp = lastDate;tmp.getFullYear()<thisDate.getFullYear()
+                    ||tmp.getMonth()<thisDate.getMonth()
+                    ||tmp.getDate()<=thisDate.getDate();tmp.setDate(tmp.getDate()+1))
+                    {
+                        var thisGroup = [new Date(tmp),0];
+                        tempList.push(thisGroup);
+                    }
+                }
+
+                if(date!==undefined)
+                {
+                    lastDate.setDate((new Date(date)).getDate()-7);
+                }
+                else
+                {
+                    lastDate.setDate((new Date()).getDate()-7);
+                }
+                laneStore.push(record.lane_name);
+                if(tempList.length!==0)
+                {
+                    chartDataExtra.push(tempList.slice());
+                    tempList = [];
+                }
             }
-        });
+
+            if(laneStore.includes(record.lane_name))
+            {
+                var thisDate =new Date(record.date);
+                thisDate.setHours(8);
+                thisDate.setMinutes(0);
+                thisDate.setSeconds(0);
+                thisDate.setMilliseconds(0);
+                for(var tmp = lastDate;tmp.getFullYear()<thisDate.getFullYear()
+                ||tmp.getMonth()<thisDate.getMonth()
+                ||tmp.getDate()<thisDate.getDate();tmp.setDate(tmp.getDate()+1))
+                {
+                    var thisGroup = [new Date(tmp),0];
+                    tempList.push(thisGroup);
+                }
+
+                illegalTotal = record.status1+ record.status2
+                    + record.status3+ record.status4;
+                var group = [thisDate, illegalTotal];
+                lastDate.setDate(thisDate.getDate()+1)
+                tempList.push(group);
+            }
+        }
+        if(tempList.length!==0)
+        {
+            chartDataExtra.push(tempList.slice());
+            tempList = [];
+        }
+
     }
 
-    var myPrintAPI = function(){
-        window.open("analysis_print_default.jsp");
-    }
-
-    var myPrintAPI_Word = function(){
-        window.open("analysis_print_word.jsp");
-
-    }
-
+    //图标处理函数-----结束
 
     //图表的初始化函数-----开始
     var initChartSets = function(){
@@ -526,20 +556,6 @@ var Page = function() {
                 "title": "正常行驶",
                 "type": "column",
                 "valueField": "正常行驶"
-            }, {
-                "balloonText": "<span style='font-size:13px;'>[[title]] in [[category]]:<b>[[value]]</b> [[additional]]</span>",
-                "bullet": "round",
-                "dashLengthField": "dashLengthLine",
-                "lineThickness": 3,
-                "bulletSize": 7,
-                "bulletBorderAlpha": 1,
-                "bulletColor": "#FFFFFF",
-                "useLineColorForBulletBorder": true,
-                "bulletBorderThickness": 3,
-                "fillAlphas": 0,
-                "lineAlpha": 1,
-                "title": "正常行驶",
-                "valueField": "正常行驶"
             },{
                 "alphaField": "alpha",
                 "balloonText": "<span style='font-size:13px;'>[[title]] in [[category]]:<b>[[value]]</b> [[additional]]</span>",
@@ -547,20 +563,6 @@ var Page = function() {
                 "fillAlphas": 1,
                 "title": "违停",
                 "type": "column",
-                "valueField": "违停"
-            }, {
-                "balloonText": "<span style='font-size:13px;'>[[title]] in [[category]]:<b>[[value]]</b> [[additional]]</span>",
-                "bullet": "round",
-                "dashLengthField": "dashLengthLine",
-                "lineThickness": 3,
-                "bulletSize": 7,
-                "bulletBorderAlpha": 1,
-                "bulletColor": "#FFFFFF",
-                "useLineColorForBulletBorder": true,
-                "bulletBorderThickness": 3,
-                "fillAlphas": 0,
-                "lineAlpha": 1,
-                "title": "违停",
                 "valueField": "违停"
             },{
                 "alphaField": "alpha",
@@ -571,40 +573,12 @@ var Page = function() {
                 "type": "column",
                 "valueField": "闯红灯"
             }, {
-                "balloonText": "<span style='font-size:13px;'>[[title]] in [[category]]:<b>[[value]]</b> [[additional]]</span>",
-                "bullet": "round",
-                "dashLengthField": "dashLengthLine",
-                "lineThickness": 3,
-                "bulletSize": 7,
-                "bulletBorderAlpha": 1,
-                "bulletColor": "#FFFFFF",
-                "useLineColorForBulletBorder": true,
-                "bulletBorderThickness": 3,
-                "fillAlphas": 0,
-                "lineAlpha": 1,
-                "title": "闯红灯",
-                "valueField": "闯红灯"
-            },{
                 "alphaField": "alpha",
                 "balloonText": "<span style='font-size:13px;'>[[title]] in [[category]]:<b>[[value]]</b> [[additional]]</span>",
                 "dashLengthField": "dashLengthColumn",
                 "fillAlphas": 1,
                 "title": "压双黄线",
                 "type": "column",
-                "valueField": "压双黄线"
-            }, {
-                "balloonText": "<span style='font-size:13px;'>[[title]] in [[category]]:<b>[[value]]</b> [[additional]]</span>",
-                "bullet": "round",
-                "dashLengthField": "dashLengthLine",
-                "lineThickness": 3,
-                "bulletSize": 7,
-                "bulletBorderAlpha": 1,
-                "bulletColor": "#FFFFFF",
-                "useLineColorForBulletBorder": true,
-                "bulletBorderThickness": 3,
-                "fillAlphas": 0,
-                "lineAlpha": 1,
-                "title": "压双黄线",
                 "valueField": "压双黄线"
             },{
                 "alphaField": "alpha",
@@ -614,20 +588,6 @@ var Page = function() {
                 "title": "违停",
                 "type": "column",
                 "valueField": "违停"
-            }, {
-                "balloonText": "<span style='font-size:13px;'>[[title]] in [[category]]:<b>[[value]]</b> [[additional]]</span>",
-                "bullet": "round",
-                "dashLengthField": "dashLengthLine",
-                "lineThickness": 3,
-                "bulletSize": 7,
-                "bulletBorderAlpha": 1,
-                "bulletColor": "#FFFFFF",
-                "useLineColorForBulletBorder": true,
-                "bulletBorderThickness": 3,
-                "fillAlphas": 0,
-                "lineAlpha": 1,
-                "title": "违停",
-                "valueField": "违停"
             },{
                 "alphaField": "alpha",
                 "balloonText": "<span style='font-size:13px;'>[[title]] in [[category]]:<b>[[value]]</b> [[additional]]</span>",
@@ -635,20 +595,6 @@ var Page = function() {
                 "fillAlphas": 1,
                 "title": "逆行",
                 "type": "column",
-                "valueField": "逆行"
-            }, {
-                "balloonText": "<span style='font-size:13px;'>[[title]] in [[category]]:<b>[[value]]</b> [[additional]]</span>",
-                "bullet": "round",
-                "dashLengthField": "dashLengthLine",
-                "lineThickness": 3,
-                "bulletSize": 7,
-                "bulletBorderAlpha": 1,
-                "bulletColor": "#FFFFFF",
-                "useLineColorForBulletBorder": true,
-                "bulletBorderThickness": 3,
-                "fillAlphas": 0,
-                "lineAlpha": 1,
-                "title": "逆行",
                 "valueField": "逆行"
             }],
             "categoryField": "lane_name",
@@ -724,130 +670,137 @@ var Page = function() {
 
     }
 
-    var initChartSample7 = function() {
-        var chart = AmCharts.makeChart("chart_7", {
-            "type": "pie",
-            "theme": "light",
+    var InitChart3ForALL=function() {
+        if ($('#chart_3').size() != 1) {
+            return;
+        }
 
-            "fontFamily": 'Open Sans',
+        //对全局变量数据进行处理
+        var plotData = [];
+        plotData.push({data:0,label:0})
+        for(var i = 0;i<chartDataExtra.length;i++)
+        {
+            var plotItem = {
+                data: chartDataExtra[i],
+                label: laneStore[i],
+                lines: {
+                    lineWidth: 1,
+                },
+                shadowSize: 0
 
-            "color":    '#888',
+            };
 
-            "dataProvider":chartDataFlowType,
-            "valueField": "num",
-            "titleField": "flow_type",
-            "outlineAlpha": 0.4,
-            "depth3D": 15,
-            "balloonText": "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>",
-            "angle": 30,
-            "exportConfig": {
-                menuItems: [{
-                    icon: '/lib/3/images/export.png',
-                    format: 'png'
-                }]
+            plotData.push(plotItem);
+        }
+
+        var plot = $.plot($("#chart_3"), plotData, {
+            series: {
+                lines: {
+                    show: true,
+                    lineWidth: 2,
+                    fill: true,
+                    fillColor: {
+                        colors: [{
+                            opacity: 0.05
+                        }, {
+                            opacity: 0.01
+                        }]
+                    }
+                },
+                points: {
+                    show: true,
+                    radius: 3,
+                    lineWidth: 1
+                },
+                shadowSize: 2
+            },
+            grid: {
+                hoverable: true,
+                clickable: true,
+                tickColor: "#eee",
+                borderColor: "#eee",
+                borderWidth: 1
+            },
+            colors: ["#d12610", "#37b7f3", "#52e136"],
+            xaxis: {
+
+                mode: "time",
+                timeformat: "%Y-%m-%d",
+                tickColor: "#eee"
+            },
+            yaxis: {
+                ticks: 11,
+                tickDecimals: 0,
+                tickColor: "#eee",
             }
         });
 
-        jQuery('.chart_7_chart_input').off().on('input change', function() {
-            var property = jQuery(this).data('property');
-            var target = chart;
-            var value = Number(this.value);
-            chart.startDuration = 0;
 
-            if (property == 'innerRadius') {
-                value += "%";
+        function showTooltip(x, y, contents) {
+            $('<div id="tooltip">' + contents + '</div>').css({
+                position: 'absolute',
+                display: 'none',
+                top: y + 5,
+                left: x + 15,
+                border: '1px solid #333',
+                padding: '4px',
+                color: '#fff',
+                'border-radius': '3px',
+                'background-color': '#333',
+                opacity: 0.80
+            }).appendTo("body").fadeIn(200);
+        }
+
+        var previousPoint = null;
+        $("#chart_3").bind("plothover", function(event, pos, item) {
+            $("#x").text(pos.x.toFixed(2));
+            $("#y").text(pos.y.toFixed(2));
+
+            if (item) {
+                if (previousPoint != item.dataIndex) {
+                    previousPoint = item.dataIndex;
+
+                    $("#tooltip").remove();
+                    var x = item.datapoint[0].toFixed(2),
+                        y = item.datapoint[1].toFixed(2);
+
+                    showTooltip(item.pageX, item.pageY, item.series.label + " of " + item.series.data[item.dataIndex] + " = " + y);
+                }
+            } else {
+                $("#tooltip").remove();
+                previousPoint = null;
             }
-
-            target[property] = value;
-            chart.validateNow();
-        });
-
-        $('#chart_7').closest('.portlet').find('.fullscreen').click(function() {
-            chart.invalidateSize();
         });
     }
     //图表的初始化函数-----结束
 
-    //图表处理函数-----开始
-    var changeResultDataToChartForIllegalTypes = function(list) {
-        chartDataIllegalType=[];
-        for(var i = 0;i<list.length;i++)
-        {
-            var json = {"lane_name":list[i].lane_name,"正常行驶":list[i].status0,"违停":list[i].status1
-                ,"闯红灯":list[i].status2,"压双黄线":list[i].status3,"逆行":list[i].status4}
 
-            chartDataIllegalType.push(json);
-        }
 
-    }
+    var myExportAPI = function(){
+        var url = "../../analysis_data_servlet_action";
+        var data={};
+        data.action="export_record";
+        $.post(url,data,function(json){
 
-    var changeResultDataToChartForIllegalTotal = function(list) {
-        chartDataIllegalTotal = [];
-        for (var i = 0; i < list.length; i++) {
-            var json = {"lane_name": list[i].lane_name, "违法行驶数量": list[i].illegal_total}
-            chartDataIllegalTotal.push(json);
-        }
-    }
-
-    var changeResultDataToChartForAll = function(list) {
-        chartDataExtra = [];
-
-        var tempList = [];
-        var illegalTotal = 0;
-        var lastDate = new Date();
-        for (var i = 0; i < list.length; i++) {
-            var record =list[i];
-
-            if(!laneStore.includes(record.lane_name))
-            {
-                if(i!==0)
-                {
-                    var thisDate = new Date();
-                    for(var tmp = lastDate;tmp.getFullYear()<thisDate.getFullYear()
-                    ||tmp.getMonth()<thisDate.getMonth()
-                    ||tmp.getDate()<=thisDate.getDate();tmp.setDate(tmp.getDate()+1))
-                    {
-                        var thisGroup = [new Date(tmp),0];
-                        tempList.push(thisGroup);
-                    }
-                }
-
-                lastDate.setDate((new Date()).getDate()-7);
-                laneStore.push(record.lane_name);
-                if(tempList.length!==0)
-                {
-                    chartDataExtra.push(tempList.slice());
-                    tempList = [];
-                }
+            if(json.result_code_for_export==0){
+                console.log(JSON.stringify(json));
+                console.log(json.download_url);
+                $("#record_export_div #download_url").attr("download_url",json.download_url);
+                $("#record_export_div").modal("show");
             }
+        });
+    }
 
-            if(laneStore.includes(record.lane_name))
-            {
-                var thisDate =new Date(record.date);
-                for(var tmp = lastDate;tmp.getFullYear()<thisDate.getFullYear()
-                ||tmp.getMonth()<thisDate.getMonth()
-                ||tmp.getDate()<thisDate.getDate();tmp.setDate(tmp.getDate()+1))
-                {
-                    var thisGroup = [new Date(tmp),0];
-                    tempList.push(thisGroup);
-                }
+    var myPrintAPI = function(){
+        window.open("daily_print_default.jsp");
+    }
 
-                illegalTotal = record.status1+ record.status2
-                    + record.status3+ record.status4;
-                var group = [thisDate, illegalTotal];
-                lastDate.setDate(thisDate.getDate()+1)
-                tempList.push(group);
-            }
-        }
-        if(tempList.length!==0)
-        {
-            chartDataExtra.push(tempList.slice());
-            tempList = [];
-        }
+    var myPrintAPI_Word = function(){
+        window.open("analysis_print_word.jsp");
 
     }
 
-        //图标处理函数-----结束
+
     //submit functions end
 
     var returnBack = function(){
@@ -957,6 +910,8 @@ var Page = function() {
             });
         }
     }
+
+
 
     //数据解析模块-----开始
     var explainIllegalCode = function(code)

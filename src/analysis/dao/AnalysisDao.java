@@ -180,6 +180,12 @@ public class AnalysisDao {
         queryRecord(data, json);
     }
 
+    public void getDateAll(Data data, JSONObject json) throws JSONException, SQLException {
+        // 构造sql语句，根据传递过来的查询条件参数
+        String sql = createGetDateRecordSql(); // 构造sql语句，根据传递过来的查询条件参数
+        data.getParam().put("sql", sql);
+        queryRecord(data, json);
+    }
 
     //数据库交互接口函数-----开始
 
@@ -364,9 +370,9 @@ public class AnalysisDao {
         /*--------------------获取变量 开始--------------------*/
         String resultMsg = "ok";
 
-        String where = "";
         JSONObject param = data.getParam();
-        where = useTimeWhere(param,where,"time_from","time_to","capture_time");
+        String now=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+        String date = param.has("time_from")?param.getString("time_to"):now;
 
         int resultCode = 0;
         List jsonList = new ArrayList();
@@ -382,8 +388,8 @@ public class AnalysisDao {
                 +"count(CASE WHEN illegal_status = 4 THEN 1 END) AS status4"
                 +" from " + relationName;
         sql += createJoinSql(relationName,"lane_data","lane_id","lane_id");
-        sql += " where capture_time BETWEEN DATE_SUB(NOW(),INTERVAL 3 DAY)\n" +
-                "AND DATE_ADD(NOW(),INTERVAL 3 DAY) ";
+        sql += " where capture_time BETWEEN DATE_SUB('"+date+"',INTERVAL 3 DAY)"
+                +" and DATE_ADD('"+date+"',INTERVAL 3 DAY) ";
         sql += " group by lane_name,date";
         showDebug("[toStatistics]构造的SQL语句是：" + sql);
 
@@ -430,6 +436,19 @@ public class AnalysisDao {
         json.put("result_code", resultCode); // 返回0表示正常，不等于0就表示有错误产生，错误代码
         /*--------------------返回数据 结束--------------------*/
     }
+    /**
+     * 构建Sql语句,供查询日期功能使用
+     * @return sql语句
+     */
+    public String createGetDateRecordSql()  {
+        String sql = "select (DATE_FORMAT(capture_time,\"%Y-%m-%d\")) as date from " + relationName;
+        sql+=" group by date";
+
+        showDebug(sql);
+        return sql;
+    }
+
+
 
     //构建SQL语句函数-----结束
 
