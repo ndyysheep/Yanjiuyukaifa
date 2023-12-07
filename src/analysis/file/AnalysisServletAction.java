@@ -106,6 +106,21 @@ public class AnalysisServletAction extends HttpServlet {
 
             }
 
+            if (action.equals("get_daily_date")) {
+                actionOk = true;
+
+                try {
+
+                    getDailyReportDate(request, response, json);
+
+                } catch (Exception e) {
+
+                    e.printStackTrace();
+
+                }
+
+            }
+
             if (action.equals("query_analysis_record")) {
                 actionOk = true;
 
@@ -151,20 +166,6 @@ public class AnalysisServletAction extends HttpServlet {
 
             }
 
-            if (action.equals("analysis_print")) {
-                actionOk = true;
-
-                try {
-
-                    printAnalysisRecord(request, response, json);
-
-                } catch (Exception e) {
-
-                    e.printStackTrace();
-
-                }
-
-            }
 
 
             try {
@@ -296,6 +297,12 @@ public class AnalysisServletAction extends HttpServlet {
         dao.getRecordForDailyAll(data,json);
     }
 
+    private void getDailyReportDate(HttpServletRequest request, HttpServletResponse response, JSONObject json)
+            throws JSONException, SQLException {
+        AnalysisDao dao = new AnalysisDao();
+        dao.getDateAll(data, json);
+    }
+
     private void getQueryRecord(HttpServletRequest request, HttpServletResponse response, JSONObject json)
             throws JSONException, SQLException {
         AnalysisDao dao = new AnalysisDao();
@@ -318,12 +325,6 @@ public class AnalysisServletAction extends HttpServlet {
 
     }
 
-    private void printAnalysisRecord(HttpServletRequest request, HttpServletResponse response, JSONObject json)
-            throws JSONException, SQLException, IOException {
-        AnalysisDao dao = new AnalysisDao();
-        Data data = getPageParameters(request, response);
-        dao.getAnalysisRecord(data, json);
-    }
 
     /*
      * ========================================CRUD业务函数 结束========================================

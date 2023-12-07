@@ -542,34 +542,6 @@ var Page = function() {
 
 		tableWrapper.find('.dataTables_length select').select2(); // initialize select2 dropdown
 
-		// table.on("page.dt",function(event){
-		// 	var pageLen = table.page.info().length;
-		// 	var currentPage = table.page.info().page+1;
-		//
-		// 	var pageDynamicBegin = currentPage;
-		// 	var pageDynamicEnd = pageDynamicBegin+5;
-		//
-		// 	var pageJumperBegin = pageDynamicBegin*pageLen;
-		// 	var pageJumperEnd = pageDynamicEnd*pageLen;
-		//
-		// 	var myData = {};
-		//
-		// 	myData.action = data.action;
-		// 	myData.pageJumperBegin = pageJumperBegin;
-		// 	myData.pageJumperEnd = pageJumperEnd;
-		//
-		// 	console.log(myData);
-		// 	$.post(servletRequest, myData,function(json){
-		// 			// 使用 API 方法更新数据
-		// 			table.rows.add(json.aaData).draw();
-		//
-		// 			// 设置回原来的页数
-		// 		console.log(currentPage);
-		//
-		//
-		// 	});
-		//
-		// });
 
 
 	}
