@@ -16,6 +16,7 @@ jQuery(document).ready(function() {
 var chartDataIllegalType=[];
 var chartDataIllegalTotal = [];
 var chartDataExtra = [];
+var laneStore =[];
 //关于页面的控件生成等操作都放在Page里
 var Page = function() {
     /*----------------------------------------入口函数  开始----------------------------------------*/
@@ -78,30 +79,24 @@ var Page = function() {
             return;
         }
 
-        function randValue() {
-            return (Math.floor(Math.random() * (1 + 40 - 20))) + 20;
+        //对全局变量数据进行处理
+        var plotData = [];
+        for(var i = 0;i<chartDataExtra.length;i++)
+        {
+            var plotItem = {
+                data: chartDataExtra[i],
+                label: laneStore[i],
+                lines: {
+                    lineWidth: 1,
+                },
+                shadowSize: 0
+
+            };
+
+            plotData.push(plotItem);
         }
-        var pageviews = chartDataExtra[0];
 
-        var visitors = chartDataExtra[1];
-        console.log(chartDataExtra);
-
-        var plot = $.plot($("#chart_3"), [{
-            data: pageviews,
-            label: "Unique Visits",
-            lines: {
-                lineWidth: 1,
-            },
-            shadowSize: 0
-
-        }, {
-            data: visitors,
-            label: "Page Views",
-            lines: {
-                lineWidth: 1,
-            },
-            shadowSize: 0
-        }], {
+        var plot = $.plot($("#chart_3"), plotData, {
             series: {
                 lines: {
                     show: true,
@@ -230,11 +225,6 @@ var Page = function() {
                 if(list!==undefined&&list.length>0){
                     changeResultDataToChartForAll(list);
                 }
-
-
-                // if(list!==undefined&&list.length>0){
-                //     changeDataToChartForVehicleTypes(list);
-                // }
 
             }else{
                 alert("与后端交互错误!"+json.result_Msg);
@@ -794,7 +784,7 @@ var Page = function() {
 
     var changeResultDataToChartForAll = function(list) {
         chartDataExtra = [];
-        var laneStore =[];
+
         var tempList = [];
         var illegalTotal = 0;
         var lastDate = new Date();
@@ -803,6 +793,18 @@ var Page = function() {
 
             if(!laneStore.includes(record.lane_name))
             {
+                if(i!==0)
+                {
+                    var thisDate = new Date();
+                    for(var tmp = lastDate;tmp.getFullYear()<thisDate.getFullYear()
+                    ||tmp.getMonth()<thisDate.getMonth()
+                    ||tmp.getDate()<=thisDate.getDate();tmp.setDate(tmp.getDate()+1))
+                    {
+                        var thisGroup = [new Date(tmp),0];
+                        tempList.push(thisGroup);
+                    }
+                }
+
                 lastDate.setDate((new Date()).getDate()-7);
                 laneStore.push(record.lane_name);
                 if(tempList.length!==0)
@@ -815,7 +817,9 @@ var Page = function() {
             if(laneStore.includes(record.lane_name))
             {
                 var thisDate =new Date(record.date);
-                for(var tmp = lastDate;tmp<thisDate;tmp.setDate(tmp.getDate()+1))
+                for(var tmp = lastDate;tmp.getFullYear()<thisDate.getFullYear()
+                ||tmp.getMonth()<thisDate.getMonth()
+                ||tmp.getDate()<thisDate.getDate();tmp.setDate(tmp.getDate()+1))
                 {
                     var thisGroup = [new Date(tmp),0];
                     tempList.push(thisGroup);
@@ -833,6 +837,7 @@ var Page = function() {
             chartDataExtra.push(tempList.slice());
             tempList = [];
         }
+
     }
 
         //图标处理函数-----结束
