@@ -86,6 +86,7 @@ public class ServletActionRecordInfo extends HttpServlet {
             json.put("result_msg", "ok");
 
             // 这几个常规增删改查功能
+            //获取非法行驶数据
             if (action.equals("get_illegal_record")) {
                 actionOk = true;
 
@@ -101,6 +102,7 @@ public class ServletActionRecordInfo extends HttpServlet {
 
             }
 
+            //删除非法行驶数据
             if (action.equals("delete_illegal_record")) {
                 actionOk = true;
                 try {
@@ -115,6 +117,7 @@ public class ServletActionRecordInfo extends HttpServlet {
 
             }
 
+            //详细查询非法行驶数据
             if (action.equals("query_illegal_data_record")) {
                 actionOk = true;
 

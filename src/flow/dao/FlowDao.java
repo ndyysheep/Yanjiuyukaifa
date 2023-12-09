@@ -458,10 +458,7 @@ public class FlowDao {
 
         String where = "";
 
-        if (checkParamValid(param, "id")) {
-            where = "id=" + param.getString("id");
-        }
-
+        where = useWhere(param,"id",where,false);
         where = useTimeWhere(param,where,"time_from","time_to","start_time");
         where = useTimeWhere(param,where,"time_from","time_to","end_time");
         where = useWhere(param, "total_num", where,false);

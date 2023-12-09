@@ -298,7 +298,7 @@ public class MonitorDao {
 
         String where = "";
         JSONObject param = data.getParam();
-        where = useTimeWhere(param,where,"time_from","timeTo");
+        where = useTimeWhere(param,where,"time_from","time_to");
 
         int resultCode = 0;
         List jsonList = new ArrayList();

@@ -9,7 +9,7 @@
     <welcome-file>default.htm</welcome-file>
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
-	<!-- ================  monitor begin =================           -->
+	<!-- ================  车辆监测数据接口 开始 =================-->
 	<servlet>
 		<servlet-name>monitor_file_servlet_action</servlet-name>
 		<servlet-class>monitor.file.ServletAction</servlet-class>
@@ -27,18 +27,9 @@
 		<servlet-name>monitor_data_servlet_action</servlet-name>
 		<url-pattern>/monitor_data_servlet_action</url-pattern>
 	</servlet-mapping>
-		<!-- ================  monitor end =================           -->
+	<!-- ================  车辆监测数据接口 结束 =================-->
 
-	<servlet>
-		<servlet-name>user_center_servlet_action</servlet-name>
-		<servlet-class>user.center.LoginAction</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>user_center_servlet_action</servlet-name>
-		<url-pattern>/user_center_servlet_action</url-pattern>
-	</servlet-mapping>
-
-
+	<!-- ================  违法监测数据接口 开始 =================-->
 	<servlet>
 		<servlet-name>illegal_data_servlet_action</servlet-name>
 		<servlet-class>illegal.file.ServletActionRecordInfo</servlet-class>
@@ -47,7 +38,9 @@
 		<servlet-name>illegal_data_servlet_action</servlet-name>
 		<url-pattern>/illegal_data_servlet_action</url-pattern>
 	</servlet-mapping>
+	<!-- ================  违法监测数据接口 结束 =================-->
 
+	<!-- ================  车流量监测数据接口 开始 =================-->
 	<servlet>
 		<servlet-name>flow_data_servlet_action</servlet-name>
 		<servlet-class>flow.file.FlowServletAction</servlet-class>
@@ -56,9 +49,9 @@
 		<servlet-name>flow_data_servlet_action</servlet-name>
 		<url-pattern>/flow_data_servlet_action</url-pattern>
 	</servlet-mapping>
+	<!-- ================  车流量监测数据接口 结束 =================-->
 
-
-
+	<!-- ================  监测数据分析接口 开始 =================-->
 	<servlet>
 		<servlet-name>analysis_data_servlet_action</servlet-name>
 		<servlet-class>analysis.file.AnalysisServletAction</servlet-class>
@@ -67,5 +60,6 @@
 		<servlet-name>analysis_data_servlet_action</servlet-name>
 		<url-pattern>/analysis_data_servlet_action</url-pattern>
 	</servlet-mapping>
-	
+	<!-- ================  监测数据分析接口 结束 =================-->
+
   </web-app>
