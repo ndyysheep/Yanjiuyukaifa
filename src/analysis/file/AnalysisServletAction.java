@@ -77,7 +77,7 @@ public class AnalysisServletAction extends HttpServlet {
             // 这几个常规增删改查功能
             //周报表部分-----开始
             //获取日报表信息
-            if (action.equals("report"))
+            if (action.equals("get_report"))
             {
                 actionOk = true;
 
