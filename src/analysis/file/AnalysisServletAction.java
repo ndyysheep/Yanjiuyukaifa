@@ -77,13 +77,13 @@ public class AnalysisServletAction extends HttpServlet {
             // 这几个常规增删改查功能
             //周报表部分-----开始
             //获取日报表信息
-            if (action.equals("daily_report"))
+            if (action.equals("report"))
             {
                 actionOk = true;
 
                 try {
 
-                    getAnalysisDailyReport(json);
+                    getAnalysisReport(json);
 
                 } catch (Exception e) {
 
@@ -93,13 +93,13 @@ public class AnalysisServletAction extends HttpServlet {
 
             }
 
-            if (action.equals("daily_report_all"))
+            if (action.equals("report_all"))
             {
                 actionOk = true;
 
                 try {
 
-                    getAnalysisDailyReportForAll(json);
+                    getAnalysisReportForAll(json);
 
                 } catch (Exception e) {
 
@@ -118,7 +118,7 @@ public class AnalysisServletAction extends HttpServlet {
 
                 try {
 
-                    getDailyReportDate(json);
+                    getReportDate(json);
 
                 } catch (Exception e) {
 
@@ -246,7 +246,7 @@ public class AnalysisServletAction extends HttpServlet {
     /**
      * 日报表获取信息
      */
-    private void getAnalysisDailyReport(JSONObject json) throws JSONException
+    private void getAnalysisReport(JSONObject json) throws JSONException
     {
         AnalysisDao dao = new AnalysisDao();
         dao.getRecordForReport(data, json);
@@ -255,7 +255,7 @@ public class AnalysisServletAction extends HttpServlet {
     /**
      * 统计概览图获取信息
      */
-    private void getAnalysisDailyReportForAll(JSONObject json) throws JSONException
+    private void getAnalysisReportForAll(JSONObject json) throws JSONException
     {
         AnalysisDao dao = new AnalysisDao();
         dao.getRecordForAll(data,json);
@@ -265,7 +265,7 @@ public class AnalysisServletAction extends HttpServlet {
     /**
      * 获取日报表需要的日期信息
      */
-    private void getDailyReportDate(JSONObject json) throws JSONException, SQLException
+    private void getReportDate(JSONObject json) throws JSONException, SQLException
     {
         AnalysisDao dao = new AnalysisDao();
         dao.getDateAll(data, json);
