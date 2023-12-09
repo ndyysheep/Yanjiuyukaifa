@@ -200,28 +200,30 @@ var Page = function() {
         var data={};
         var date = undefined;
         var dateExtra = undefined;
-        data.action="report_all";
+        data.action="get_report_all";
         if(time_from!==undefined&&time_to!==undefined)
         {
-            var slip1 =0,slip2=0;
-            if(pageId==="daily_report")
-            {
-                slip1 = slip2 =3;
-            }
-            else if(pageId === "weekly_report")
-            {
-                var tmpDate = new Date();
-               var currentMonth =tmpDate.getMonth();
-               tmpDate.setMonth(currentMonth+1,0);
 
-            }
             var timeBegin = new Date(time_from);
             var timeEnd = new Date(time_to);
 
-            timeBegin.setDate(timeBegin.getDate()-slip1);
-            timeEnd.setDate(timeBegin.getDate()+slip2);
-            data.time_from = time_from;
-            data.time_to = time_to;
+            if(pageId==="daily_report")
+            {
+                timeBegin.setDate(timeBegin.getDate()-3);
+                timeEnd.setDate(timeBegin.getDate()+3);
+            }
+            else if(pageId === "weekly_report")
+            {
+                timeBegin.setDate(timeBegin.getDate()-21);
+                var changeResultDataToChartForAll = function(list,date)
+                {
+                    
+                }
+                
+            }
+
+            data.time_from = timeBegin.toISOString().slice(0,10);
+            data.time_to = timeEnd.toISOString().slice(0,10);
 
             date = time_from.toString().slice(0,10);
 
@@ -288,7 +290,7 @@ var Page = function() {
 
         if(pageId==="daily_report")
         {
-            data.action="report";
+            data.action="get_report";
             if(date==undefined)
             {
                 var currentDate = new Date().toISOString().slice(0, 10);
@@ -303,7 +305,7 @@ var Page = function() {
         }
         else if(pageId==="weekly_report")
         {
-            data.action="report";
+            data.action="get_report";
             if(date==undefined)
             {
                 weekList = getWeek(new Date());
@@ -926,7 +928,7 @@ var Page = function() {
     var  getDailyAnalysisRecordPrint = function(){
         var url = "../../analysis_data_servlet_action";
         var data={};
-        data.action="report";
+        data.action="get_report";
         $.post(url,data,function(json){
             if(json.result_code==0){
                 console.log(JSON.stringify(json));
