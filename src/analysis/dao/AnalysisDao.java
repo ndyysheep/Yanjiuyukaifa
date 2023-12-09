@@ -24,7 +24,6 @@ public class AnalysisDao {
 
     /**
      * 生成调试信息
-     *
      * @param msg 接收的第一个参数,主要调试信息
      */
     public void showDebug(String msg) {
@@ -161,35 +160,7 @@ public class AnalysisDao {
         return timeWhere ;
     }
 
-
-    /**
-     * 查询记录
-     */
-    public void getAnalysisRecord(Data data, JSONObject json) throws JSONException, SQLException {
-        // 构造sql语句，根据传递过来的查询条件参数
-        String sql = createGetQueryRecordSql(data,true); // 构造sql语句，根据传递过来的查询条件参数
-        data.getParam().put("sql", sql);
-        queryRecord(data, json);
-    }
-
-
-    public void getQueryRecord(Data data, JSONObject json) throws JSONException, SQLException {
-        // 构造sql语句，根据传递过来的查询条件参数
-        String sql = createGetQueryRecordSql(data,false); // 构造sql语句，根据传递过来的查询条件参数
-        data.getParam().put("sql", sql);
-        queryRecord(data, json);
-    }
-
-    public void getDateAll(Data data, JSONObject json) throws JSONException, SQLException {
-        // 构造sql语句，根据传递过来的查询条件参数
-        String sql = createGetDateRecordSql(); // 构造sql语句，根据传递过来的查询条件参数
-        data.getParam().put("sql", sql);
-        queryRecord(data, json);
-    }
-
     //数据库交互接口函数-----开始
-
-
     /**
      * 进行主要的数据库查询处理和交互(接口)
      * @param data Data类对象,是json对象的容器
@@ -249,61 +220,27 @@ public class AnalysisDao {
         json.put("result_code", resultCode); // 返回0表示正常，不等于0就表示有错误产生，错误代码
         /*--------------------返回数据 结束--------------------*/
     }
-
-
     //数据库交互接口函数-----结束
 
-    //构建SQL语句函数-----开始
+
     /**
-     * 构建Sql语句,供查询功能使用
-     * @param data 自定义Data变量
-     * @return sql语句
-     * @throws JSONException 抛出json异常
+     *获取日期信息
      */
-    public String createGetQueryRecordSql(Data data, boolean isNeedJoin) throws JSONException {
-        JSONObject param = data.getParam();
-        String sql = "select lane_name,illegal_status from " + relationName;
-
-        if(!isNeedJoin)
-        {
-            if(data.getParam().has("lane_name"))
-            {
-                sql += createJoinSql(relationName, "lane_data", "lane_id", "lane_id");
-            }
-        }
-        else
-        {
-            sql += createJoinSql(relationName, "lane_data", "lane_id", "lane_id");
-
-        }
-
-
-        String where = "";
-
-        if (checkParamValid(param, "id")) {
-            where = "id=" + param.getString("id");
-        }
-
-        where = useTimeWhere(param,where,"time_from","timeTo","start_time");
-        where = useTimeWhere(param,where,"time_from","timeTo","end_time");
-        where = useWhere(param, "total_num", where,false);
-
-        showDebug(where);
-        // 判断是否有条件
-        if (!where.isEmpty()) {
-            sql = sql + where;
-        }
-        showDebug(sql);
-        return sql;
+    public void getDateAll(Data data, JSONObject json) throws JSONException, SQLException {
+        // 构造sql语句，根据传递过来的查询条件参数
+        String sql = createGetDateRecordSql(); // 构造sql语句，根据传递过来的查询条件参数
+        data.getParam().put("sql", sql);
+        queryRecord(data, json);
     }
 
-    public void getRecordForDailyReport(Data data, JSONObject json) throws JSONException {
+    public void getRecordForReport(Data data, JSONObject json) throws JSONException {
         /*--------------------获取变量 开始--------------------*/
         String resultMsg = "ok";
 
         String where = "";
         JSONObject param = data.getParam();
-        where = useTimeWhere(param,where,"time_from","time_to","capture_time");
+        where = useTimeWhere(param,where,"time_from"
+                ,"time_to","capture_time");
 
         int resultCode = 0;
         List jsonList = new ArrayList();
@@ -360,13 +297,13 @@ public class AnalysisDao {
         /*--------------------返回数据 开始--------------------*/
 
         showDebug(jsonList.toString());
-        json.put("daily_aaData", jsonList);
+        json.put("report_aaData", jsonList);
         json.put("result_msg", resultMsg); // 如果发生错误就设置成"error"等
         json.put("result_code", resultCode); // 返回0表示正常，不等于0就表示有错误产生，错误代码
         /*--------------------返回数据 结束--------------------*/
     }
 
-    public void getRecordForDailyAll(Data data, JSONObject json) throws JSONException {
+    public void getRecordForAll(Data data, JSONObject json) throws JSONException {
         /*--------------------获取变量 开始--------------------*/
         String resultMsg = "ok";
 
@@ -436,6 +373,13 @@ public class AnalysisDao {
         json.put("result_code", resultCode); // 返回0表示正常，不等于0就表示有错误产生，错误代码
         /*--------------------返回数据 结束--------------------*/
     }
+
+
+
+
+
+    //构建SQL语句函数-----开始
+
     /**
      * 构建Sql语句,供查询日期功能使用
      * @return sql语句

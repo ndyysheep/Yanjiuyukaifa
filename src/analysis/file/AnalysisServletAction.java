@@ -2,7 +2,6 @@ package analysis.file;
 
 import analysis.dao.AnalysisDao;
 import monitor.dao.Data;
-import monitor.dao.MySQLDao;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -76,12 +75,15 @@ public class AnalysisServletAction extends HttpServlet {
             json.put("result_msg", "ok");
 
             // 这几个常规增删改查功能
-            if (action.equals("daily_report")) {
+            //周报表部分-----开始
+            //获取日报表信息
+            if (action.equals("daily_report"))
+            {
                 actionOk = true;
 
                 try {
 
-                    getAnalysisDailyReport(request, response, json);
+                    getAnalysisDailyReport(json);
 
                 } catch (Exception e) {
 
@@ -91,12 +93,32 @@ public class AnalysisServletAction extends HttpServlet {
 
             }
 
-            if (action.equals("daily_report_all")) {
+            if (action.equals("daily_report_all"))
+            {
                 actionOk = true;
 
                 try {
 
-                    getAnalysisDailyReport(request, response, json);
+                    getAnalysisDailyReportForAll(json);
+
+                } catch (Exception e) {
+
+                    e.printStackTrace();
+
+                }
+
+            }
+            //周报表部分-----结束
+
+
+
+
+            if (action.equals("get_report_date")) {
+                actionOk = true;
+
+                try {
+
+                    getDailyReportDate(json);
 
                 } catch (Exception e) {
 
@@ -106,65 +128,6 @@ public class AnalysisServletAction extends HttpServlet {
 
             }
 
-            if (action.equals("get_daily_date")) {
-                actionOk = true;
-
-                try {
-
-                    getDailyReportDate(request, response, json);
-
-                } catch (Exception e) {
-
-                    e.printStackTrace();
-
-                }
-
-            }
-
-            if (action.equals("query_analysis_record")) {
-                actionOk = true;
-
-                try {
-
-                    getQueryRecord(request, response, json);
-
-                } catch (Exception e) {
-
-                    e.printStackTrace();
-
-                }
-
-            }
-
-            if (action.equals("update_record")) {
-                actionOk = true;
-                try {
-
-                    updateRecord(request, response, json);
-
-                } catch (Exception e) {
-
-                    e.printStackTrace();
-
-                }
-
-            }
-
-
-            if (action.equals("export_record")) {
-                actionOk = true;
-
-                try {
-
-                    exportAnalysisRecord(request, response, json);
-
-                } catch (Exception e) {
-
-                    e.printStackTrace();
-
-                }
-
-            }
 
 
 
@@ -275,55 +238,40 @@ public class AnalysisServletAction extends HttpServlet {
     /*
      * ========================================公共函数结束========================================
      */
-    /*
-     * ========================================MySQL HTTP操作通用函数 开始========================================
-     */
-    private void updateRecord(HttpServletRequest request, HttpServletResponse response, JSONObject json)
-            throws JSONException, SQLException {
-        MySQLDao dao = new MySQLDao();
-        dao.updateRecord(data, json);
-    }
 
-    /*
-     * ========================================MySQL HTTP操作通用函数 结束========================================
-     */
     /*
      * ========================================CRUD业务函数 开始========================================
      */
-    private void getAnalysisDailyReport(HttpServletRequest request, HttpServletResponse response, JSONObject json)
-            throws JSONException, SQLException {
+
+    /**
+     * 日报表获取信息
+     */
+    private void getAnalysisDailyReport(JSONObject json) throws JSONException
+    {
         AnalysisDao dao = new AnalysisDao();
-        dao.getRecordForDailyReport(data, json);
-        dao.getRecordForDailyAll(data,json);
+        dao.getRecordForReport(data, json);
     }
 
-    private void getDailyReportDate(HttpServletRequest request, HttpServletResponse response, JSONObject json)
-            throws JSONException, SQLException {
+    /**
+     * 统计概览图获取信息
+     */
+    private void getAnalysisDailyReportForAll(JSONObject json) throws JSONException
+    {
+        AnalysisDao dao = new AnalysisDao();
+        dao.getRecordForAll(data,json);
+    }
+
+
+    /**
+     * 获取日报表需要的日期信息
+     */
+    private void getDailyReportDate(JSONObject json) throws JSONException, SQLException
+    {
         AnalysisDao dao = new AnalysisDao();
         dao.getDateAll(data, json);
     }
 
-    private void getQueryRecord(HttpServletRequest request, HttpServletResponse response, JSONObject json)
-            throws JSONException, SQLException {
-        AnalysisDao dao = new AnalysisDao();
-        dao.getQueryRecord(data, json);
-    }
 
-
-
-    private void exportAnalysisRecord(HttpServletRequest request, HttpServletResponse response, JSONObject json)
-            throws JSONException, SQLException, IOException {
-        AnalysisDao dao = new AnalysisDao();
-        Data data = getPageParameters(request, response);
-        // 获取设备信息
-        dao.getAnalysisRecord(data, json);
-
-        // 下载操作
-        dao.getExportAnalysisRecordToTxt(json, data);
-        dao.getExportAnalysisRecordToExcel(json, data);
-
-
-    }
 
 
     /*

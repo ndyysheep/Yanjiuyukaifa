@@ -103,80 +103,16 @@
                             监测数据日报表</a>
                     </li>
                     <li>
-                        <a href="ui_buttons.html">
+                        <a href="../../maintain/comprehensive_statistics/weekly_statistics.jsp">
                             监测数据周报表</a>
                     </li>
                     <li>
-                        <a href="ui_icons.html">
+                        <a href="../../maintain/comprehensive_statistics/monthly_statistics.jsp">
                             监测数据月报表</a>
                     </li>
                     <li>
                         <a href="ui_colors.html">
-                            Flat UI Colors</a>
-                    </li>
-                    <li>
-                        <a href="ui_typography.html">
-                            Typography</a>
-                    </li>
-                    <li>
-                        <a href="ui_tabs_accordions_navs.html">
-                            Tabs, Accordions & Navs</a>
-                    </li>
-                    <li>
-                        <a href="ui_tree.html">
-                            <span class="badge badge-danger">new</span>Tree View</a>
-                    </li>
-                    <li>
-                        <a href="ui_page_progress_style_1.html">
-                            <span class="badge badge-warning">new</span>Page Progress Bar - Style 1</a>
-                    </li>
-                    <li>
-                        <a href="ui_blockui.html">
-                            Block UI</a>
-                    </li>
-                    <li>
-                        <a href="ui_bootstrap_growl.html">
-                            <span class="badge badge-roundless badge-warning">new</span>Bootstrap Growl Notifications</a>
-                    </li>
-                    <li>
-                        <a href="ui_notific8.html">
-                            Notific8 Notifications</a>
-                    </li>
-                    <li>
-                        <a href="ui_toastr.html">
-                            Toastr Notifications</a>
-                    </li>
-                    <li>
-                        <a href="ui_alert_dialog_api.html">
-                            <span class="badge badge-danger">new</span>Alerts & Dialogs API</a>
-                    </li>
-                    <li>
-                        <a href="ui_session_timeout.html">
-                            Session Timeout</a>
-                    </li>
-                    <li>
-                        <a href="ui_idle_timeout.html">
-                            User Idle Timeout</a>
-                    </li>
-                    <li>
-                        <a href="ui_modals.html">
-                            Modals</a>
-                    </li>
-                    <li>
-                        <a href="ui_extended_modals.html">
-                            Extended Modals</a>
-                    </li>
-                    <li>
-                        <a href="ui_tiles.html">
-                            Tiles</a>
-                    </li>
-                    <li>
-                        <a href="ui_datepaginator.html">
-                            <span class="badge badge-success">new</span>Date Paginator</a>
-                    </li>
-                    <li>
-                        <a href="ui_nestable.html">
-                            Nestable List</a>
+                            监测数据年报表</a>
                     </li>
                 </ul>
             </li>

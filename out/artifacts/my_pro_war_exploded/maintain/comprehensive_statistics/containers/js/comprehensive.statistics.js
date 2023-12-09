@@ -25,8 +25,16 @@ var Page = function() {
             $.ajaxSettings.async=false;
             initAnalysisList();
             $.ajaxSettings.async=true;
-
             initAnalysisStatistics();
+        }
+
+        if(pageId ==="weekly_report"){
+            $(".sub-menu #weekly_report").addClass("active");
+            $.ajaxSettings.async=false;
+            initAnalysisList();
+            $.ajaxSettings.async=true;
+            initAnalysisStatistics();
+
         }
 
         if(pageId==="daily_statistics_print"){
@@ -58,23 +66,22 @@ var Page = function() {
     /*------------------------------针对各个页面的入口  开始------------------------------*/
     var initAnalysisList=function(){
 
-        initDailyDate();
+        initDate();
         initAnalysisListControlEvent();
         initAnalysisRecordList();
     }
 
-    var initDailyAnalysisPrint = function(){
-        initDailyAnalysisRecordForPrint();
-    }
 
-    var initMonitorPrint_Word = function(){
-        initAnalysisRecordForPrint_Word();
-    }
     //统计初始化模块-----开始
+    /**
+     * 初始化统计图
+     * @param time_from 开始时间
+     * @param time_to   截止时间
+     */
     var initAnalysisStatistics = function(time_from,time_to){
 
         $.ajaxSettings.async=false;
-        initAnalysisRecordForStatistics(time_from,time_to);
+        initAnalysisRecordForCharts(time_from,time_to);
         $.ajaxSettings.async=true;
         initChartSets();
         initChartSetsForIllegalTotal();
@@ -108,12 +115,12 @@ var Page = function() {
         //使用Datatable的数据表,统计总数据
         getAnalysisRecordDatatable();
     }
-    var initDailyDate=function(){
+    var initDate=function(){
         var url = "../../analysis_data_servlet_action"
         var data = {};
         var currentDate=new Date().toISOString().slice(0, 10);
         var container = $("#date_selector");
-        data.action = "get_daily_date"
+        data.action = "get_report_date"
         $.post(url,data,function(json){
             if(json.result_code===0)
             {
@@ -129,18 +136,13 @@ var Page = function() {
             }
         })
     }
-    var initDailyAnalysisRecordForPrint=function(){
-        getDailyAnalysisRecordPrint();
-    }
 
-    var initAnalysisRecordForPrint_Word=function(){
-        getAnalysisRecordPrint_Word();
-    }
 
-    var initAnalysisRecordForStatistics =function(time_from,time_to){
-        console.log(resultList);
+    var initAnalysisRecordForCharts =function(time_from,time_to){
+
         changeResultDataToChartForIllegalTypes(resultList);
         changeResultDataToChartForIllegalTotal(resultList);
+
         var url = "../../analysis_data_servlet_action";
         var data={};
         var date = undefined;
@@ -283,8 +285,8 @@ var Page = function() {
                 "type": "POST",
                 "data":data,
                 "dataSrc": function(json) {
-                    console.log(json.daily_aaData);
-                    resultList = json.daily_aaData;
+                    console.log(json.report_aaData);
+                    resultList = json.report_aaData;
 
                     for(var i = 0;i<resultList.length ;i++)
                     {
@@ -293,12 +295,12 @@ var Page = function() {
                             +resultList[i].status3+resultList[i].status4;
 
                         var illegal_total = total - resultList[i].status0;
-                        json.daily_aaData[i].total = total;
-                        json.daily_aaData[i].illegal_total = illegal_total;
+                        json.report_aaData[i].total = total;
+                        json.report_aaData[i].illegal_total = illegal_total;
 
                     }
-                    resultList = json.daily_aaData;
-                    return json.daily_aaData; // 返回的 JSON 数据中的数据源位置
+                    resultList = json.report_aaData;
+                    return json.report_aaData; // 返回的 JSON 数据中的数据源位置
                 }
 
             }
@@ -330,96 +332,7 @@ var Page = function() {
 
     }
 
-    var  getDailyAnalysisRecordPrint = function(){
-        var url = "../../analysis_data_servlet_action";
-        var data={};
-        data.action="daily_report";
-        $.post(url,data,function(json){
-            if(json.result_code==0){
-                console.log(JSON.stringify(json));
 
-                var list = json.aaData;
-
-                var myhtml="";
-                if(list!=undefined && list.length>0)
-                {
-                    for(var i=0;i<list.length;i++) {
-
-                        var record=list[i];
-                        myhtml+="<tr><td class=\"highlight\">" +record.lane_name+"</td>";
-                        myhtml+="<td>" +(record.status0+record.status1
-                            +record.status2+record.status3+record.status4)+" </td>"
-                        myhtml+="<td>"+record.status0 +"</td>";
-                        myhtml+="<td class=\"highlight\">"+record.status1+"</td>";
-                        myhtml+="<td>"+record.status2+"</td>";
-                        myhtml+="<td>"+record.status3 +"</td>";
-                        myhtml+="<td class=\"highlight\">"+record.status4+"</td>";
-                        myhtml+="</tr>";
-                    }
-                }
-            }
-            $("#print_list").html(myhtml);
-        });
-
-
-    }
-
-    var  getAnalysisRecordPrint_Word = function(){
-        var url = "../../analysis_data_servlet_action";
-        var data={};
-        data.action="analysis_print";
-        $.post(url,data,function(json){
-            if(json.result_code==0){
-                console.log(JSON.stringify(json));
-
-                var list = json.aaData;
-
-                var html="";
-                if(list!=undefined && list.length>0)
-                {
-                    for(var i=0;i<list.length;i++) {
-
-                        var record=list[i];
-                        html=html+"<tr style='height:26.95pt'>";
-                        html=html+" <td width=63 valign=top style='width:46.95pt;border:none;border-right:solid #C9C9C9 1.0pt;";
-                        html=html+"  background:white;padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>";
-                        html=html+" <p class=MsoNormal align=center style='text-align:center'><i><span";
-                        html=html+" lang=EN-US style='font-family:\"微软雅黑\",sans-serif'>"+record.id+"</span></i></p>";
-                        html=html+" </td>";
-                        html=html+" <td width=63 valign=top style='width:47.05pt;border-top:none;border-left:";
-                        html=html+" none;border-bottom:solid #C9C9C9 1.0pt;border-right:solid #C9C9C9 1.0pt;";
-                        html=html+" padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>";
-                        html=html+" <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US";
-                        html=html+" style='font-family:\"微软雅黑\",sans-serif'>"+record.lane_name+"</span></p>";
-                        html=html+" </td>";
-                        html=html+" <td width=106 valign=top style='width:79.4pt;border-top:none;border-left:";
-                        html=html+"  none;border-bottom:solid #C9C9C9 1.0pt;border-right:solid #C9C9C9 1.0pt;";
-                        html=html+"  padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>";
-                        html=html+" <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US";
-                        html=html+" style='font-family:\"微软雅黑\",sans-serif'>"+record.start_time+"</span></p>";
-                        html=html+" </td>";
-                        html=html+" <td width=63 valign=top style='width:47.05pt;border-top:none;border-left:";
-                        html=html+" none;border-bottom:solid #C9C9C9 1.0pt;border-right:solid #C9C9C9 1.0pt;";
-                        html=html+" padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>";
-                        html=html+" <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US";
-                        html=html+" style='font-family:\"微软雅黑\",sans-serif'>"+record.end_time+"</span></p>";
-                        html=html+" </td>";
-                        html=html+" <td width=63 valign=top style='width:47.05pt;border-top:none;border-left:";
-                        html=html+"  none;border-bottom:solid #C9C9C9 1.0pt;border-right:solid #C9C9C9 1.0pt;";
-                        html=html+"  padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>";
-                        html=html+" <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US";
-                        html=html+" style='font-family:\"微软雅黑\",sans-serif'>"+record.total_num+"</span></p>";
-                        html=html+" </td>";
-                        html=html+" </tr>";
-
-                    }
-                }
-            }
-            $("#print_list_for_word").html(html);
-        });
-
-
-    }
     //数据获取函数--结束
 
     //图表处理函数-----开始
@@ -776,6 +689,116 @@ var Page = function() {
 
 
 
+
+
+
+    var initDailyAnalysisPrint = function(){
+        initDailyAnalysisRecordForPrint();
+    }
+
+    var initMonitorPrint_Word = function(){
+        initAnalysisRecordForPrint_Word();
+    }
+
+    var initDailyAnalysisRecordForPrint=function(){
+        getDailyAnalysisRecordPrint();
+    }
+
+    var initAnalysisRecordForPrint_Word=function(){
+        getAnalysisRecordPrint_Word();
+    }
+
+    var  getDailyAnalysisRecordPrint = function(){
+        var url = "../../analysis_data_servlet_action";
+        var data={};
+        data.action="daily_report";
+        $.post(url,data,function(json){
+            if(json.result_code==0){
+                console.log(JSON.stringify(json));
+
+                var list = json.aaData;
+
+                var myhtml="";
+                if(list!=undefined && list.length>0)
+                {
+                    for(var i=0;i<list.length;i++) {
+
+                        var record=list[i];
+                        myhtml+="<tr><td class=\"highlight\">" +record.lane_name+"</td>";
+                        myhtml+="<td>" +(record.status0+record.status1
+                            +record.status2+record.status3+record.status4)+" </td>"
+                        myhtml+="<td>"+record.status0 +"</td>";
+                        myhtml+="<td class=\"highlight\">"+record.status1+"</td>";
+                        myhtml+="<td>"+record.status2+"</td>";
+                        myhtml+="<td>"+record.status3 +"</td>";
+                        myhtml+="<td class=\"highlight\">"+record.status4+"</td>";
+                        myhtml+="</tr>";
+                    }
+                }
+            }
+            $("#print_list").html(myhtml);
+        });
+
+
+    }
+
+    var  getAnalysisRecordPrint_Word = function(){
+        var url = "../../analysis_data_servlet_action";
+        var data={};
+        data.action="analysis_print";
+        $.post(url,data,function(json){
+            if(json.result_code==0){
+                console.log(JSON.stringify(json));
+
+                var list = json.aaData;
+
+                var html="";
+                if(list!=undefined && list.length>0)
+                {
+                    for(var i=0;i<list.length;i++) {
+
+                        var record=list[i];
+                        html=html+"<tr style='height:26.95pt'>";
+                        html=html+" <td width=63 valign=top style='width:46.95pt;border:none;border-right:solid #C9C9C9 1.0pt;";
+                        html=html+"  background:white;padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>";
+                        html=html+" <p class=MsoNormal align=center style='text-align:center'><i><span";
+                        html=html+" lang=EN-US style='font-family:\"微软雅黑\",sans-serif'>"+record.id+"</span></i></p>";
+                        html=html+" </td>";
+                        html=html+" <td width=63 valign=top style='width:47.05pt;border-top:none;border-left:";
+                        html=html+" none;border-bottom:solid #C9C9C9 1.0pt;border-right:solid #C9C9C9 1.0pt;";
+                        html=html+" padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>";
+                        html=html+" <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US";
+                        html=html+" style='font-family:\"微软雅黑\",sans-serif'>"+record.lane_name+"</span></p>";
+                        html=html+" </td>";
+                        html=html+" <td width=106 valign=top style='width:79.4pt;border-top:none;border-left:";
+                        html=html+"  none;border-bottom:solid #C9C9C9 1.0pt;border-right:solid #C9C9C9 1.0pt;";
+                        html=html+"  padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>";
+                        html=html+" <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US";
+                        html=html+" style='font-family:\"微软雅黑\",sans-serif'>"+record.start_time+"</span></p>";
+                        html=html+" </td>";
+                        html=html+" <td width=63 valign=top style='width:47.05pt;border-top:none;border-left:";
+                        html=html+" none;border-bottom:solid #C9C9C9 1.0pt;border-right:solid #C9C9C9 1.0pt;";
+                        html=html+" padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>";
+                        html=html+" <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US";
+                        html=html+" style='font-family:\"微软雅黑\",sans-serif'>"+record.end_time+"</span></p>";
+                        html=html+" </td>";
+                        html=html+" <td width=63 valign=top style='width:47.05pt;border-top:none;border-left:";
+                        html=html+"  none;border-bottom:solid #C9C9C9 1.0pt;border-right:solid #C9C9C9 1.0pt;";
+                        html=html+"  padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>";
+                        html=html+" <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US";
+                        html=html+" style='font-family:\"微软雅黑\",sans-serif'>"+record.total_num+"</span></p>";
+                        html=html+" </td>";
+                        html=html+" </tr>";
+
+                    }
+                }
+            }
+            $("#print_list_for_word").html(html);
+        });
+
+
+    }
+
     var myExportAPI = function(){
         var url = "../../analysis_data_servlet_action";
         var data={};
@@ -808,171 +831,6 @@ var Page = function() {
     }
 
 
-    //输入判断函数--开始
-    var checkInputValid = function(key) {
-        var invalidKeys=['-','=','+','{','}','\'','/',',',
-            '\\','"',':',';','?','!','%','&','*','#','$','^','(',')']
-
-        for(var i = 0;i<invalidKeys.length;i++)
-        {
-            if(key===invalidKeys[i])
-            {
-                return false;
-            }
-        }
-
-        return true;
-
-    }
-
-    var checkValid = function(element) {
-
-        resetInputCss();
-        illegalInput = [];
-        var inputElements = element.find("input");
-        var check =  true;
-        var str = "";
-
-        var elementArray = [];
-        var checkTimeArray = ["capture_time_begin","capture_time_sec_begin"
-            ,"capture_time_end","capture_time_sec_end"]
-
-        var start_time;
-        var end_time;
-
-        //判断总车流量是不是数字
-        if(jQuery.type(element.find("#total_num"))!=="number")
-        {
-            illegalInput.push($(this));
-            check = false;
-        }
-        inputElements.each(function(){
-
-            var recentElem = $(this);
-            str = recentElem.val();
-            for(var i = 0;i<str.length;i++)
-            {
-                var myCh = str[i];
-                if(!checkInputValid(myCh))
-                {
-                    check = false;
-                    illegalInput.push($(this));
-                }
-            }
-
-            //取timepicker中每个不为空的输入栏
-            for(var i = 0;i<4;i++)
-            {
-                if(recentElem.attr("id")===checkTimeArray[i])
-                {
-                    elementArray[i] = recentElem;
-                }
-            }
-
-            inValidManager();
-        })
-
-        //判断是否出现结束时间>开始时间的情况
-        if(elementArray[0].val()!==""&&elementArray[1].val()!==""
-            &&elementArray[2].val()!==""&&elementArray[3].val()!=="")
-        {
-            start_time = elementArray[0].val()+elementArray[1].val();
-            end_time = elementArray[2].val()+elementArray[3].val();
-
-            if(start_time>end_time)
-            {
-                check = false;
-                for(var i = 0;i<elementArray.length;i++)
-                {
-                    illegalInput.push(elementArray[i]);
-                }
-            }
-        }
-        return check;
-    }
-    //输入判断函数--结束
-
-    var inValidManager = function(){
-        for(var i = 0;i<illegalInput.length;i++)
-        {
-            illegalInput[i].css({
-                "border-color" : "#a94442"
-            });
-        }
-    }
-
-    var resetInputCss = function()
-    {
-        for(var i = 0;i<illegalInput.length;i++)
-        {
-            illegalInput[i].css({
-                "border-color" : "#cccccc"
-            });
-        }
-    }
-
-
-
-    //数据解析模块-----开始
-    var explainIllegalCode = function(code)
-    {
-        if(code == 1)
-        {
-            return "违停";
-        }
-        else if(code == 2)
-        {
-            return "闯红灯";
-        }
-        else if(code == 3)
-        {
-            return "压双黄线";
-        }
-        else if(code == 4)
-        {
-            return "逆行";
-        }
-        else if(code == 0)
-        {
-            return "正常行驶";
-        }
-        else
-        {
-            return "数据错误";
-        }
-
-
-    }
-
-    var explainIllegalCode_Contrary = function(code)
-    {
-        if(code === "违停")
-        {
-            return 1;
-        }
-        else if(code === "闯红灯")
-        {
-            return 2;
-        }
-        else if(code === "压双黄线")
-        {
-            return 3;
-        }
-        else if(code === "逆行")
-        {
-            return 4;
-        }
-        else if(code === "正常行驶")
-        {
-            return 0;
-        }
-        else
-        {
-            return 9;
-        }
-
-
-    }
 
     //Page return 开始
     return {

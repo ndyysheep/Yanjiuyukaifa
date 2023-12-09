@@ -54,8 +54,7 @@ public class ServletAction extends HttpServlet {
     }
 
     /*
-     * ========================================函数分流
-     * 开始========================================
+     * ========================================函数分流开始========================================
      */
     public void processAction(HttpServletRequest request, HttpServletResponse response)
             throws IOException, JSONException {
@@ -218,7 +217,7 @@ public class ServletAction extends HttpServlet {
 
                 try {
 
-                    statisticsGPSRecord(request, response, json);
+                    getRecordForStatistics(request, response, json);
 
                 } catch (Exception e) {
 
@@ -440,7 +439,7 @@ public class ServletAction extends HttpServlet {
     }
 
 
-    private void statisticsGPSRecord(HttpServletRequest request, HttpServletResponse response, JSONObject json)
+    private void getRecordForStatistics(HttpServletRequest request, HttpServletResponse response, JSONObject json)
             throws JSONException, SQLException {
         MonitorDao dao = new MonitorDao();
         dao.getRecordForStatisticsHour(data, json);
