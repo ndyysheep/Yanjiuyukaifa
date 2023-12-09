@@ -13,7 +13,7 @@ jQuery(document).ready(function() {
 
 });
 /* ================================================================================ */
-
+var pageId;
 //关于页面的控件生成等操作都放在Page里
 var Page = function() {
     /*----------------------------------------入口函数  开始----------------------------------------*/
@@ -31,7 +31,7 @@ var Page = function() {
         if(pageId ==="weekly_report"){
             $(".sub-menu #weekly_report").addClass("active");
             $.ajaxSettings.async=false;
-            initAnalysisList();
+            initAnalysisListForWeekly();
             $.ajaxSettings.async=true;
             initAnalysisStatistics();
 
@@ -66,8 +66,16 @@ var Page = function() {
     /*------------------------------针对各个页面的入口  开始------------------------------*/
     var initAnalysisList=function(){
 
-        initDate();
+        initDateInDailyFormat();
         initAnalysisListControlEvent();
+        initAnalysisRecordList();
+    }
+
+
+    var initAnalysisListForWeekly=function(){
+
+        initDateInWeeklyFormat();
+        initAnalysisListControlEventForWeekly();
         initAnalysisRecordList();
     }
 
@@ -98,7 +106,7 @@ var Page = function() {
     //事件处理初始化--开始
     var initAnalysisListControlEvent=function(){
 
-        onPageAttachment($("#date_selector"));
+        onDailyPageAttachment($("#date_selector"));
         //导出信息
         $('#export_button').click(function() {myExportAPI();});
         //打印信息
@@ -107,7 +115,16 @@ var Page = function() {
 
     }
 
+    var initAnalysisListControlEventForWeekly =function(){
 
+        onWeeklyPageAttachment($("#date_selector"));
+        //导出信息
+        $('#export_button').click(function() {myExportAPI();});
+        //打印信息
+        $('#print_button').click(function() {myPrintAPI()});
+        $('#print_button_for_word').click(function() {myPrintAPI_Word()});
+
+    }
     //事件处理初始化--结束
 
     //数据获取初始化--开始
@@ -115,9 +132,10 @@ var Page = function() {
         //使用Datatable的数据表,统计总数据
         getAnalysisRecordDatatable();
     }
-    var initDate=function(){
+    var initDateInDailyFormat=function(){
         var url = "../../analysis_data_servlet_action"
         var data = {};
+        var weekList = [];
         var currentDate=new Date().toISOString().slice(0, 10);
         var container = $("#date_selector");
         data.action = "get_report_date"
@@ -137,6 +155,41 @@ var Page = function() {
         })
     }
 
+    var initDateInWeeklyFormat=function(){
+        var url = "../../analysis_data_servlet_action"
+        var data = {};
+        var weekList = [];
+        var now = new Date().toISOString().slice(0,10);
+        var week = getWeek(now);
+
+        weekList.push(week[0]);
+
+        var currentWeek=week[0]+"~"+week[1];
+        var container = $("#date_selector");
+        data.action = "get_report_date"
+        $.post(url,data,function(json){
+            if(json.result_code===0)
+            {
+                var list = json.aaData;
+                var html = "<option>"+currentWeek+"</option>";
+                for(var i = 0 ;i<list.length;i++)
+                {
+                    var thisWeek = getWeek(list[i].date);
+                    if(!weekList.includes(thisWeek[0]))
+                    {
+                        var date=thisWeek[0]+"~"
+                            +thisWeek[1];
+                        html +="<option>"+date+"</option>"
+                        weekList.push(thisWeek[0]);
+                    }
+
+                }
+
+                container.html(html);
+            }
+        })
+    }
+
 
     var initAnalysisRecordForCharts =function(time_from,time_to){
 
@@ -146,14 +199,32 @@ var Page = function() {
         var url = "../../analysis_data_servlet_action";
         var data={};
         var date = undefined;
-        data.action="daily_report_all";
+        var dateExtra = undefined;
+        data.action="report_all";
         if(time_from!==undefined&&time_to!==undefined)
         {
+            var slip1 =0,slip2=0;
+            if(pageId==="daily_report")
+            {
+                slip1 = slip2 =3;
+            }
+            else if(pageId === "weekly_report")
+            {
+                var tmpDate = new Date();
+               var currentMonth =tmpDate.getMonth();
+               tmpDate.setMonth(currentMonth+1,0);
+
+            }
+            var timeBegin = new Date(time_from);
+            var timeEnd = new Date(time_to);
+
+            timeBegin.setDate(timeBegin.getDate()-slip1);
+            timeEnd.setDate(timeBegin.getDate()+slip2);
             data.time_from = time_from;
             data.time_to = time_to;
 
-            console.log(time_from);
-             date = time_from.toString().slice(0,10);
+            date = time_from.toString().slice(0,10);
+
         }
 
         $.post(url,data,function(json){
@@ -176,7 +247,7 @@ var Page = function() {
 
     //数据获取初始化--结束
 
-    var onPageAttachment = function(element)
+    var onDailyPageAttachment = function(element)
     {
         element.change(function(event){
             var date = element.val();
@@ -190,24 +261,64 @@ var Page = function() {
 
         })
     }
+
+    var onWeeklyPageAttachment = function(element)
+    {
+        element.change(function(event){
+            var dateStr = element.val();
+            var partBegin = dateStr.slice(0,10);
+            var partEnd = dateStr.slice(11,20);
+            var time_from = partBegin + " "+"00:00:00"
+            var time_to =partEnd + " "+"23:59:59";
+            $.ajaxSettings.async=false;
+            getAnalysisRecordDatatable(partBegin);
+            $.ajaxSettings.async=true;
+            initAnalysisStatistics(time_from,time_to)
+
+
+        })
+    }
     //数据获取函数--开始
     var getAnalysisRecordDatatable =function(date){
 
         var servletRequest ="../../analysis_data_servlet_action";
         resultList=[];
+        var weekList =[];
         var data={};
-        data.action="daily_report";
-        if(date==undefined)
+
+        if(pageId==="daily_report")
         {
-            var currentDate = new Date().toISOString().slice(0, 10);
-            data.time_from = currentDate + " "+"00:00:00"
-            data.time_to = currentDate + " "+"23:59:59";
+            data.action="report";
+            if(date==undefined)
+            {
+                var currentDate = new Date().toISOString().slice(0, 10);
+                data.time_from = currentDate + " "+"00:00:00"
+                data.time_to = currentDate + " "+"23:59:59";
+            }
+            else
+            {
+                data.time_from = date + " "+"00:00:00"
+                data.time_to = date + " "+"23:59:59";
+            }
         }
-        else
+        else if(pageId==="weekly_report")
         {
-            data.time_from = date + " "+"00:00:00"
-            data.time_to = date + " "+"23:59:59";
+            data.action="report";
+            if(date==undefined)
+            {
+                weekList = getWeek(new Date());
+            }
+            else
+            {
+                weekList = getWeek(new Date(date));
+            }
+
+            var thisMonday =  weekList[0];
+            var thisSunday =  weekList[1]
+            data.time_from = thisMonday + " "+"00:00:00"
+            data.time_to = thisSunday + " "+"23:59:59";
         }
+
 
         $('.datatable').DataTable().destroy();
 
@@ -357,6 +468,87 @@ var Page = function() {
     }
 
     var changeResultDataToChartForAll = function(list,date) {
+        chartDataExtra = [];
+        laneStore = [];
+        var tempList = [];
+        var illegalTotal = 0;
+        var lastDate = new Date();
+        if(date!==undefined)
+        {
+            lastDate = new Date(date);
+        }
+        lastDate.setHours(8);
+        lastDate.setMinutes(0);
+        lastDate.setSeconds(0);
+        lastDate.setMilliseconds(0);
+        for (var i = 0; i < list.length; i++) {
+            var record =list[i];
+
+            if(!laneStore.includes(record.lane_name))
+            {
+                if(i!==0)
+                {
+                    var thisDate = new Date();
+                    if(date!==undefined)
+                    {
+                        thisDate = new Date(date);
+                    }
+                    for(var tmp = lastDate;tmp.getFullYear()<thisDate.getFullYear()
+                    ||tmp.getMonth()<thisDate.getMonth()
+                    ||tmp.getDate()<=thisDate.getDate();tmp.setDate(tmp.getDate()+1))
+                    {
+                        var thisGroup = [new Date(tmp),0];
+                        tempList.push(thisGroup);
+                    }
+                }
+
+                if(date!==undefined)
+                {
+                    lastDate.setDate((new Date(date)).getDate()-7);
+                }
+                else
+                {
+                    lastDate.setDate((new Date()).getDate()-7);
+                }
+                laneStore.push(record.lane_name);
+                if(tempList.length!==0)
+                {
+                    chartDataExtra.push(tempList.slice());
+                    tempList = [];
+                }
+            }
+
+            if(laneStore.includes(record.lane_name))
+            {
+                var thisDate =new Date(record.date);
+                thisDate.setHours(8);
+                thisDate.setMinutes(0);
+                thisDate.setSeconds(0);
+                thisDate.setMilliseconds(0);
+                for(var tmp = lastDate;tmp.getFullYear()<thisDate.getFullYear()
+                ||tmp.getMonth()<thisDate.getMonth()
+                ||tmp.getDate()<thisDate.getDate();tmp.setDate(tmp.getDate()+1))
+                {
+                    var thisGroup = [new Date(tmp),0];
+                    tempList.push(thisGroup);
+                }
+
+                illegalTotal = record.status1+ record.status2
+                    + record.status3+ record.status4;
+                var group = [thisDate, illegalTotal];
+                lastDate.setDate(thisDate.getDate()+1)
+                tempList.push(group);
+            }
+        }
+        if(tempList.length!==0)
+        {
+            chartDataExtra.push(tempList.slice());
+            tempList = [];
+        }
+
+    }
+
+    var changeWeeklyResultDataToChartForAll = function(list,date) {
         chartDataExtra = [];
         laneStore = [];
         var tempList = [];
@@ -687,7 +879,30 @@ var Page = function() {
     }
     //图表的初始化函数-----结束
 
+    var getWeek = function(date) {
 
+        // 创建一个新的日期对象，将其设置为给定的日期
+        const target = new Date(date); // 创建目标日期的副本
+
+        const day = target.getDay(); // 获取目标日期的星期几（0-6，其中0表示星期日）
+
+        var weekList = [];
+
+        // 计算目标日期距离所在周一的天数偏移量
+        const offset = (day + 6) % 7;
+
+
+        // 将目标日期的日期部分设置为目标日期减去偏移量得到的周一日期
+        target.setDate(target.getDate() - offset);
+        weekList.push(target.toISOString().slice(0,10));
+
+        var target2 = new Date(target);
+        target2.setDate(target2.getDate()+6);
+        weekList.push(target2.toISOString().slice(0,10));
+
+
+        return weekList; // 返回所在周
+    }
 
 
 
@@ -711,7 +926,7 @@ var Page = function() {
     var  getDailyAnalysisRecordPrint = function(){
         var url = "../../analysis_data_servlet_action";
         var data={};
-        data.action="daily_report";
+        data.action="report";
         $.post(url,data,function(json){
             if(json.result_code==0){
                 console.log(JSON.stringify(json));
