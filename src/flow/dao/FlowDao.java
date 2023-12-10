@@ -272,7 +272,7 @@ public class FlowDao {
 
     public void getQueryRecord(Data data, JSONObject json) throws JSONException, SQLException {
         // 构造sql语句，根据传递过来的查询条件参数
-        String sql = createGetQueryRecordSql(data,false); // 构造sql语句，根据传递过来的查询条件参数
+        String sql = createGetQueryRecordSql(data,true); // 构造sql语句，根据传递过来的查询条件参数
         data.getParam().put("sql", sql);
         queryRecord(data, json);
     }
