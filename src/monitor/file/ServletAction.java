@@ -417,7 +417,7 @@ public class ServletAction extends HttpServlet {
     private void modifyMonitorRecord(HttpServletRequest request, HttpServletResponse response, JSONObject json)
             throws JSONException, SQLException {
         MonitorDao dao = new MonitorDao();
-        dao.modifyDeviceRecord(data, json);
+        dao.modifyMonitorRecord(data, json);
     }
 
     private void modifyMonitorRecordForView(HttpServletRequest request, HttpServletResponse response, JSONObject json)

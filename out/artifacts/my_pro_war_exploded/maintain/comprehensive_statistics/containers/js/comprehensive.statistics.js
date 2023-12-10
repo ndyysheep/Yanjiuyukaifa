@@ -199,14 +199,34 @@ var Page = function() {
         var url = "../../analysis_data_servlet_action";
         var data={};
         var date = undefined;
-        data.action="report_all";
+        var dateExtra = undefined;
+        data.action="get_report_all";
         if(time_from!==undefined&&time_to!==undefined)
         {
-            data.time_from = time_from;
-            data.time_to = time_to;
 
-            console.log(time_from);
-             date = time_from.toString().slice(0,10);
+            var timeBegin = new Date(time_from);
+            var timeEnd = new Date(time_to);
+
+            if(pageId==="daily_report")
+            {
+                timeBegin.setDate(timeBegin.getDate()-3);
+                timeEnd.setDate(timeBegin.getDate()+3);
+            }
+            else if(pageId === "weekly_report")
+            {
+                timeBegin.setDate(timeBegin.getDate()-21);
+                var changeResultDataToChartForAll = function(list,date)
+                {
+                    
+                }
+                
+            }
+
+            data.time_from = timeBegin.toISOString().slice(0,10);
+            data.time_to = timeEnd.toISOString().slice(0,10);
+
+            date = time_from.toString().slice(0,10);
+
         }
 
         $.post(url,data,function(json){
@@ -270,7 +290,7 @@ var Page = function() {
 
         if(pageId==="daily_report")
         {
-            data.action="report";
+            data.action="get_report";
             if(date==undefined)
             {
                 var currentDate = new Date().toISOString().slice(0, 10);
@@ -285,7 +305,7 @@ var Page = function() {
         }
         else if(pageId==="weekly_report")
         {
-            data.action="report";
+            data.action="get_report";
             if(date==undefined)
             {
                 weekList = getWeek(new Date());
@@ -450,6 +470,87 @@ var Page = function() {
     }
 
     var changeResultDataToChartForAll = function(list,date) {
+        chartDataExtra = [];
+        laneStore = [];
+        var tempList = [];
+        var illegalTotal = 0;
+        var lastDate = new Date();
+        if(date!==undefined)
+        {
+            lastDate = new Date(date);
+        }
+        lastDate.setHours(8);
+        lastDate.setMinutes(0);
+        lastDate.setSeconds(0);
+        lastDate.setMilliseconds(0);
+        for (var i = 0; i < list.length; i++) {
+            var record =list[i];
+
+            if(!laneStore.includes(record.lane_name))
+            {
+                if(i!==0)
+                {
+                    var thisDate = new Date();
+                    if(date!==undefined)
+                    {
+                        thisDate = new Date(date);
+                    }
+                    for(var tmp = lastDate;tmp.getFullYear()<thisDate.getFullYear()
+                    ||tmp.getMonth()<thisDate.getMonth()
+                    ||tmp.getDate()<=thisDate.getDate();tmp.setDate(tmp.getDate()+1))
+                    {
+                        var thisGroup = [new Date(tmp),0];
+                        tempList.push(thisGroup);
+                    }
+                }
+
+                if(date!==undefined)
+                {
+                    lastDate.setDate((new Date(date)).getDate()-7);
+                }
+                else
+                {
+                    lastDate.setDate((new Date()).getDate()-7);
+                }
+                laneStore.push(record.lane_name);
+                if(tempList.length!==0)
+                {
+                    chartDataExtra.push(tempList.slice());
+                    tempList = [];
+                }
+            }
+
+            if(laneStore.includes(record.lane_name))
+            {
+                var thisDate =new Date(record.date);
+                thisDate.setHours(8);
+                thisDate.setMinutes(0);
+                thisDate.setSeconds(0);
+                thisDate.setMilliseconds(0);
+                for(var tmp = lastDate;tmp.getFullYear()<thisDate.getFullYear()
+                ||tmp.getMonth()<thisDate.getMonth()
+                ||tmp.getDate()<thisDate.getDate();tmp.setDate(tmp.getDate()+1))
+                {
+                    var thisGroup = [new Date(tmp),0];
+                    tempList.push(thisGroup);
+                }
+
+                illegalTotal = record.status1+ record.status2
+                    + record.status3+ record.status4;
+                var group = [thisDate, illegalTotal];
+                lastDate.setDate(thisDate.getDate()+1)
+                tempList.push(group);
+            }
+        }
+        if(tempList.length!==0)
+        {
+            chartDataExtra.push(tempList.slice());
+            tempList = [];
+        }
+
+    }
+
+    var changeWeeklyResultDataToChartForAll = function(list,date) {
         chartDataExtra = [];
         laneStore = [];
         var tempList = [];
@@ -827,7 +928,7 @@ var Page = function() {
     var  getDailyAnalysisRecordPrint = function(){
         var url = "../../analysis_data_servlet_action";
         var data={};
-        data.action="report";
+        data.action="get_report";
         $.post(url,data,function(json){
             if(json.result_code==0){
                 console.log(JSON.stringify(json));

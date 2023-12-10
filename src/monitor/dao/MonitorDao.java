@@ -167,6 +167,28 @@ public class MonitorDao {
     }
 
 
+    private String useSet(JSONObject param,String keyPara,String sql) throws JSONException {
+        String thisSql = sql;
+        showDebug("每次调用"+sql);
+        if(param.has(keyPara))
+        {
+            String keyData = param.getString(keyPara);
+            if(!Objects.equals(keyData,""))
+            {
+                if(Objects.equals(thisSql, ""))
+                {
+                    thisSql = thisSql + " set "+keyPara+" = '"+keyData +"'";
+                }
+                else
+                {
+                    thisSql = thisSql + ","+keyPara+" = '"+keyData +"'";
+                }
+            }
+
+        }
+
+        return thisSql;
+    }
     /**
      * 添加设备记录
      * 
@@ -222,30 +244,35 @@ public class MonitorDao {
     /**
      * 修改设备记录
      */
-    public void modifyDeviceRecord(Data data, JSONObject json) throws JSONException, SQLException {
+    public void modifyMonitorRecord(Data data, JSONObject json) throws JSONException, SQLException {
         // 构造sql语句，根据传递过来的条件参数
+        JSONObject param = data.getParam();
         String id = data.getParam().has("id") ? data.getParam().getString("id") : null;
-        String car_code = data.getParam().has("car_code") ? data.getParam().getString("car_code") : null;
-        String vehicle_type = data.getParam().has("vehicle_type") ? data.getParam().getString("vehicle_type") : null;
-        String illegal_status = data.getParam().has("illegal_status")
-                ? data.getParam().getString("illegal_status")
-                : null;
-        String capture_time = data.getParam().has("capture_time") ? data.getParam().getString("capture_time") : null;
-        String speed = data.getParam().has("speed") ? data.getParam().getString("speed") : null;
-        String lane_name = data.getParam().has("lane_name") ? data.getParam().getString("lane_name") : null;
 
         if (id != null) {
+            String sql = "";
+            String commandSql = "update " + relationName;
 
-            String sql = "update " + relationName;
-            sql = sql + " set car_code='" + car_code + "'";
-            sql = sql + " ,vehicle_type='" + vehicle_type + "'";
-            sql = sql + " ,illegal_status='" + illegal_status + "'";
-            sql = sql + " ,capture_time='" + capture_time + "'";
-            sql = sql + " ,speed='" + speed + "'";
+            sql = useSet(param,"car_code",sql);
+            sql = useSet(param,"vehicle_type",sql);
+            sql = useSet(param,"illegal_status",sql);
+            sql = useSet(param,"capture_time",sql);
+            sql = useSet(param,"speed",sql);
 
             // 需要道路名
 
+            if(param.has("lane_name"))
+            {
+                String keyData = param.getString("lane_name");
+                if(!Objects.equals(keyData,""))
+                {
+                    sql+= ",lane_id= "+ " (select lane_id from lane_data where lane_name ='"+keyData+"')";
+                }
+
+            }
             sql = sql + " where id=" + id;
+
+            sql = commandSql+sql;
             data.getParam().put("sql", sql);
             updateRecord(data, json);
 
