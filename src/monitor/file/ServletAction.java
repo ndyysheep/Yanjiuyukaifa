@@ -429,13 +429,13 @@ public class ServletAction extends HttpServlet {
     private void deleteMonitorRecord(HttpServletRequest request, HttpServletResponse response, JSONObject json)
             throws JSONException, SQLException {
         MonitorDao dao = new MonitorDao();
-        dao.deleteDeviceRecord(data, json);
+        dao.deleteMonitorRecord(data, json);
     }
 
     private void addMonitorRecord(HttpServletRequest request, HttpServletResponse response, JSONObject json)
             throws JSONException, SQLException {
         MonitorDao dao = new MonitorDao();
-        dao.addDeviceRecord(data, json);
+        dao.addMonitorRecord(data, json);
     }
 
 

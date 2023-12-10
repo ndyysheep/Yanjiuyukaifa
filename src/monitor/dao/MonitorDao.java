@@ -38,7 +38,7 @@ public class MonitorDao {
     }
 
     /**
-     * 判断json对象存储的信息是否合法
+     * 判断json对象存储的信息是否合法,拒绝含有特殊字符的请求
      * 
      * @param param 接收的第一个参数,接收json对象信息
      * @param field 接收的第二个参数,接收json对象包含列名
@@ -47,11 +47,25 @@ public class MonitorDao {
      */
     private boolean checkParamValid(JSONObject param, String field) throws JSONException {
         boolean ok = false;
+        ArrayList<Character> inValidList = new ArrayList<>(Arrays.asList('\\','?','=','+','\'','/',',',
+                '\\',';','!','%','*','#','$','^','(',')'));
         System.out.println(param);
         ok = param.has(field) && param.getString(field) != null && !param.getString(field).isEmpty()
                 && !param.getString(field).equals("undefined") && !param.getString(field).equals("null");
+        if(ok)
+        {
+            for(char ch:inValidList)
+            {
+                if(param.getString(field).contains(String.valueOf(ch)))
+                {
+                  ok = false;
+                }
+            }
+        }
+
         return ok;
     }
+
 
     /**
      * join构建sql
@@ -166,15 +180,21 @@ public class MonitorDao {
         return timeWhere ;
     }
 
-
+    /**
+     * 判断输入是否合法,并构建合适的 更新 语句
+     * @param param json对象
+     * @param keyPara 关键字
+     * @param sql 现有的sql语句
+     * @return 构建好的sql语句
+     * @throws JSONException 抛出sql异常
+     */
     private String useSet(JSONObject param,String keyPara,String sql) throws JSONException {
         String thisSql = sql;
         showDebug("每次调用"+sql);
-        if(param.has(keyPara))
+        if(checkParamValid(param,keyPara))
         {
             String keyData = param.getString(keyPara);
-            if(!Objects.equals(keyData,""))
-            {
+
                 if(Objects.equals(thisSql, ""))
                 {
                     thisSql = thisSql + " set "+keyPara+" = '"+keyData +"'";
@@ -183,6 +203,35 @@ public class MonitorDao {
                 {
                     thisSql = thisSql + ","+keyPara+" = '"+keyData +"'";
                 }
+
+        }
+
+        return thisSql;
+    }
+
+    /**
+     * 判断输入是否合法,并构建合适的 更新 语句
+     * @param param json对象
+     * @param keyPara 关键字
+     * @param sql 现有的sql语句
+     * @return 构建好的sql语句
+     * @throws JSONException 抛出sql异常
+     */
+    private String useInsert(JSONObject param,String keyPara,String sql) throws JSONException {
+        String thisSql = sql;
+        showDebug("每次调用"+sql);
+
+        if(checkParamValid(param,keyPara))
+        {
+            String keyData = param.getString(keyPara);
+
+            if(Objects.equals(thisSql, ""))
+            {
+                thisSql = thisSql + " select '" +keyData+ "'";
+            }
+            else
+            {
+                thisSql = thisSql + ",'"+keyData +"'";
             }
 
         }
@@ -197,29 +246,57 @@ public class MonitorDao {
      * @throws JSONException 抛出json类异常
      * @throws SQLException 抛出sql类异常
      */
-    public void addDeviceRecord(Data data, JSONObject json) throws JSONException, SQLException {
+    public void addMonitorRecord(Data data, JSONObject json) throws JSONException, SQLException {
+
+
+        JSONObject param = data.getParam();
         // 构造sql语句，根据传递过来的条件参数
-        String car_code = data.getParam().has("car_code") ? data.getParam().getString("car_code") : null;
-        String vehicle_type = data.getParam().has("vehicle_type") ? data.getParam().getString("vehicle_type") : null;
-        String illegal_status = data.getParam().has("illegal_status")
-                ? data.getParam().getString("illegal_status")
-                : null;
-        String capture_time = data.getParam().has("capture_time") ? data.getParam().getString("capture_time") : null;
-        String speed = data.getParam().has("speed") ? data.getParam().getString("speed") : null;
+
+        String capture_time = data.getParam().has("capture_time")
+                ? data.getParam().getString("capture_time") : null;
+        String lane_name = null;
+
+
 
         String create_time = (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).format(new Date());
 
-        if (car_code != null) {
-            String sql = "insert into " + relationName + "(car_code,vehicle_type,illegal_status,"
-                    + "capture_time,speed,create_time)";
-            sql = sql + " values('" + car_code + "'";
-            sql = sql + " ,'" + vehicle_type + "','" + illegal_status + "','" + capture_time + "','" + speed + "','"
-                    + create_time + "')";
-            data.getParam().put("sql", sql);
-            updateRecord(data, json);
+        if(capture_time==null)
+        {
+            capture_time = create_time;
+        }
+        String commandSql = "insert into " + relationName + "(car_code,vehicle_type,illegal_status,"
+                + "capture_time,speed,create_time,lane_id)";
+
+        //构建sql语句部分
+        String sql = "";
+
+        sql = useInsert(param,"car_code",sql);
+        sql = useInsert(param,"vehicle_type",sql);
+        sql = useInsert(param,"illegal_status",sql);
+
+        //添加capture_time字段
+        sql +=",'"+capture_time+"'";
+
+        sql = useInsert(param,"speed",sql);
+
+        //添加create_time字段
+        sql+=",'"+create_time+"'";
+
+        if(checkParamValid(param,"lane_name"))
+        {
+            lane_name=param.getString("lane_name");
+            sql+=",(select lane_id from lane_data where lane_name = '"+ lane_name +"')";
         }
 
+
+        //进行sql语句的处理
+        sql = commandSql+sql;
+        data.getParam().put("sql", sql);
+        updateRecord(data, json);
+
+
     }
+
 
     /**
      * 删除设备记录
@@ -229,7 +306,7 @@ public class MonitorDao {
      * @throws JSONException 抛出json类异常
      * @throws SQLException 抛出sql类异常
      */
-    public void deleteDeviceRecord(Data data, JSONObject json) throws JSONException, SQLException {
+    public void deleteMonitorRecord(Data data, JSONObject json) throws JSONException, SQLException {
         // 构造sql语句，根据传递过来的条件参数
         String id = data.getParam().has("id") ? data.getParam().getString("id") : null;
 
@@ -261,13 +338,10 @@ public class MonitorDao {
 
             // 需要道路名
 
-            if(param.has("lane_name"))
+            if(checkParamValid(param,"lane_name"))
             {
                 String keyData = param.getString("lane_name");
-                if(!Objects.equals(keyData,""))
-                {
-                    sql+= ",lane_id= "+ " (select lane_id from lane_data where lane_name ='"+keyData+"')";
-                }
+                sql+= ",lane_id= "+ " (select lane_id from lane_data where lane_name ='"+keyData+"')";
 
             }
             sql = sql + " where id=" + id;
