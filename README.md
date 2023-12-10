@@ -1,6 +1,6 @@
 # Yanjiuyukaifa
 ---
-title: 个人项目 v1.0.0
+title: 研究与开发实践 v1.0.0
 language_tabs:
   - shell: Shell
   - http: HTTP
@@ -26,9 +26,11 @@ generator: "@tarslib/widdershins v4.0.17"
 
 Base URLs:
 
+* <a href="http://localhost:9999/my_pro_war_exploded">测试环境: http://localhost:9999/my_pro_war_exploded</a>
+
 # Authentication
 
-# Default
+# 研究与开发实践
 
 ## POST 文件上传接口
 
@@ -58,6 +60,184 @@ POST /my_pro_war_exploded/monitor_data_servlet_action
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|成功|Inline|
 
 ### Responses Data Schema
+
+
+
+## POST 研开-车辆监测数据
+
+POST /my_pro_war_exploded/monitor_data_servlet_action
+
+车辆监测数据的接口
+
+### Params
+
+|Name|Location|Type|Required|Description|
+|---|---|---|---|---|
+|action|query|string| yes |action,实际的请求类型|
+|id|query|string| no |查询检测信息的序号|
+|car_code|query|string| no |该条检测数据的车牌号|
+|vehicle_type|query|string| no |车辆类型|
+|illegal_status|query|integer| no |0-正常行驶 1-违停 2-闯红灯 3-压双黄线 4-逆行|
+|capture_time|query|string| no |支持yyyy-mm-dd形式的日期,也可接收yyyy-mm-dd HH:mm:ss格式|
+|speed|query|string| no |车辆行驶速度|
+|lane_name|query|string| no |道路名称,注意:遵从外码约束,引用表lane_data|
+|ajax|query|integer| yes |ajax方式请求|
+
+> Response Examples
+
+> 200 Response
+
+```json
+{
+  "result_msg": "string",
+  "aaColumn": [
+    "string"
+  ],
+  "aaData": [
+    {
+      "speed_limit": "string",
+      "creator": "string",
+      "create_time": "string",
+      "device_id": "string",
+      "vehicle_type": "string",
+      "lane_id": "string",
+      "speed": "string",
+      "illegal_status": "string",
+      "car_code": "string",
+      "id": "string",
+      "lane_name": "string",
+      "capture_time": "string",
+      "video_id": "string",
+      "speed_limit_for_others": "string",
+      "park_limit_tag": "string"
+    }
+  ],
+  "action": "string",
+  "result_code": 0,
+  "ajax": true
+}
+```
+
+### Responses
+
+|HTTP Status Code |Meaning|Description|Data schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|成功|Inline|
+
+### Responses Data Schema
+
+HTTP Status Code **200**
+
+|Name|Type|Required|Restrictions|Title|description|
+|---|---|---|---|---|---|
+|» result_msg|string|true|none||返回的字段信息|
+|» aaColumn|[string]|true|none||返回数据含有的列名称|
+|» aaData|[object]|true|none||返回数据的主干|
+|»» speed_limit|string|false|none||该路段的限速信息|
+|»» creator|string|false|none||该条目创建者|
+|»» create_time|string|false|none||该条目创建时间|
+|»» device_id|string|false|none||监控的设备id|
+|»» vehicle_type|string|false|none||车辆类型|
+|»» lane_id|string|false|none||该条记录道路id|
+|»» speed|string|false|none||该条记录的车速|
+|»» illegal_status|string|false|none||违法状态|
+|»» car_code|string|false|none||车牌号|
+|»» id|string|false|none||该条目的序号,主码|
+|»» lane_name|string|false|none||道路名称-和laneid一一对应|
+|»» capture_time|string|false|none||此记录相关的抓拍时间|
+|»» video_id|string|false|none||采取的视频id|
+|»» speed_limit_for_others|string|false|none||除小型车之外其它的限速信息|
+|»» park_limit_tag|string|false|none||是否允许停车的字段|
+|» action|string|true|none||提交的请求信息|
+|» result_code|integer|true|none||返回的结果信息|
+|» ajax|boolean|true|none||是否使用ajax跳转方式|
+
+
+## POST 研开-违法监测数据
+
+POST /my_pro_war_exploded/illegal_data_servlet_action
+
+违法监测数据的接口--和车辆监测数据的接口高度类似,区别在于该接口只返回违法车辆信息,后期可能优化合并,故只对部分字段进行注释
+
+### Params
+
+|Name|Location|Type|Required|Description|
+|---|---|---|---|---|
+|action|query|string| yes |action,实际的请求类型|
+|id|query|string| no |查询检测信息的序号|
+|car_code|query|string| no |该条检测数据的车牌号|
+|vehicle_type|query|string| no |车辆类型|
+|illegal_status|query|integer| no |0-正常行驶 1-违停 2-闯红灯 3-压双黄线 4-逆行|
+|capture_time|query|string| no |支持yyyy-mm-dd形式的日期,也可接收yyyy-mm-dd HH:mm:ss格式|
+|speed|query|string| no |车辆行驶速度|
+|lane_name|query|string| no |道路名称,注意:遵从外码约束,引用表lane_data|
+|ajax|query|integer| yes |ajax方式请求|
+
+> Response Examples
+
+> 200 Response
+
+```json
+{
+  "result_msg": "string",
+  "aaColumn": [
+    "string"
+  ],
+  "aaData": [
+    {
+      "creator": "string",
+      "create_time": "string",
+      "device_id": "string",
+      "vehicle_type": "string",
+      "lane_id": "string",
+      "speed": "string",
+      "illegal_status": "string",
+      "car_code": "string",
+      "id": "string",
+      "lane_name": "string",
+      "capture_time": "string",
+      "video_id": "string",
+      "image_url": "string"
+    }
+  ],
+  "action": "string",
+  "result_code": 0,
+  "ajax": true
+}
+```
+
+### Responses
+
+|HTTP Status Code |Meaning|Description|Data schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|成功|Inline|
+
+### Responses Data Schema
+
+HTTP Status Code **200**
+
+|Name|Type|Required|Restrictions|Title|description|
+|---|---|---|---|---|---|
+|» result_msg|string|true|none||none|
+|» aaColumn|[string]|true|none||none|
+|» aaData|[object]|true|none||none|
+|»» creator|string|false|none||none|
+|»» create_time|string|false|none||none|
+|»» device_id|string|false|none||none|
+|»» vehicle_type|string|false|none||none|
+|»» lane_id|string|false|none||none|
+|»» speed|string|false|none||none|
+|»» illegal_status|string|false|none||none|
+|»» car_code|string|false|none||none|
+|»» id|string|false|none||none|
+|»» lane_name|string|false|none||none|
+|»» capture_time|string|false|none||none|
+|»» video_id|string|false|none||none|
+|»» image_url|string|false|none||抓拍图片的地址(虚拟地址)|
+|» action|string|true|none||none|
+|» result_code|integer|true|none||none|
+|» ajax|boolean|true|none||none|
+
 
 ## POST 研开-违法监测数据-统计
 
@@ -208,5 +388,75 @@ HTTP Status Code **200**
 |» action|string|true|none||none|
 |» result_code|integer|true|none||返回的状态码|
 |» ajax|boolean|true|none||none|
+
+## POST 研开-车流量监测数据--统计
+
+POST /my_pro_war_exploded/flow_data_servlet_action
+
+对车辆监测数据的部分统计信息,包括总车流量前十道路统计,单次车流量前十统计
+
+### 请求参数
+
+|名称|位置|类型|必选|说明|
+|---|---|---|---|---|
+|time_from|query|string| 否 |选取记录查找筛查起点 和time_to任一为空值则查询当前时间->time_to范围字段|
+|time_to|query|string| 否 |选取记录查找筛查起点 time_from为空值则查询time_from->当前时间范围字段|
+|action|query|string| 是 |action,请求类型|
+|ajax|query|string| 是 |ajax跳转方式|
+
+> 返回示例
+
+> 200 Response
+
+```json
+{
+  "result_msg": "string",
+  "aaColumn": [
+    "string"
+  ],
+  "aaData": [
+    {
+      "num": "string",
+      "lane_name": "string"
+    }
+  ],
+  "action": "string",
+  "result_code": 0,
+  "ajax": true,
+  "hour_aaData": [
+    {
+      "num": 0,
+      "lane_name": "string"
+    }
+  ]
+}
+```
+
+### 返回结果
+
+|状态码|状态码含义|说明|数据模型|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|成功|Inline|
+
+### 返回数据结构
+
+状态码 **200**
+
+|名称|类型|必选|约束|中文名|说明|
+|---|---|---|---|---|---|
+|» result_msg|string|true|none||返回结果信息|
+|» aaColumn|[string]|true|none||返回aaData的列集合|
+|» aaData|[object]|true|none||车辆类型统计|
+|»» num|string|true|none||数量|
+|»» lane_name|string|true|none||道路名称|
+|» action|string|true|none||none|
+|» result_code|integer|true|none||返回的状态码|
+|» ajax|boolean|true|none||none|
+|» hour_aaData|[object]|true|none||按小时计统计信息|
+|»» num|integer|false|none||数字|
+|»» lane_name|string|false|none||道路名称|
+
+# Data Schema
+
 
 
