@@ -158,6 +158,75 @@ HTTP Status Code **200**
 
 ## POST 研开-车辆监测数据-统计
 
+POST /my_pro_war_exploded/monitor_data_servlet_action
+
+对车辆监测数据的部分统计信息
+
+### 请求参数
+
+|名称|位置|类型|必选|说明|
+|---|---|---|---|---|
+|time_from|query|string| 否 |选取记录查找筛查起点 和time_to任一为空值则查询当前时间->当前时间范围字段|
+|time_to|query|string| 否 |选取记录查找筛查起点 和time_to任一为空值则查询当前时间->当前时间范围字段|
+|action|query|string| 是 |action,请求类型|
+|ajax|query|string| 是 |ajax跳转方式|
+
+> 返回示例
+
+> 200 Response
+
+```json
+{
+  "result_msg": "string",
+  "my_aaData": [
+    {
+      "total": 0,
+      "illegal_total": 0,
+      "time_interval": 0,
+      "legal_total": 0
+    }
+  ],
+  "aaColumn": [
+    "string"
+  ],
+  "aaData": [
+    {
+      "num": "string",
+      "vehicle_type": "string"
+    }
+  ],
+  "action": "string",
+  "result_code": 0,
+  "ajax": true
+}
+```
+
+### 返回结果
+
+|状态码|状态码含义|说明|数据模型|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|成功获得返回信息|Inline|
+
+### 返回数据结构
+
+状态码 **200**
+
+|名称|类型|必选|约束|中文名|说明|
+|---|---|---|---|---|---|
+|» result_msg|string|true|none||返回的信息字段|
+|» my_aaData|[object]|true|none||车辆统计信息的集合|
+|»» total|integer|true|none||记录合计|
+|»» illegal_total|integer|true|none||违法数据合计|
+|»» time_interval|integer|true|none||小时段00-23|
+|»» legal_total|integer|true|none||合法数据合计|
+|» aaColumn|[string]|true|none||aaData集合的列集合|
+|» aaData|[object]|true|none||车辆类型统计|
+|»» num|string|true|none||各车辆类型数量合计|
+|»» vehicle_type|string|true|none||车辆类型名称|
+|» action|string|true|none||none|
+|» result_code|integer|true|none||none|
+|» ajax|boolean|true|none||none|
+
 ## POST 研开-违法监测数据
 
 POST /my_pro_war_exploded/illegal_data_servlet_action
@@ -460,6 +529,10 @@ POST /my_pro_war_exploded/flow_data_servlet_action
 |» hour_aaData|[object]|true|none||按小时计统计信息|
 |»» num|integer|false|none||数字|
 |»» lane_name|string|false|none||道路名称|
+
+# Data Schema
+
+
 
 # Data Schema
 
