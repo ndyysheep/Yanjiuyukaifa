@@ -153,6 +153,11 @@ HTTP Status Code **200**
 |» ajax|boolean|true|none||是否使用ajax跳转方式|
 
 
+
+
+
+## POST 研开-车辆监测数据-统计
+
 ## POST 研开-违法监测数据
 
 POST /my_pro_war_exploded/illegal_data_servlet_action
