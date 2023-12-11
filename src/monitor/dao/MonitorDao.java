@@ -637,13 +637,10 @@ public class MonitorDao {
 
 
     //导出处理函数-----开始
-    public void getExportMonitorRecordToPDF(JSONObject json, Data data) {
-
-    }
 
     public void getExportMonitorRecordToExcel(JSONObject json, Data data) throws JSONException, IOException {
-        json.put("download_url", "/upload/maintain/monitor/export_device.xls");
-        json.put("file_path", "/upload/maintain/monitor/export_device.xls");
+        json.put("download_url", "/upload/maintain/monitor/export_monitor.xls");
+        json.put("file_path", "/upload/maintain/monitor/export_monitor.xls");
         MyExcel m = new MyExcel();
         m.exportData(data, json);
     }
@@ -678,9 +675,7 @@ public class MonitorDao {
 
     }
 
-    public void getExportMonitorRecordToFile(JSONObject json, Data data) throws JSONException {
 
-    }
     //导出处理函数-----结束
 
     //上传文件函数-----开始

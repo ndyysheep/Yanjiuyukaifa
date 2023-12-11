@@ -41,9 +41,22 @@ public class AnalysisDao {
      */
     private boolean checkParamValid(JSONObject param, String field) throws JSONException {
         boolean ok = false;
+        ArrayList<Character> inValidList = new ArrayList<>(Arrays.asList('\\','?','=','+','\'','/',',',
+                '\\',';','!','%','*','#','$','^','(',')'));
         System.out.println(param);
         ok = param.has(field) && param.getString(field) != null && !param.getString(field).isEmpty()
                 && !param.getString(field).equals("undefined") && !param.getString(field).equals("null");
+        if(ok)
+        {
+            for(char ch:inValidList)
+            {
+                if(param.getString(field).contains(String.valueOf(ch)))
+                {
+                    ok = false;
+                }
+            }
+        }
+
         return ok;
     }
 
@@ -308,16 +321,25 @@ public class AnalysisDao {
         String resultMsg = "ok";
 
         JSONObject param = data.getParam();
-        String now=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
-        String date = param.has("time_from")?param.getString("time_to"):now;
 
         int resultCode = 0;
         List jsonList = new ArrayList();
         /*--------------------获取变量 完毕--------------------*/
         /*--------------------数据操作 开始--------------------*/
         Db queryDb = new Db(dbName);
+        String formatStr = "\"%Y-%m-%d\"";
+        if(checkParamValid(param,"report_type"))
+        {
+            String type = param.getString("report_type");
 
-        String sql = "select lane_name,DATE_FORMAT(capture_time,\"%Y-%m-%d\")as date,"
+
+            if(Objects.equals(type,"yearly_report"))
+            {
+                formatStr = "\"%Y-%m\"";
+            }
+
+        }
+        String sql = "select lane_name,DATE_FORMAT(capture_time,"+formatStr+")as date,"
                 +"count(CASE WHEN illegal_status = 0 THEN 1 END) AS status0,"
                 +"count(CASE WHEN illegal_status = 1 THEN 1 END) AS status1,"
                 +"count(CASE WHEN illegal_status = 2 THEN 1 END) AS status2,"
@@ -325,8 +347,7 @@ public class AnalysisDao {
                 +"count(CASE WHEN illegal_status = 4 THEN 1 END) AS status4"
                 +" from " + relationName;
         sql += createJoinSql(relationName,"lane_data","lane_id","lane_id");
-        sql += " where capture_time BETWEEN DATE_SUB('"+date+"',INTERVAL 3 DAY)"
-                +" and DATE_ADD('"+date+"',INTERVAL 3 DAY) ";
+        sql += useTimeWhere(param,"","time_from","time_to","capture_time");
         sql += " group by lane_name,date";
         showDebug("[toStatistics]构造的SQL语句是：" + sql);
 
@@ -378,6 +399,7 @@ public class AnalysisDao {
 
 
 
+
     //构建SQL语句函数-----开始
 
     /**
@@ -397,46 +419,6 @@ public class AnalysisDao {
     //构建SQL语句函数-----结束
 
 
-
-
-    //导出处理函数-----开始
-
-    public void getExportAnalysisRecordToExcel(JSONObject json, Data data) throws JSONException, IOException {
-        json.put("download_url", "/upload/maintain/analysis/export_device.xls");
-        json.put("file_path", "/upload/maintain/analysis/export_device.xls");
-        MyExcel m = new MyExcel();
-        m.exportData(data, json);
-    }
-
-    public void getExportAnalysisRecordToTxt(JSONObject json, Data data) throws JSONException {
-        String jsonStr = json.toString();
-        String jsonPath = "D:\\upload\\maintain\\analysis\\export_device.txt";
-        File jsonFile = new File(jsonPath);
-        json.put("download_url", "/upload/maintain/analysis/export_device.txt");
-
-        try {
-
-            // 文件不存在就创建文件
-            if (!jsonFile.exists()) {
-                jsonFile.createNewFile();
-            }
-
-            FileWriter fileWriter = new FileWriter(jsonFile.getAbsoluteFile());
-            BufferedWriter bw = new BufferedWriter(fileWriter);
-            bw.write(jsonStr);
-            bw.close();
-            json.put("result_code_for_export", 0);
-            json.put("result_Msg", "ok");
-
-        } catch (IOException e) {
-
-            e.printStackTrace();
-            json.put("result_code_for_export", 10);
-            json.put("result_Msg", "error!");
-
-        }
-
-    }
 
 
 

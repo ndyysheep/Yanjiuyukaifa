@@ -190,9 +190,6 @@
 
             <div class="row">
                 <div class="col-md-12">
-                    <button type="button" id="export_button" name ="export_button" class="btn default blue-stripe">导出记录</button>
-                    <button type="button" id="print_button" name="print_button" class="btn default red-stripe">打印</button>
-                    <button type="button" id="print_button_for_word" name="print_button_for_word" class="btn default blue-stripe">用word打印</button>
 
                         <label class="col-md-1 control-label">日期：</label>
                         <div class="col-md-3">
@@ -210,7 +207,7 @@
                 <div class="col-md-12">
                     <div class="portlet box blue-hoki">
                         <div class="portlet-title">
-                            <div class="caption">
+                            <div class="caption" id="reportTitle">
                                 <i class="fa fa-comments"></i>当天违法数据表
                             </div>
                             <div class="tools">
@@ -320,29 +317,6 @@
             <!-- END ROW -->
 
 
-            <!-- BEGIN INTERACTIVE CHART PORTLET-->
-            <div class="portlet box red">
-                <div class="portlet-title">
-                    <div class="caption">
-                        <i class="fa fa-gift"></i>近7日各路段违法情况
-                    </div>
-                    <div class="tools">
-                        <a href="javascript:;" class="collapse">
-                        </a>
-                        <a href="#portlet-config" data-toggle="modal" class="config">
-                        </a>
-                        <a href="javascript:;" class="reload">
-                        </a>
-                        <a href="javascript:;" class="remove">
-                        </a>
-                    </div>
-                </div>
-                <div class="portlet-body">
-                    <div id="chart_3" class="chart">
-                    </div>
-                </div>
-            </div>
-            <!-- END INTERACTIVE CHART PORTLET-->
             <!-- END PAGE CONTENT-->
 
         </div>
@@ -387,6 +361,8 @@
 <script src="../../assets/global/plugins/flot/jquery.flot.crosshair.min.js"></script>
 <script src="../../assets/global/plugins/flot/jquery.flot.categories.min.js" type="text/javascript"></script>
 <!-- END PAGE LEVEL PLUGINS -->
+
+
 
 <script src="../../assets/global/plugins/moment.min.js" type="text/javascript"></script>
 <script src="containers/js/comprehensive.statistics.js" type="text/javascript"></script>

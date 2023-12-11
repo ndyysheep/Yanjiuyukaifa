@@ -41,9 +41,22 @@ public class FlowDao {
      */
     private boolean checkParamValid(JSONObject param, String field) throws JSONException {
         boolean ok = false;
+        ArrayList<Character> inValidList = new ArrayList<>(Arrays.asList('\\','?','=','+','\'','/',',',
+                '\\',';','!','%','*','#','$','^','(',')'));
         System.out.println(param);
         ok = param.has(field) && param.getString(field) != null && !param.getString(field).isEmpty()
                 && !param.getString(field).equals("undefined") && !param.getString(field).equals("null");
+        if(ok)
+        {
+            for(char ch:inValidList)
+            {
+                if(param.getString(field).contains(String.valueOf(ch)))
+                {
+                    ok = false;
+                }
+            }
+        }
+
         return ok;
     }
 
@@ -515,17 +528,17 @@ public class FlowDao {
     //导出处理函数-----开始
 
     public void getExportFlowRecordToExcel(JSONObject json, Data data) throws JSONException, IOException {
-        json.put("download_url", "/upload/maintain/flow/export_device.xls");
-        json.put("file_path", "/upload/maintain/flow/export_device.xls");
+        json.put("download_url", "/upload/maintain/flow/export_traffic_flow.xls");
+        json.put("file_path", "/upload/maintain/flow/export_traffic_flow.xls");
         MyExcel m = new MyExcel();
         m.exportData(data, json);
     }
 
     public void getExportFlowRecordToTxt(JSONObject json, Data data) throws JSONException {
         String jsonStr = json.toString();
-        String jsonPath = "D:\\upload\\maintain\\flow\\export_device.txt";
+        String jsonPath = "D:\\upload\\maintain\\flow\\export_traffic_flow.txt";
         File jsonFile = new File(jsonPath);
-        json.put("download_url", "/upload/maintain/flow/export_device.txt");
+        json.put("download_url", "/upload/maintain/flow/export_traffic_flow.txt");
 
         try {
 
