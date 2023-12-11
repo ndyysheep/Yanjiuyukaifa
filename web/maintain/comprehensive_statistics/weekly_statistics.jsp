@@ -190,10 +190,6 @@
 
             <div class="row">
                 <div class="col-md-12">
-                    <button type="button" id="export_button" name ="export_button" class="btn default blue-stripe">导出记录</button>
-                    <button type="button" id="print_button" name="print_button" class="btn default red-stripe">打印</button>
-                    <button type="button" id="print_button_for_word" name="print_button_for_word" class="btn default blue-stripe">用word打印</button>
-
                         <label class="col-md-1 control-label">日期：</label>
                         <div class="col-md-3">
                             <select class="form-control" id="date_selector" name="date_selector">
@@ -323,8 +319,8 @@
             <!-- BEGIN INTERACTIVE CHART PORTLET-->
             <div class="portlet box red">
                 <div class="portlet-title">
-                    <div class="caption">
-                        <i class="fa fa-gift"></i>近4周各路段违法情况
+                    <div class="caption" id="reportTitle">
+                        <i class="fa fa-gift"></i>本周各路段违法情况
                     </div>
                     <div class="tools">
                         <a href="javascript:;" class="collapse">

@@ -51,9 +51,22 @@ public class IllegalDao {
      */
     private boolean checkParamValid(JSONObject param, String field) throws JSONException {
         boolean ok = false;
+        ArrayList<Character> inValidList = new ArrayList<>(Arrays.asList('\\','?','=','+','\'','/',',',
+                '\\',';','!','%','*','#','$','^','(',')'));
         System.out.println(param);
         ok = param.has(field) && param.getString(field) != null && !param.getString(field).isEmpty()
                 && !param.getString(field).equals("undefined") && !param.getString(field).equals("null");
+        if(ok)
+        {
+            for(char ch:inValidList)
+            {
+                if(param.getString(field).contains(String.valueOf(ch)))
+                {
+                    ok = false;
+                }
+            }
+        }
+
         return ok;
     }
 
@@ -385,7 +398,7 @@ public class IllegalDao {
 
         String sql = "select "+relationName+".*,"+"illegal_info.image_url,lane_name from " + relationName;
         sql += createJoinSql(relationName, "lane_data", "lane_id", "lane_id");
-        sql += createJoinSql(relationName,"illegal_info","id","monitor_id");
+        sql +=" left outer "+createJoinSql(relationName,"illegal_info","id","monitor_id");
         String where = " where illegal_status<>0 ";
 
         where = useWhere(param,"id",where,false);
@@ -445,17 +458,17 @@ public class IllegalDao {
     }
 
     public void getExportDeviceRecordToExcel(JSONObject json, Data data) throws JSONException, IOException {
-        json.put("download_url", "/upload/maintain/illegal/export_device.xls");
-        json.put("file_path", "/upload/maintain/illegal/export_device.xls");
+        json.put("download_url", "/upload/maintain/illegal/export_illegal_data.xls");
+        json.put("file_path", "/upload/maintain/illegal/export_illegal_data.xls");
         MyExcel m = new MyExcel();
         m.exportData(data, json);
     }
 
     public void getExportDeviceRecordToTxt(JSONObject json, Data data) throws JSONException {
         String jsonStr = json.toString();
-        String jsonPath = "D:\\upload\\maintain\\illegal\\export_device.txt";
+        String jsonPath = "D:\\upload\\maintain\\illegal\\export_illegal_data.txt";
         File jsonFile = new File(jsonPath);
-        json.put("download_url", "/upload/maintain/illegal/export_device.txt");
+        json.put("download_url", "/upload/maintain/illegal/export_illegal_data.txt");
 
         try {
 

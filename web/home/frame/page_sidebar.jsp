@@ -111,7 +111,7 @@
                             监测数据月报表</a>
                     </li>
                     <li>
-                        <a href="ui_colors.html">
+                        <a href="../../maintain/comprehensive_statistics/yearly_statistics.jsp">
                             监测数据年报表</a>
                     </li>
                 </ul>

@@ -22,35 +22,33 @@ var Page = function() {
         if(pageId==="daily_report"){
             $(".sub-menu #daily_report").addClass("active");
             //设备列表页面
-            $.ajaxSettings.async=false;
             initAnalysisList();
-            $.ajaxSettings.async=true;
-            initAnalysisStatistics();
         }
 
         if(pageId ==="weekly_report"){
             $(".sub-menu #weekly_report").addClass("active");
-            $.ajaxSettings.async=false;
             initAnalysisListForWeekly();
-            $.ajaxSettings.async=true;
-            initAnalysisStatistics();
+        }
 
+        if(pageId ==="monthly_report"){
+            $(".sub-menu #monthly_report").addClass("active");
+            initAnalysisListForMonthly();
+        }
+
+        if(pageId ==="yearly_report"){
+            $(".sub-menu #monthly_report").addClass("active");
+            initAnalysisListForYearly();
         }
 
         if(pageId==="daily_statistics_print"){
             //打印页面
             initDailyAnalysisPrint();
         }
-        if(pageId==="analysis_print_word"){
-            //Word打印页面
-            initMonitorPrint_Word();
-        }
 
     };
     /*----------------------------------------入口函数  结束----------------------------------------*/
     //全局变量数组
     var resultList=[];
-    var illegalInput = [];
 
     //统计用--开始
     //用于统计违法类型
@@ -62,13 +60,14 @@ var Page = function() {
     //储存路段信息
     var laneStore =[];
     //统计用--结束
+    var pageData ={};
     /*----------------------------------------业务函数  开始----------------------------------------*/
     /*------------------------------针对各个页面的入口  开始------------------------------*/
     var initAnalysisList=function(){
 
         initDateInDailyFormat();
         initAnalysisListControlEvent();
-        initAnalysisRecordList();
+
     }
 
 
@@ -76,7 +75,19 @@ var Page = function() {
 
         initDateInWeeklyFormat();
         initAnalysisListControlEventForWeekly();
-        initAnalysisRecordList();
+
+    }
+
+    var initAnalysisListForMonthly=function(){
+
+        initDateInMonthlyFormat();
+        initAnalysisListControlEventForMonthly();
+    }
+
+    var initAnalysisListForYearly=function(){
+
+        initDateInYearlyFormat();
+        initAnalysisListControlEventForYearly();
     }
 
 
@@ -93,7 +104,15 @@ var Page = function() {
         $.ajaxSettings.async=true;
         initChartSets();
         initChartSetsForIllegalTotal();
-        InitChart3ForALL();
+        if(pageId==="yearly_report")
+        {
+            InitChart3ForMulti();
+        }
+        else
+        {
+            InitChart3ForALL();
+        }
+
 
 
     }
@@ -111,7 +130,7 @@ var Page = function() {
         $('#export_button').click(function() {myExportAPI();});
         //打印信息
         $('#print_button').click(function() {myPrintAPI()});
-        $('#print_button_for_word').click(function() {myPrintAPI_Word()});
+
 
     }
 
@@ -122,16 +141,35 @@ var Page = function() {
         $('#export_button').click(function() {myExportAPI();});
         //打印信息
         $('#print_button').click(function() {myPrintAPI()});
-        $('#print_button_for_word').click(function() {myPrintAPI_Word()});
+
+
+    }
+
+    var initAnalysisListControlEventForMonthly =function(){
+
+        onMonthlyPageAttachment($("#date_selector"));
+        //导出信息
+        $('#export_button').click(function() {myExportAPI();});
+        //打印信息
+        $('#print_button').click(function() {myPrintAPI()});
+
+
+    }
+
+    var initAnalysisListControlEventForYearly =function(){
+
+        onYearlyPageAttachment($("#date_selector"));
+        //导出信息
+        $('#export_button').click(function() {myExportAPI();});
+        //打印信息
+        $('#print_button').click(function() {myPrintAPI()});
+
 
     }
     //事件处理初始化--结束
 
     //数据获取初始化--开始
-    var initAnalysisRecordList=function(){
-        //使用Datatable的数据表,统计总数据
-        getAnalysisRecordDatatable();
-    }
+
     var initDateInDailyFormat=function(){
         var url = "../../analysis_data_servlet_action"
         var data = {};
@@ -151,6 +189,7 @@ var Page = function() {
                 }
 
                 container.html(html);
+                container.trigger('change');
             }
         })
     }
@@ -186,63 +225,115 @@ var Page = function() {
                 }
 
                 container.html(html);
+                container.trigger('change');
             }
         })
     }
 
+    var initDateInMonthlyFormat=function(){
+        var url = "../../analysis_data_servlet_action"
+        var data = {};
+        var monthList = [];
+        var now = new Date().toISOString().slice(0,10);
+        var month = getMonthList(now);
+
+        monthList.push(month[0]);
+
+        var currentMonth=now.slice(0,4)+"年 "+now.slice(5,7)+"月";
+        var container = $("#date_selector");
+        data.action = "get_report_date"
+        $.post(url,data,function(json){
+            if(json.result_code===0)
+            {
+                var list = json.aaData;
+                var html = "<option>"+currentMonth+"</option>";
+                for(var i = 0 ;i<list.length;i++)
+                {
+                    var thisMonth = getMonthList(list[i].date);
+                    if(!monthList.includes(thisMonth[0]))
+                    {
+                        var date=thisMonth[0].slice(0,4)+"年 "
+                            +thisMonth[1].slice(5,7)+"月";
+                        html +="<option>"+date+"</option>"
+                        monthList.push(thisMonth[0]);
+                    }
+
+                }
+
+                container.html(html);
+                container.trigger('change');
+            }
+        })
+    }
+
+    var initDateInYearlyFormat=function(){
+        var url = "../../analysis_data_servlet_action"
+        var data = {};
+        var yearList = [];
+        var now = new Date().toISOString().slice(0,10);
+        var year = getYearList(now);
+
+        yearList.push(year[0]);
+
+        var currentYear=now.slice(0,4)+"年";
+        var container = $("#date_selector");
+        data.action = "get_report_date"
+        $.post(url,data,function(json){
+            if(json.result_code===0)
+            {
+                var list = json.aaData;
+                var html = "<option>"+currentYear+"</option>";
+                for(var i = 0 ;i<list.length;i++)
+                {
+                    var thisYear = getYearList(list[i].date);
+                    if(!yearList.includes(thisYear[0]))
+                    {
+                        var date=thisYear[0].slice(0,4)+"年 ";
+                        html +="<option>"+date+"</option>"
+                        yearList.push(thisYear[0]);
+                    }
+
+                }
+
+                container.html(html);
+                container.trigger('change');
+            }
+        })
+    }
 
     var initAnalysisRecordForCharts =function(time_from,time_to){
 
         changeResultDataToChartForIllegalTypes(resultList);
         changeResultDataToChartForIllegalTotal(resultList);
 
-        var url = "../../analysis_data_servlet_action";
-        var data={};
-        var date = undefined;
-        var dateExtra = undefined;
-        data.action="get_report_all";
-        if(time_from!==undefined&&time_to!==undefined)
-        {
-
-            var timeBegin = new Date(time_from);
-            var timeEnd = new Date(time_to);
-
-            if(pageId==="daily_report")
-            {
-                timeBegin.setDate(timeBegin.getDate()-3);
-                timeEnd.setDate(timeBegin.getDate()+3);
-            }
-            else if(pageId === "weekly_report")
-            {
-                timeBegin.setDate(timeBegin.getDate()-21);
-                var changeResultDataToChartForAll = function(list,date)
-                {
-                    
-                }
-                
-            }
-
-            data.time_from = timeBegin.toISOString().slice(0,10);
-            data.time_to = timeEnd.toISOString().slice(0,10);
-
-            date = time_from.toString().slice(0,10);
-
-        }
+    var url = "../../analysis_data_servlet_action";
+    var data = {};
+    data.action = "get_report_all";
+    data.time_to = time_to;
+    data.time_from = time_from;
+    data.report_type = pageId;
 
         $.post(url,data,function(json){
-            if(json.result_code==0){
-                console.log(JSON.stringify(json));
+           if(json.result_code==0)
+           {
+                var list = json.aaData;
 
-                var list =json.aaData;
-                if(list!==undefined&&list.length>0){
-                    changeResultDataToChartForAll(list,date);
+                if(pageId==="yearly_report")
+                {
+                    changeResultDataToChartForYear(list);
                 }
-
-            }else{
-                alert("与后端交互错误!"+json.result_Msg);
-            }
-
+                else
+                {
+                    changeResultDataToChartForAll(list,time_from,time_to);
+                }
+           }
+           else
+           {
+               alert(json.errMsg);
+           }
         });
+
+
 
 
     }
@@ -269,7 +360,7 @@ var Page = function() {
         element.change(function(event){
             var dateStr = element.val();
             var partBegin = dateStr.slice(0,10);
-            var partEnd = dateStr.slice(11,20);
+            var partEnd = dateStr.slice(11,21);
             var time_from = partBegin + " "+"00:00:00"
             var time_to =partEnd + " "+"23:59:59";
             $.ajaxSettings.async=false;
@@ -277,6 +368,50 @@ var Page = function() {
             $.ajaxSettings.async=true;
             initAnalysisStatistics(time_from,time_to)
 
+        })
+    }
+
+    var onMonthlyPageAttachment = function(element)
+    {
+        element.change(function(event){
+            var dateStr = element.val();
+            dateStr = dateStr.slice(0,4)+"-"+dateStr.slice(6,8);
+            var partBegin = dateStr+"-"+"01";
+            var date = new Date(partBegin);
+            partBegin+=" 00:00:00";
+            var month = date.getMonth();
+            date.setMonth(month + 1,1);
+            date.setDate(date.getDate()-1);
+
+            var partEnd = date.toISOString().slice(0,10);
+            var time_from = partBegin
+            var time_to =partEnd + " "+"23:59:59";
+            $.ajaxSettings.async=false;
+            getAnalysisRecordDatatable(date);
+            $.ajaxSettings.async=true;
+            initAnalysisStatistics(time_from,time_to)
+
+        })
+    }
+
+    var onYearlyPageAttachment = function(element)
+    {
+        element.change(function(event){
+            var dateStr = element.val();
+            dateStr = dateStr.slice(0,4)
+            var date = new Date(dateStr);
+            var partBegin = new Date(date).toISOString().slice(0,10)+" 00:00:00";
+
+            date.setDate(date.getDate()-1);
+            date.setFullYear(date.getFullYear()+1);
+            var partEnd = new Date(date).toISOString().slice(0,10)+" 23:59:59";
+
+            var time_from = partBegin
+            var time_to =partEnd;
+            $.ajaxSettings.async=false;
+            getAnalysisRecordDatatable(date);
+            $.ajaxSettings.async=true;
+            initAnalysisStatistics(time_from,time_to)
 
         })
     }
@@ -285,12 +420,11 @@ var Page = function() {
 
         var servletRequest ="../../analysis_data_servlet_action";
         resultList=[];
-        var weekList =[];
+        var dateList =[];
         var data={};
-
+        data.action="get_report";
         if(pageId==="daily_report")
         {
-            data.action="get_report";
             if(date==undefined)
             {
                 var currentDate = new Date().toISOString().slice(0, 10);
@@ -305,27 +439,59 @@ var Page = function() {
         }
         else if(pageId==="weekly_report")
         {
-            data.action="get_report";
+
             if(date==undefined)
             {
-                weekList = getWeek(new Date());
+                dateList = getWeek(new Date());
             }
             else
             {
-                weekList = getWeek(new Date(date));
+                dateList = getWeek(new Date(date));
             }
 
-            var thisMonday =  weekList[0];
-            var thisSunday =  weekList[1]
+            var thisMonday =  dateList[0];
+            var thisSunday =  dateList[1]
             data.time_from = thisMonday + " "+"00:00:00"
             data.time_to = thisSunday + " "+"23:59:59";
         }
+        else if(pageId ==="monthly_report")
+        {
+            if(date==undefined)
+            {
+                dateList = getMonthList(new Date());
+            }
+            else
+            {
+                dateList = getMonthList(new Date(date));
+            }
 
+            var thisFirstDay =  dateList[0];
+            var thisLastDay =  dateList[1]
+            data.time_from = thisFirstDay + " "+"00:00:00"
+            data.time_to = thisLastDay + " "+"23:59:59";
+        }
+        else if(pageId ==="yearly_report")
+        {
+            if(date==undefined)
+            {
+                dateList = getYearList(new Date());
+            }
+            else
+            {
+                dateList = getYearList(new Date(date));
+            }
 
+            var thisFirstDay =  dateList[0];
+            var thisLastDay =  dateList[1]
+            data.time_from = thisFirstDay + " "+"00:00:00"
+            data.time_to = thisLastDay + " "+"23:59:59";
+        }
+        pageData = data;
         $('.datatable').DataTable().destroy();
 
         $('.datatable').dataTable( {
 
+            "dom": 'Bfrtip',
             "paging":true,
             "searching":false,
             "oLanguage": {
@@ -348,6 +514,26 @@ var Page = function() {
                     "sLast":     "末页"
                 }
             },
+           "buttons": [
+                {
+                    extend: 'copyHtml5',
+                },
+                {
+                    extend: 'excelHtml5',
+                    title: $("#reportTitle").text(),
+                },
+                {
+                    extend: 'pdfHtml5',
+                    title: $("#reportTitle").text()
+                },
+                {
+                    extend: 'csvHtml5',
+                    title: $("#reportTitle").text()
+                },
+                {
+                    extend:'print',
+                }
+            ],
             "aoColumns": [{
                 "mRender": function(data, type, full) {
                     sReturn = '<div>'+full.lane_name+'</div>';
@@ -391,6 +577,7 @@ var Page = function() {
             }],
 
             "aLengthMenu": [[5,10,15,20,25,40,50],[5,10,15,20,25,40,50]],
+
             "fnDrawCallback": function(){$(".checkboxes").uniform();$(".group-checkable").uniform();},
             //"sAjaxSource": "get_record.jsp"
             "ajax": {
@@ -420,6 +607,16 @@ var Page = function() {
 
 
         });
+        var container=$(".buttons-copy").text('复制');
+        container.addClass("btn default blue-stripe");
+        container=$(".buttons-excel").text('导出excel');
+        container.addClass("btn default blue-stripe");
+        container=$(".buttons-pdf").text('导出pdf');
+        container.addClass("btn default blue-stripe");
+        container= $(".buttons-csv").text('导出csv');
+        container.addClass("btn default red-stripe");
+        container=$(".buttons-print").text('打印');
+        container.addClass("btn default red-stripe");
 
         $('.datatable').find('.group-checkable').change(function () {
             var set = jQuery(this).attr("data-set");
@@ -469,77 +666,45 @@ var Page = function() {
         }
     }
 
-    var changeResultDataToChartForAll = function(list,date) {
+    var changeResultDataToChartForAll = function(list,time_from,time_to)
+    {
+        var beginDate = new Date(time_from);
+        var endDate = new Date(time_to);
+        beginDate.setHours(8);
+        endDate.setHours(8);
         chartDataExtra = [];
         laneStore = [];
         var tempList = [];
-        var illegalTotal = 0;
-        var lastDate = new Date();
-        if(date!==undefined)
-        {
-            lastDate = new Date(date);
-        }
-        lastDate.setHours(8);
-        lastDate.setMinutes(0);
-        lastDate.setSeconds(0);
-        lastDate.setMilliseconds(0);
+
         for (var i = 0; i < list.length; i++) {
             var record =list[i];
 
             if(!laneStore.includes(record.lane_name))
             {
-                if(i!==0)
-                {
-                    var thisDate = new Date();
-                    if(date!==undefined)
-                    {
-                        thisDate = new Date(date);
-                    }
-                    for(var tmp = lastDate;tmp.getFullYear()<thisDate.getFullYear()
-                    ||tmp.getMonth()<thisDate.getMonth()
-                    ||tmp.getDate()<=thisDate.getDate();tmp.setDate(tmp.getDate()+1))
-                    {
-                        var thisGroup = [new Date(tmp),0];
-                        tempList.push(thisGroup);
-                    }
-                }
-
-                if(date!==undefined)
-                {
-                    lastDate.setDate((new Date(date)).getDate()-7);
-                }
-                else
-                {
-                    lastDate.setDate((new Date()).getDate()-7);
-                }
-                laneStore.push(record.lane_name);
                 if(tempList.length!==0)
                 {
-                    chartDataExtra.push(tempList.slice());
-                    tempList = [];
+                    chartDataExtra.push(tempList);
                 }
+                tempList = [];
+                var j = 0;
+                for(var tmp = new Date(beginDate); tmp.toISOString().slice(0,10) <=endDate.toISOString().slice(0,10);
+                      tmp.setDate(tmp.getDate()+1))
+                {
+                    tempList[j] = [new Date(tmp),0];
+                    j++;
+                }
+                laneStore.push(record.lane_name);
+
             }
 
             if(laneStore.includes(record.lane_name))
             {
-                var thisDate =new Date(record.date);
-                thisDate.setHours(8);
-                thisDate.setMinutes(0);
-                thisDate.setSeconds(0);
-                thisDate.setMilliseconds(0);
-                for(var tmp = lastDate;tmp.getFullYear()<thisDate.getFullYear()
-                ||tmp.getMonth()<thisDate.getMonth()
-                ||tmp.getDate()<thisDate.getDate();tmp.setDate(tmp.getDate()+1))
-                {
-                    var thisGroup = [new Date(tmp),0];
-                    tempList.push(thisGroup);
-                }
-
-                illegalTotal = record.status1+ record.status2
-                    + record.status3+ record.status4;
-                var group = [thisDate, illegalTotal];
-                lastDate.setDate(thisDate.getDate()+1)
-                tempList.push(group);
+                var count = record.status1+record.status2
+                    +record.status3+record.status4;
+                var thisDate = new Date(record.date);
+                var index = thisDate.getDate() - beginDate.getDate();
+                console.log(index);
+                tempList[index]=[thisDate,count];
             }
         }
         if(tempList.length!==0)
@@ -548,79 +713,42 @@ var Page = function() {
             tempList = [];
         }
 
+        console.log(chartDataExtra)
     }
 
-    var changeWeeklyResultDataToChartForAll = function(list,date) {
+    var changeResultDataToChartForYear = function(list)
+    {
         chartDataExtra = [];
         laneStore = [];
         var tempList = [];
-        var illegalTotal = 0;
-        var lastDate = new Date();
-        if(date!==undefined)
-        {
-            lastDate = new Date(date);
-        }
-        lastDate.setHours(8);
-        lastDate.setMinutes(0);
-        lastDate.setSeconds(0);
-        lastDate.setMilliseconds(0);
+
         for (var i = 0; i < list.length; i++) {
             var record =list[i];
 
             if(!laneStore.includes(record.lane_name))
             {
-                if(i!==0)
-                {
-                    var thisDate = new Date();
-                    if(date!==undefined)
-                    {
-                        thisDate = new Date(date);
-                    }
-                    for(var tmp = lastDate;tmp.getFullYear()<thisDate.getFullYear()
-                    ||tmp.getMonth()<thisDate.getMonth()
-                    ||tmp.getDate()<=thisDate.getDate();tmp.setDate(tmp.getDate()+1))
-                    {
-                        var thisGroup = [new Date(tmp),0];
-                        tempList.push(thisGroup);
-                    }
-                }
-
-                if(date!==undefined)
-                {
-                    lastDate.setDate((new Date(date)).getDate()-7);
-                }
-                else
-                {
-                    lastDate.setDate((new Date()).getDate()-7);
-                }
-                laneStore.push(record.lane_name);
                 if(tempList.length!==0)
                 {
-                    chartDataExtra.push(tempList.slice());
-                    tempList = [];
+                    chartDataExtra.push(tempList);
                 }
+                tempList = [];
+
+                for(var j = 0;j<=12;j++)
+                {
+                    tempList[j] = [j,0];
+                }
+                laneStore.push(record.lane_name);
+
             }
 
             if(laneStore.includes(record.lane_name))
             {
-                var thisDate =new Date(record.date);
-                thisDate.setHours(8);
-                thisDate.setMinutes(0);
-                thisDate.setSeconds(0);
-                thisDate.setMilliseconds(0);
-                for(var tmp = lastDate;tmp.getFullYear()<thisDate.getFullYear()
-                ||tmp.getMonth()<thisDate.getMonth()
-                ||tmp.getDate()<thisDate.getDate();tmp.setDate(tmp.getDate()+1))
-                {
-                    var thisGroup = [new Date(tmp),0];
-                    tempList.push(thisGroup);
-                }
-
-                illegalTotal = record.status1+ record.status2
-                    + record.status3+ record.status4;
-                var group = [thisDate, illegalTotal];
-                lastDate.setDate(thisDate.getDate()+1)
-                tempList.push(group);
+                var count = record.status1+record.status2
+                    +record.status3+record.status4;
+                var thisDate = new Date(record.date);
+                var index = thisDate.getMonth();
+                console.log(index);
+                tempList[index]=[index+1,count];
             }
         }
         if(tempList.length!==0)
@@ -629,7 +757,9 @@ var Page = function() {
             tempList = [];
         }
 
+        console.log(chartDataExtra)
     }
+
 
     //图标处理函数-----结束
 
@@ -832,8 +962,118 @@ var Page = function() {
             xaxis: {
 
                 mode: "time",
+                TickSize: [1, "day"],  // 设置刻度的最小间隔为一天
+                maxTickSize:[1,"day"],
+                autoscaleMargin: 0.1,  // 设置自适应边距为 10% （可以根据需要进行调整）
                 timeformat: "%Y-%m-%d",
                 tickColor: "#eee"
+            },
+            yaxis: {
+                min:0,
+                ticks: 11,
+                tickDecimals: 0,
+                tickColor: "#eee",
+            }
+        });
+
+
+        function showTooltip(x, y, contents) {
+            $('<div id="tooltip">' + contents + '</div>').css({
+                position: 'absolute',
+                display: 'none',
+                top: y + 5,
+                left: x + 15,
+                border: '1px solid #333',
+                padding: '4px',
+                color: '#fff',
+                'border-radius': '3px',
+                'background-color': '#333',
+                opacity: 0.80
+            }).appendTo("body").fadeIn(200);
+        }
+
+        var previousPoint = null;
+        $("#chart_3").bind("plothover", function(event, pos, item) {
+            $("#x").text(pos.x.toFixed(2));
+            $("#y").text(pos.y.toFixed(2));
+
+            if (item) {
+                if (previousPoint != item.dataIndex) {
+                    previousPoint = item.dataIndex;
+
+                    $("#tooltip").remove();
+                    var x = item.datapoint[0].toFixed(2),
+                        y = item.datapoint[1].toFixed(2);
+
+                    showTooltip(item.pageX, item.pageY, item.series.label + " of " + item.series.data[item.dataIndex] + " = " + y);
+                }
+            } else {
+                $("#tooltip").remove();
+                previousPoint = null;
+            }
+        });
+    }
+
+    var InitChart3ForMulti=function() {
+        if ($('#chart_3').size() != 1) {
+            return;
+        }
+
+        //对全局变量数据进行处理
+        var plotData = [];
+        plotData.push({data:0,label:0})
+        for(var i = 0;i<chartDataExtra.length;i++)
+        {
+            var plotItem = {
+                data: chartDataExtra[i],
+                label: laneStore[i],
+                lines: {
+                    lineWidth: 1,
+                },
+                shadowSize: 0
+
+            };
+
+            plotData.push(plotItem);
+        }
+        
+        console.log(chartDataExtra)
+
+        var plot = $.plot($("#chart_3"), plotData, {
+            series: {
+                lines: {
+                    show: true,
+                    lineWidth: 2,
+                    fill: true,
+                    fillColor: {
+                        colors: [{
+                            opacity: 0.05
+                        }, {
+                            opacity: 0.01
+                        }]
+                    }
+                },
+                points: {
+                    show: true,
+                    radius: 3,
+                    lineWidth: 1
+                },
+                shadowSize: 2
+            },
+            grid: {
+                hoverable: true,
+                clickable: true,
+                tickColor: "#eee",
+                borderColor: "#eee",
+                borderWidth: 1
+            },
+            colors: ["#d12610", "#37b7f3", "#52e136"],
+            xaxis: {
+                minTickSize: [1, 1],  // 设置刻度的最小间隔为一天
+                autoscaleMargin: 0.1,  // 设置自适应边距为 10% （可以根据需要进行调整）
+                tickColor: "#eee",
+                min:1,
+                max:12
             },
             yaxis: {
                 ticks: 11,
@@ -881,6 +1121,7 @@ var Page = function() {
     }
     //图表的初始化函数-----结束
 
+
     var getWeek = function(date) {
 
         // 创建一个新的日期对象，将其设置为给定的日期
@@ -906,24 +1147,50 @@ var Page = function() {
         return weekList; // 返回所在周
     }
 
+    var getMonthList = function(date) {
 
+        // 创建一个新的日期对象，将其设置为给定的日期
+        var target1 = new Date(date);
+        const target2 = new Date(date); // 创建目标日期的副本
+
+        target1.setDate(1);
+
+        const month = target2.getMonth(); // 获取目标日期的星期几（0-6，其中0表示星期日）
+        target2.setMonth(month + 1, 1);
+        target2.setDate(target2.getDate()-1);
+        var monthList = [];
+
+        monthList.push(target1.toISOString().slice(0,10));
+        monthList.push(target2.toISOString().slice(0,10));
+
+        return monthList; // 返回所在月第一天和最后一天
+    }
+
+    var getYearList = function(date) {
+
+        date = new Date(date);
+        var dateStr = (date).toISOString().slice(0,4);
+        // 创建一个新的日期对象，将其设置为给定的日期
+        var target1 = new Date(dateStr);
+        var target2 = new Date(dateStr); // 创建目标日期的副本
+        target2.setDate(date.getDate()-1);
+        target2.setFullYear(date.getFullYear()+1);
+        var yearList = [];
+
+        yearList.push(target1.toISOString().slice(0,10));
+        yearList.push(target2.toISOString().slice(0,10));
+
+        return yearList; // 返回今年第一天和最后一天
+    }
 
 
     var initDailyAnalysisPrint = function(){
-        initDailyAnalysisRecordForPrint();
-    }
-
-    var initMonitorPrint_Word = function(){
-        initAnalysisRecordForPrint_Word();
-    }
-
-    var initDailyAnalysisRecordForPrint=function(){
         getDailyAnalysisRecordPrint();
     }
 
-    var initAnalysisRecordForPrint_Word=function(){
-        getAnalysisRecordPrint_Word();
-    }
+
+
+
 
     var  getDailyAnalysisRecordPrint = function(){
         var url = "../../analysis_data_servlet_action";
@@ -933,7 +1200,7 @@ var Page = function() {
             if(json.result_code==0){
                 console.log(JSON.stringify(json));
 
-                var list = json.aaData;
+                var list = json.report_aaData;
 
                 var myhtml="";
                 if(list!=undefined && list.length>0)
@@ -959,62 +1226,6 @@ var Page = function() {
 
     }
 
-    var  getAnalysisRecordPrint_Word = function(){
-        var url = "../../analysis_data_servlet_action";
-        var data={};
-        data.action="analysis_print";
-        $.post(url,data,function(json){
-            if(json.result_code==0){
-                console.log(JSON.stringify(json));
-
-                var list = json.aaData;
-
-                var html="";
-                if(list!=undefined && list.length>0)
-                {
-                    for(var i=0;i<list.length;i++) {
-
-                        var record=list[i];
-                        html=html+"<tr style='height:26.95pt'>";
-                        html=html+" <td width=63 valign=top style='width:46.95pt;border:none;border-right:solid #C9C9C9 1.0pt;";
-                        html=html+"  background:white;padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>";
-                        html=html+" <p class=MsoNormal align=center style='text-align:center'><i><span";
-                        html=html+" lang=EN-US style='font-family:\"微软雅黑\",sans-serif'>"+record.id+"</span></i></p>";
-                        html=html+" </td>";
-                        html=html+" <td width=63 valign=top style='width:47.05pt;border-top:none;border-left:";
-                        html=html+" none;border-bottom:solid #C9C9C9 1.0pt;border-right:solid #C9C9C9 1.0pt;";
-                        html=html+" padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>";
-                        html=html+" <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US";
-                        html=html+" style='font-family:\"微软雅黑\",sans-serif'>"+record.lane_name+"</span></p>";
-                        html=html+" </td>";
-                        html=html+" <td width=106 valign=top style='width:79.4pt;border-top:none;border-left:";
-                        html=html+"  none;border-bottom:solid #C9C9C9 1.0pt;border-right:solid #C9C9C9 1.0pt;";
-                        html=html+"  padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>";
-                        html=html+" <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US";
-                        html=html+" style='font-family:\"微软雅黑\",sans-serif'>"+record.start_time+"</span></p>";
-                        html=html+" </td>";
-                        html=html+" <td width=63 valign=top style='width:47.05pt;border-top:none;border-left:";
-                        html=html+" none;border-bottom:solid #C9C9C9 1.0pt;border-right:solid #C9C9C9 1.0pt;";
-                        html=html+" padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>";
-                        html=html+" <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US";
-                        html=html+" style='font-family:\"微软雅黑\",sans-serif'>"+record.end_time+"</span></p>";
-                        html=html+" </td>";
-                        html=html+" <td width=63 valign=top style='width:47.05pt;border-top:none;border-left:";
-                        html=html+"  none;border-bottom:solid #C9C9C9 1.0pt;border-right:solid #C9C9C9 1.0pt;";
-                        html=html+"  padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>";
-                        html=html+" <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US";
-                        html=html+" style='font-family:\"微软雅黑\",sans-serif'>"+record.total_num+"</span></p>";
-                        html=html+" </td>";
-                        html=html+" </tr>";
-
-                    }
-                }
-            }
-            $("#print_list_for_word").html(html);
-        });
-
-
-    }
 
     var myExportAPI = function(){
         var url = "../../analysis_data_servlet_action";
@@ -1035,10 +1246,6 @@ var Page = function() {
         window.open("daily_print_default.jsp");
     }
 
-    var myPrintAPI_Word = function(){
-        window.open("analysis_print_word.jsp");
-
-    }
 
 
     //submit functions end

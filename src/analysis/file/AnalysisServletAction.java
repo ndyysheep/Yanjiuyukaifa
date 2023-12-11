@@ -93,7 +93,7 @@ public class AnalysisServletAction extends HttpServlet {
 
             }
 
-            if (action.equals("report_all"))
+            if (action.equals("get_report_all"))
             {
                 actionOk = true;
 

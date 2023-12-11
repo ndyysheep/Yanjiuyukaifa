@@ -454,10 +454,9 @@ public class ServletAction extends HttpServlet {
         dao.getMonitorRecord(data, json);
 
         // 下载操作
-        dao.getExportMonitorRecordToFile(json, data);
         dao.getExportMonitorRecordToTxt(json, data);
         dao.getExportMonitorRecordToExcel(json, data);
-        dao.getExportMonitorRecordToPDF(json, data);
+
 
 
     }
