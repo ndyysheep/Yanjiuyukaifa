@@ -18,7 +18,7 @@ public class UploadControl extends HttpServlet  {
         request.setCharacterEncoding("utf-8");
         HttpSession session = request.getSession(true);
         String uid = session.getAttribute("uid").toString();
-        String path = "F:/Amusement/Capture/pictures/avatar/";
+        String path = "F:/Amusement/Capture/pictures/avatar/"; // 我的upload的实际路径是F:/Amusement/Capture/pictures，故我的path是实际路径加上一个avatar文件夹
         String fileName = uid + ".jpg";
         try {
             File file1 = new File(path);
