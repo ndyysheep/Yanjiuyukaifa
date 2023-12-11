@@ -1,4 +1,8 @@
+<<<<<<< HEAD
++/**
+=======
 /**
+>>>>>>> 2c4382b (Initial test)
  + * Korean translation for bootstrap-markdown
  + * WoongBi Kim <ssinss@gmail.com>
  + */

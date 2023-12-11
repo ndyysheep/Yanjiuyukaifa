@@ -8,7 +8,7 @@
           <element id="module-output" name="my_pro" />
         </element>
         <element id="directory" name="lib">
-          <element id="library" level="project" name="lib" />
+          <element id="library" level="project" name="Local Library" />
         </element>
       </element>
     </root>
