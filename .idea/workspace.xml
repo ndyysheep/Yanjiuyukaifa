@@ -14,34 +14,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="92dc437d-bb51-42f3-93ee-b2423cc3248c" name="Default Changelist" comment="11th commit--修理分支">
-      <change afterPath="$PROJECT_DIR$/src/DBControl/DB.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/EmailControl/EmailSend.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/FilterControl/AuthenticationFilter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/servletControl/LoginControl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/servletControl/Logout.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/servletControl/TodoControl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/servletControl/UploadControl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/servletControl/UserControl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/WEB-INF/lib/activation-1.1.1.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/WEB-INF/lib/javax.mail.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/assets/js/profileAccount.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/assets/js/table-advanced.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/assets/js/todo.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/main/login/favicon.ico" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/main/login/login.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/main/userManage/UserManage.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/main/userManage/extra_profile_account.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/main/userManage/favicon.ico" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/main/userManage/todo.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/user/center/LoginAction.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/user/dao/UserDao.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/WEB-INF/web.xml" beforeDir="false" afterPath="$PROJECT_DIR$/web/WEB-INF/web.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/assets/admin/pages/scripts/login.js" beforeDir="false" afterPath="$PROJECT_DIR$/web/assets/admin/pages/scripts/login.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/home/frame/page_sidebar.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/web/home/frame/page_sidebar.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/home/frame/top_menu.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/web/home/frame/top_menu.jsp" afterDir="false" />
-    </list>
+    <list default="true" id="92dc437d-bb51-42f3-93ee-b2423cc3248c" name="Default Changelist" comment="11th commit--修理分支" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -178,7 +151,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "Probe's",
+    "git-widget-placeholder": "master",
     "jdk.selected.JAVA_MODULE": "1.8",
     "last_opened_file_path": "F:/WorkSpace/LearningResource/CodeResource/Java/JointProject/Yanjiuyukaifa/web/assets/js",
     "node.js.detected.package.eslint": "true",
@@ -554,22 +527,6 @@
       <workItem from="1702293492811" duration="177000" />
       <workItem from="1702293694284" duration="138000" />
       <workItem from="1702296080976" duration="4535000" />
-    </task>
-    <task id="LOCAL-00003" summary="Gjr's pro">
-      <option name="closed" value="true" />
-      <created>1701104918594</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1701104918594</updated>
-    </task>
-    <task id="LOCAL-00004" summary="测试">
-      <option name="closed" value="true" />
-      <created>1701105840334</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1701105840334</updated>
     </task>
     <task id="LOCAL-00005" summary="测试">
       <option name="closed" value="true" />
@@ -947,7 +904,23 @@
       <option name="project" value="LOCAL" />
       <updated>1702293169747</updated>
     </task>
-    <option name="localTasksCounter" value="52" />
+    <task id="LOCAL-00052" summary="11th commit--修理分支">
+      <option name="closed" value="true" />
+      <created>1702373827833</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1702373827833</updated>
+    </task>
+    <task id="LOCAL-00053" summary="11th commit--修理分支">
+      <option name="closed" value="true" />
+      <created>1702373843004</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1702373843004</updated>
+    </task>
+    <option name="localTasksCounter" value="54" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -984,7 +957,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="Probe's" />
+                        <option value="master" />
                       </list>
                     </value>
                   </entry>
