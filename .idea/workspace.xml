@@ -14,8 +14,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="92dc437d-bb51-42f3-93ee-b2423cc3248c" name="Default Changelist" comment="11th commit--修理分支">
+    <list default="true" id="92dc437d-bb51-42f3-93ee-b2423cc3248c" name="Default Changelist" comment="3th commit--修理分支">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/monitor/dao/MonitorDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/monitor/dao/MonitorDao.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/maintain/monitor/containers/js/monitor.js" beforeDir="false" afterPath="$PROJECT_DIR$/web/maintain/monitor/containers/js/monitor.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -531,14 +533,6 @@
       <workItem from="1702293694284" duration="138000" />
       <workItem from="1702296080976" duration="4535000" />
     </task>
-    <task id="LOCAL-00005" summary="测试">
-      <option name="closed" value="true" />
-      <created>1701107646796</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1701107646796</updated>
-    </task>
     <task id="LOCAL-00006" summary="测试">
       <option name="closed" value="true" />
       <created>1701108282252</created>
@@ -923,7 +917,15 @@
       <option name="project" value="LOCAL" />
       <updated>1702373843004</updated>
     </task>
-    <option name="localTasksCounter" value="54" />
+    <task id="LOCAL-00054" summary="3th commit--修理分支">
+      <option name="closed" value="true" />
+      <created>1702377765419</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1702377765419</updated>
+    </task>
+    <option name="localTasksCounter" value="55" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -997,7 +999,8 @@
     <MESSAGE value="11th commit--完善各个报表打印和导出功能,监测数据管理与统计基本实现" />
     <MESSAGE value="Merge remote-tracking branch 'Yanjiuyukaifa/Probe's' into Probe's" />
     <MESSAGE value="11th commit--修理分支" />
-    <option name="LAST_COMMIT_MESSAGE" value="11th commit--修理分支" />
+    <MESSAGE value="3th commit--修理分支" />
+    <option name="LAST_COMMIT_MESSAGE" value="3th commit--修理分支" />
     <option name="GROUP_MULTIFILE_MERGE_BY_DIRECTORY" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -1014,7 +1017,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/monitor/dao/MonitorDao.java</url>
-          <line>470</line>
+          <line>482</line>
           <option name="timeStamp" value="20" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
