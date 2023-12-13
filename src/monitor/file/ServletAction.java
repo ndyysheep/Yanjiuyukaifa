@@ -81,8 +81,7 @@ public class ServletAction extends HttpServlet {
             json.put("action", action);
             json.put("result_code", 0);
             json.put("result_msg", "ok");
-
-            // 这几个常规增删改查功能
+              // 这几个常规增删改查功能
             // 获取表数据
             if (action.equals("get_monitor_record")) {
                 actionOk = true;

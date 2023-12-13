@@ -76,10 +76,30 @@ public class MonitorDao {
      * @param key2 第二个表主键
      * @return 返回sql语句
      */
-    private String createJoinSql(String table1, String table2, String key1, String key2) {
+    private String createJoinSql(String table1, String table2, String key1, String key2,int outer) {
         String subSql = "";
-
-        subSql += " join " + table2 + " on " + table1 + "." + key1 + " = " + table2 + "." + key2;
+        String outerSql = "";
+        if(outer==0)
+        {
+            outerSql = "";
+        }
+        else if(outer==1)
+        {
+            outerSql = " left outer ";
+        }
+        else if(outer==2)
+        {
+            outerSql = " right outer ";
+        }
+        else if(outer==3)
+        {
+            outerSql = " full outer ";
+        }
+        else
+        {
+            return"";
+        }
+        subSql +=outerSql +" join " + table2 + " on " + table1 + "." + key1 + " = " + table2 + "." + key2;
 
         return subSql;
     }
@@ -576,12 +596,12 @@ public class MonitorDao {
         {
             if(data.getParam().has("lane_name"))
             {
-                sql += createJoinSql(relationName, "lane_data", "lane_id", "lane_id");
+                sql += createJoinSql(relationName, "lane_data", "lane_id", "lane_id",0);
             }
         }
         else
         {
-            sql += createJoinSql(relationName, "lane_data", "lane_id", "lane_id");
+            sql += createJoinSql(relationName, "lane_data", "lane_id", "lane_id",0);
 
         }
 
@@ -610,8 +630,8 @@ public class MonitorDao {
         JSONObject param = data.getParam();
         String sql = "select * from " + relationName ;
         String where="";
-        sql += createJoinSql(relationName, "lane_data", "lane_id", "lane_id");
-        sql += createJoinSql(relationName,"illegal_info","id","monitor_id");
+        sql += createJoinSql(relationName, "lane_data", "lane_id", "lane_id",1);
+        sql += createJoinSql(relationName,"illegal_info","id","monitor_id",1);
 
         if(checkParamValid(param,"id"))
         {
