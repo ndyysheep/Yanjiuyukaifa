@@ -10,6 +10,7 @@ import javax.servlet.http.*;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
+import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.ResultSet;
@@ -227,10 +228,10 @@ public class LoginControl extends HttpServlet {
                     if(param.has("remember"))
                     {
                         Cookie uid =new Cookie("uid",Integer.toString(user_id));
+                        InitCookie(user_name,password,request,response);
                         // 一天存活时间
                         uid.setMaxAge(60 * 60 * 24);
                         response.addCookie(uid);
-
                         request.getSession().setAttribute("remember",1);
                     }
                     loginSuccessfully(resJson,request,response,user_id);
@@ -256,14 +257,67 @@ public class LoginControl extends HttpServlet {
         }
         db.Close();
     }
-    private void registerEvent(JSONObject param, HttpServletRequest request, HttpServletResponse response, JSONObject resJson) throws JSONException, SQLException {
+
+    private void InitSession(String user_name,HttpSession session) throws SQLException {
+        String sql = "select * from user_file where user_name='" + user_name + "'";
+        db.Connect();
+        ResultSet rs = db.ExecuteQuery(sql);
+        ResultSetMetaData rsmd = rs.getMetaData();
+        int fieldCount = rsmd.getColumnCount();
+        session.setAttribute("avatar","");
+        if(rs.next())
+        {
+            for(int i = 0; i < fieldCount; ++i)
+            {
+                if(rs.getString(rsmd.getColumnName(i + 1)) != null)
+                {
+                    session.setAttribute(rsmd.getColumnName(i + 1),rs.getString(rsmd.getColumnName(i + 1)));
+                    if(rsmd.getColumnName(i + 1).equals("user_id"))
+                    {
+                        session.setAttribute("uid",rs.getString(rsmd.getColumnName(i + 1)));
+                    }
+                }
+            }
+        }
+        db.Close();
+    }
+
+    private void InitCookie(String user_name, String password,HttpServletRequest request,HttpServletResponse response) throws UnsupportedEncodingException {
+        String usernameCode = URLEncoder.encode(user_name, "utf-8");
+
+        Cookie usernameCookie = new Cookie("username",usernameCode);
+        Cookie passwordCookie = new Cookie("password",password);
+        //设置持久化时间
+        usernameCookie.setMaxAge(60*60 * 24);
+        passwordCookie.setMaxAge(60*60 * 24);
+        //设置cookie携带路径
+        usernameCookie.setPath(request.getContextPath());
+        passwordCookie.setPath(request.getContextPath());
+        //发送cookie
+        response.addCookie(usernameCookie);
+        response.addCookie(passwordCookie);
+    }
+    private void registerEvent(JSONObject param, HttpServletRequest request, HttpServletResponse response, JSONObject resJson) throws JSONException, SQLException, UnsupportedEncodingException {
         showDebug("registerEvent","开始注册用户");
+        HttpSession session = request.getSession();
+        String user_name = param.getString("username");
         db.Connect();
         // 更新数据库
         boolean userAlreadyExist = db.AddtoUserFile(param);
         db.Close();
-        resJson.put("registerCode",0);
-        resJson.put("userAlreadyExist",userAlreadyExist);
+        if(userAlreadyExist)
+        {
+            resJson.put("registerCode",-1);
+            resJson.put("userAlreadyExist",userAlreadyExist);
+        }
+        else
+        {
+            InitSession(user_name,session);
+            InitCookie(user_name,param.getString("password"),request,response);
+            resJson.put("registerCode",0);
+            resJson.put("userAlreadyExist",userAlreadyExist);
+        }
+
     }
     private void SendEvent(JSONObject param, HttpServletRequest request, HttpServletResponse response, JSONObject resJson) throws JSONException, SQLException, ServletException, IOException {
         String user_name = param.getString("username");

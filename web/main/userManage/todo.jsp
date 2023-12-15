@@ -793,7 +793,7 @@
                   <li >
                     <a href="UserManage.jsp">
                       <i class="icon-check"></i>
-                      Tasks </a>
+                        UserManage </a>
                   </li>
                     <li class="active">
                         <a href="todo.jsp">
