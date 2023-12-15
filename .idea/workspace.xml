@@ -14,19 +14,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="92dc437d-bb51-42f3-93ee-b2423cc3248c" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/FilterControl/AutoLoginFilter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/DBControl/DB.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/DBControl/DB.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/FilterControl/AuthenticationFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/FilterControl/AuthenticationFilter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/servletControl/LoginControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/servletControl/LoginControl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/servletControl/Logout.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/servletControl/Logout.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/WEB-INF/web.xml" beforeDir="false" afterPath="$PROJECT_DIR$/web/WEB-INF/web.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/main/login/login.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/web/main/login/login.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/main/userManage/UserManage.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/web/main/userManage/UserManage.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/main/userManage/extra_profile_account.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/web/main/userManage/extra_profile_account.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/main/userManage/todo.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/web/main/userManage/todo.jsp" afterDir="false" />
-    </list>
+    <list default="true" id="92dc437d-bb51-42f3-93ee-b2423cc3248c" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
