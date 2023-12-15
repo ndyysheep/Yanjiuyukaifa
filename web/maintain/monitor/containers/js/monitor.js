@@ -749,15 +749,26 @@ var Page = function() {
 		var data={};
 		data.action="add_monitor_record";
 
+		var mainDate = $("#record_add_div #capture_time").val();
+		if(mainDate=="")
+		{
+			data.capture_time="";
+		}
+		else
+		{
+			data.capture_time=mainDate+" "
+				+$("#record_add_div #capture_time_sec").val();
+		}
 		var check = false;
 		var checkCol = [];
 		data.car_code=$("#record_add_div #car_code").val();
 		data.vehicle_type=$("#record_add_div #vehicle_type").val();
 		data.illegal_status=explainIllegalCode_Contrary($("#record_add_div #illegal_status").val());
-		data.capture_time=$("#record_add_div #capture_time").val()+" "
-			+$("#record_add_div #capture_time_sec").val();
+
 		data.speed=$("#record_add_div #speed").val();
 		data.lane_name=$("#record_add_div #lane_name").val();
+
+
 
 		if(checkValid($("#record_add_div")))
 		{
@@ -1137,6 +1148,7 @@ var Page = function() {
 		resetInputCss();
 		illegalInput = [];
 		var inputElements = element.find("input");
+		var timeAddCheck = element.find("timeAddCheck");
 		var check =  true;
 		var str = "";
 
@@ -1172,6 +1184,7 @@ var Page = function() {
 
 
 		})
+
 
 		//判断是否出现结束时间>开始时间的情况
 		console.log(elementArray);

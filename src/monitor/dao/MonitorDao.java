@@ -76,10 +76,30 @@ public class MonitorDao {
      * @param key2 第二个表主键
      * @return 返回sql语句
      */
-    private String createJoinSql(String table1, String table2, String key1, String key2) {
+    private String createJoinSql(String table1, String table2, String key1, String key2,int outer) {
         String subSql = "";
-
-        subSql += " join " + table2 + " on " + table1 + "." + key1 + " = " + table2 + "." + key2;
+        String outerSql = "";
+        if(outer==0)
+        {
+            outerSql = "";
+        }
+        else if(outer==1)
+        {
+            outerSql = " left outer ";
+        }
+        else if(outer==2)
+        {
+            outerSql = " right outer ";
+        }
+        else if(outer==3)
+        {
+            outerSql = " full outer ";
+        }
+        else
+        {
+            return"";
+        }
+        subSql +=outerSql +" join " + table2 + " on " + table1 + "." + key1 + " = " + table2 + "." + key2;
 
         return subSql;
     }
@@ -220,10 +240,10 @@ public class MonitorDao {
     private String useInsert(JSONObject param,String keyPara,String sql) throws JSONException {
         String thisSql = sql;
         showDebug("每次调用"+sql);
-
+        String keyData = null;
         if(checkParamValid(param,keyPara))
         {
-            String keyData = param.getString(keyPara);
+            keyData = param.getString(keyPara);
 
             if(Objects.equals(thisSql, ""))
             {
@@ -234,6 +254,17 @@ public class MonitorDao {
                 thisSql = thisSql + ",'"+keyData +"'";
             }
 
+        }
+        else
+        {
+            if(Objects.equals(thisSql, ""))
+            {
+                thisSql = thisSql + " select " +keyData;
+            }
+            else
+            {
+                thisSql = thisSql + ","+keyData ;
+            }
         }
 
         return thisSql;
@@ -252,18 +283,12 @@ public class MonitorDao {
         JSONObject param = data.getParam();
         // 构造sql语句，根据传递过来的条件参数
 
-        String capture_time = data.getParam().has("capture_time")
-                ? data.getParam().getString("capture_time") : null;
         String lane_name = null;
 
 
 
         String create_time = (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).format(new Date());
-
-        if(capture_time==null)
-        {
-            capture_time = create_time;
-        }
+        String capture_time = create_time;
         String commandSql = "insert into " + relationName + "(car_code,vehicle_type,illegal_status,"
                 + "capture_time,speed,create_time,lane_id)";
 
@@ -274,8 +299,12 @@ public class MonitorDao {
         sql = useInsert(param,"vehicle_type",sql);
         sql = useInsert(param,"illegal_status",sql);
 
+        if(checkParamValid(param,"capture_time"))
+        {
+            capture_time = param.getString("capture_time");
+        }
         //添加capture_time字段
-        sql +=",'"+capture_time+"'";
+        sql+=",'"+capture_time+"'";
 
         sql = useInsert(param,"speed",sql);
 
@@ -285,8 +314,11 @@ public class MonitorDao {
         if(checkParamValid(param,"lane_name"))
         {
             lane_name=param.getString("lane_name");
-            sql+=",(select lane_id from lane_data where lane_name = '"+ lane_name +"')";
+
         }
+
+        sql+=",(select lane_id from lane_data where lane_name = '"+ lane_name +"')";
+
 
 
         //进行sql语句的处理
@@ -564,12 +596,12 @@ public class MonitorDao {
         {
             if(data.getParam().has("lane_name"))
             {
-                sql += createJoinSql(relationName, "lane_data", "lane_id", "lane_id");
+                sql += createJoinSql(relationName, "lane_data", "lane_id", "lane_id",0);
             }
         }
         else
         {
-            sql += createJoinSql(relationName, "lane_data", "lane_id", "lane_id");
+            sql += createJoinSql(relationName, "lane_data", "lane_id", "lane_id",0);
 
         }
 
@@ -598,8 +630,8 @@ public class MonitorDao {
         JSONObject param = data.getParam();
         String sql = "select * from " + relationName ;
         String where="";
-        sql += createJoinSql(relationName, "lane_data", "lane_id", "lane_id");
-        sql += createJoinSql(relationName,"illegal_info","id","monitor_id");
+        sql += createJoinSql(relationName, "lane_data", "lane_id", "lane_id",1);
+        sql += createJoinSql(relationName,"illegal_info","id","monitor_id",1);
 
         if(checkParamValid(param,"id"))
         {
