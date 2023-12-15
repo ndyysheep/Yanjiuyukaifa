@@ -120,7 +120,7 @@ public class DB {
         String phone = null;
         String nickname = null;
         String email = null;
-        String occupation = "nothing";
+        String occupation = "none";
         int role_id = 3;
         if (param.has("username")) {
             user_name = param.getString("username");

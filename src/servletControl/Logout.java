@@ -5,6 +5,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.Console;
 import java.io.IOException;
 
 public class Logout extends HttpServlet {
@@ -12,14 +13,12 @@ public class Logout extends HttpServlet {
         Cookie[] cookies = request.getCookies();
         for(Cookie cookie:cookies)
         {
-            if(cookie.getValue().equals("uid"))
-            {
-                cookie.setMaxAge(0);
-                response.addCookie(cookie);
-            }
+            cookie.setMaxAge(0);
+            response.addCookie(cookie);
         }
         request.getSession().invalidate();
-        response.sendRedirect("../main/login/login.jsp");
+        System.out.println("登出成功!");
+        response.sendRedirect("/main/login/login.jsp");
     }
 
 }

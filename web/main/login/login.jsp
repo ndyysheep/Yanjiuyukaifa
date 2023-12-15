@@ -46,7 +46,7 @@ License: You must have a valid license purchased only from themeforest(the above
 </head>
 <!-- END HEAD -->
 <!-- BEGIN BODY -->
-<body class="page-md login" onbeforeunload="<%if(session.getAttribute("remember") == null){session.invalidate();}%>">
+<body class="page-md login">
 <!-- BEGIN SIDEBAR TOGGLER BUTTON -->
 <div class="menu-toggler sidebar-toggler">
 </div>

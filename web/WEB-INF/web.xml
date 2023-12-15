@@ -9,6 +9,26 @@
     <welcome-file>default.htm</welcome-file>
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
+	<!-- ================  filter start=================-->
+	<filter>
+		<filter-name>loginfilter</filter-name>
+		<filter-class>FilterControl.AuthenticationFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>loginfilter</filter-name>
+		<url-pattern>/main/userManage/*</url-pattern>
+		<url-pattern>/maintain/*</url-pattern>
+	</filter-mapping>
+	<filter>
+		<filter-name>autofilter</filter-name>
+		<filter-class>FilterControl.AutoLoginFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>autofilter</filter-name>
+		<url-pattern>/main/login/login.jsp</url-pattern>
+	</filter-mapping>
+
+	<!-- ================  filter end=================-->
 	<!-- ================  车辆监测数据接口 开始 =================-->
 	<servlet>
 		<servlet-name>monitor_file_servlet_action</servlet-name>
