@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" id="WebApp_ID" version="3.1">
+  <display-name>teach</display-name>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.htm</welcome-file>
+    <welcome-file>default.jsp</welcome-file>
+  </welcome-file-list>
+	<!-- ================  filter start=================-->
+	<filter>
+		<filter-name>loginfilter</filter-name>
+		<filter-class>FilterControl.AuthenticationFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>loginfilter</filter-name>
+		<url-pattern>/main/userManage/*</url-pattern>
+		<url-pattern>/maintain/*</url-pattern>
+	</filter-mapping>
+	<filter>
+		<filter-name>autofilter</filter-name>
+		<filter-class>FilterControl.AutoLoginFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>autofilter</filter-name>
+		<url-pattern>/main/login/login.jsp</url-pattern>
+	</filter-mapping>
+
+	<!-- ================  filter end=================-->
+	<!-- ================  车辆监测数据接口 开始 =================-->
+	<servlet>
+		<servlet-name>monitor_file_servlet_action</servlet-name>
+		<servlet-class>monitor.file.ServletAction</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>monitor_file_servlet_action</servlet-name>
+		<url-pattern>/monitor_file_servlet_action</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>monitor_data_servlet_action</servlet-name>
+		<servlet-class>monitor.file.ServletAction</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>monitor_data_servlet_action</servlet-name>
+		<url-pattern>/monitor_data_servlet_action</url-pattern>
+	</servlet-mapping>
+
+	<!--路段接口层-->
+
+
+	<servlet>
+		<servlet-name>sction_data_servlet_action</servlet-name>
+		<servlet-class>monitor.file.SectionAction</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>sction_data_servlet_action</servlet-name>
+		<url-pattern>/sction_data_servlet_action</url-pattern>
+	</servlet-mapping>
+
+	<!---Api接口-->
+
+	<servlet>
+		<servlet-name>weibohot_data_servlet_action</servlet-name>
+		<servlet-class>monitor.file.WeibohotAction</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>weibohot_data_servlet_action</servlet-name>
+		<url-pattern>/weibohot_data_servlet_action</url-pattern>
+	</servlet-mapping>
+
+	<!-- ================  车辆监测数据接口 结束 =================-->
+
+	<!-- ================  违法监测数据接口 开始 =================-->
+	<servlet>
+		<servlet-name>illegal_data_servlet_action</servlet-name>
+		<servlet-class>illegal.file.ServletActionRecordInfo</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>illegal_data_servlet_action</servlet-name>
+		<url-pattern>/illegal_data_servlet_action</url-pattern>
+	</servlet-mapping>
+	<!-- ================  违法监测数据接口 结束 =================-->
+
+	<!-- ================  车流量监测数据接口 开始 =================-->
+	<servlet>
+		<servlet-name>flow_data_servlet_action</servlet-name>
+		<servlet-class>flow.file.FlowServletAction</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>flow_data_servlet_action</servlet-name>
+		<url-pattern>/flow_data_servlet_action</url-pattern>
+	</servlet-mapping>
+	<!-- ================  车流量监测数据接口 结束 =================-->
+
+	<!-- ================  监测数据分析接口 开始 =================-->
+	<servlet>
+		<servlet-name>analysis_data_servlet_action</servlet-name>
+		<servlet-class>analysis.file.AnalysisServletAction</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>analysis_data_servlet_action</servlet-name>
+		<url-pattern>/analysis_data_servlet_action</url-pattern>
+	</servlet-mapping>
+	<!-- ================  监测数据分析接口 结束 =================-->
+	<servlet>
+		<servlet-name>Logout</servlet-name>
+		<servlet-class>servletControl.Logout</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Logout</servlet-name>
+		<url-pattern>/Logout</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>LoginControl</servlet-name>
+		<servlet-class>servletControl.LoginControl</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>LoginControl</servlet-name>
+		<url-pattern>/LoginControl</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>TodoControl</servlet-name>
+		<servlet-class>servletControl.TodoControl</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>TodoControl</servlet-name>
+		<url-pattern>/TodoControl</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>UserControl</servlet-name>
+		<servlet-class>servletControl.UserControl</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>UserControl</servlet-name>
+		<url-pattern>/UserInfo</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>UploadControl</servlet-name>
+		<servlet-class>servletControl.UploadControl</servlet-class>
+		<load-on-startup>1</load-on-startup>
+		<multipart-config>
+			<max-file-size>20848820</max-file-size>
+			<max-request-size>418018841</max-request-size>
+			<file-size-threshold>1048576</file-size-threshold>
+		</multipart-config>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>UploadControl</servlet-name>
+		<url-pattern>/UploadControl</url-pattern>
+	</servlet-mapping>
+  </web-app>
