@@ -36,7 +36,7 @@ var Page = function() {
         }
 
         if(pageId ==="yearly_report"){
-            $(".sub-menu #monthly_report").addClass("active");
+            $(".sub-menu #yearly_report").addClass("active");
             initAnalysisListForYearly();
         }
 

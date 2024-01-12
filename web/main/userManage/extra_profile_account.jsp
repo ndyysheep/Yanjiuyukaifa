@@ -535,26 +535,6 @@
 								<i class="icon-home"></i>
 								Dashboard</a>
 						</li>
-						<li>
-							<a href="ecommerce_orders.html">
-								<i class="icon-basket"></i>
-								Orders</a>
-						</li>
-						<li>
-							<a href="ecommerce_orders_view.html">
-								<i class="icon-tag"></i>
-								Order View</a>
-						</li>
-						<li>
-							<a href="ecommerce_products.html">
-								<i class="icon-handbag"></i>
-								Products</a>
-						</li>
-						<li>
-							<a href="ecommerce_products_edit.html">
-								<i class="icon-pencil"></i>
-								Product Edit</a>
-						</li>
 					</ul>
 				</li>
 				<li>
@@ -621,6 +601,12 @@
 					<a href="../../main/userManage/extra_profile_account.jsp">
 						<i class="icon-user-following"></i>
 						<span class="title">用户信息</span>
+					</a>
+				</li>
+				<li>
+					<a href="../../main/WeatherReport/WeatherReporter.jsp">
+						<i class="icon-pointer"></i>
+						<span class="title">天气预报</span>
 					</a>
 				</li>
 			</ul>

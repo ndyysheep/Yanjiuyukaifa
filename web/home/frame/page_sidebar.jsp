@@ -54,7 +54,7 @@
                     </li>
                 </ul>
             </li>
-            <li class="active open">
+            <li id="monitor_lists">
                 <a href="javascript:;">
                     <i class="icon-rocket"></i>
                     <span class="title">车辆检测数据</span>
@@ -87,26 +87,26 @@
                     </li>
                 </ul>
             </li>
-            <li>
+            <li id="reports">
                 <a href="javascript:;">
                     <i class="icon-diamond"></i>
                     <span class="title">流量统计分析</span>
                     <span class="arrow "></span>
                 </a>
                 <ul class="sub-menu">
-                    <li>
+                    <li id="daily_report">
                         <a href="../../maintain/comprehensive_statistics/daily_statistics.jsp">
                             监测数据日报表</a>
                     </li>
-                    <li>
+                    <li id="weekly_report">
                         <a href="../../maintain/comprehensive_statistics/weekly_statistics.jsp">
                             监测数据周报表</a>
                     </li>
-                    <li>
+                    <li id="monthly_report">
                         <a href="../../maintain/comprehensive_statistics/monthly_statistics.jsp">
                             监测数据月报表</a>
                     </li>
-                    <li>
+                    <li id="yearly_report">
                         <a href="../../maintain/comprehensive_statistics/yearly_statistics.jsp">
                             监测数据年报表</a>
                     </li>
@@ -114,10 +114,16 @@
             </li>
             <!-- BEGIN ANGULARJS LINK -->
             <!-- END ANGULARJS LINK -->
-            <li class="active open">
+            <li>
                 <a href="../../main/userManage/extra_profile_account.jsp">
                     <i class="icon-user-following"></i>
                     <span class="title">用户信息</span>
+                </a>
+            </li>
+            <li>
+                <a href="../../main/WeatherReport/WeatherReporter.jsp">
+                    <i class="icon-pointer"></i>
+                    <span class="title">天气预报</span>
                 </a>
             </li>
         </ul>

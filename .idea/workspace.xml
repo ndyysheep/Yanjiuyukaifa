@@ -14,18 +14,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="92dc437d-bb51-42f3-93ee-b2423cc3248c" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/FilterControl/AutoLoginFilter.java" afterDir="false" />
+    <list default="true" id="92dc437d-bb51-42f3-93ee-b2423cc3248c" name="Default Changelist" comment="合并login">
+      <change afterPath="$PROJECT_DIR$/web/assets/img/background.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/assets/js/WeatherReport.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/main/WeatherReport/WeatherReporter.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/DBControl/DB.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/DBControl/DB.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/FilterControl/AuthenticationFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/FilterControl/AuthenticationFilter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/servletControl/LoginControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/servletControl/LoginControl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/servletControl/Logout.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/servletControl/Logout.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/WEB-INF/web.xml" beforeDir="false" afterPath="$PROJECT_DIR$/web/WEB-INF/web.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/main/login/login.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/web/main/login/login.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/home/frame/page_sidebar.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/web/home/frame/page_sidebar.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web/main/userManage/UserManage.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/web/main/userManage/UserManage.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web/main/userManage/extra_profile_account.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/web/main/userManage/extra_profile_account.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web/main/userManage/todo.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/web/main/userManage/todo.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/maintain/comprehensive_statistics/containers/js/comprehensive.statistics.js" beforeDir="false" afterPath="$PROJECT_DIR$/web/maintain/comprehensive_statistics/containers/js/comprehensive.statistics.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/maintain/monitor/containers/js/monitor.js" beforeDir="false" afterPath="$PROJECT_DIR$/web/maintain/monitor/containers/js/monitor.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,9 +49,9 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="HTML File" />
+        <option value="Class" />
         <option value="Jsp File" />
         <option value="JavaScript File" />
-        <option value="Class" />
       </list>
     </option>
   </component>
@@ -165,7 +164,7 @@
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;git-widget-placeholder&quot;: &quot;Probe's&quot;,
     &quot;jdk.selected.JAVA_MODULE&quot;: &quot;1.8&quot;,
-    &quot;last_opened_file_path&quot;: &quot;F:/WorkSpace/LearningResource/CodeResource/Java/Joint2.0&quot;,
+    &quot;last_opened_file_path&quot;: &quot;F:/WorkSpace/LearningResource/CodeResource/Java/Login/Yanjiuyukaifa&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -190,11 +189,11 @@
       <recent name="F:\WorkSpace\LearningResource\CodeResource\Java\JointProject\Yanjiuyukaifa\web" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="F:\WorkSpace\LearningResource\CodeResource\Java\Joint2.0\web\assets\img" />
       <recent name="D:\.Probe0311\研究与开发实践\IdeaProjects\my_pro\web\WEB-INF\lib" />
       <recent name="D:\.Probe0311\研究与开发实践\IdeaProjects\my_pro\lib" />
       <recent name="D:\.Probe0311\研究与开发实践\IdeaProjects\my_pro\web\assets" />
       <recent name="D:\.Probe0311\研究与开发实践\IdeaProjects\my_pro\web\maintain\illegal_data\containers\js" />
-      <recent name="D:\.Probe0311\研究与开发实践\IdeaProjects\my_pro\web\maintain\monitor\containers\js" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="analysis.file" />
@@ -546,14 +545,9 @@
       <workItem from="1702459231739" duration="1198000" />
       <workItem from="1702466398312" duration="1122000" />
       <workItem from="1702604649536" duration="6416000" />
-    </task>
-    <task id="LOCAL-00004" summary="测试">
-      <option name="closed" value="true" />
-      <created>1701105840334</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1701105840334</updated>
+      <workItem from="1702873633996" duration="3081000" />
+      <workItem from="1703407041512" duration="54000" />
+      <workItem from="1705030480532" duration="14113000" />
     </task>
     <task id="LOCAL-00005" summary="测试">
       <option name="closed" value="true" />
@@ -939,7 +933,15 @@
       <option name="project" value="LOCAL" />
       <updated>1702303372190</updated>
     </task>
-    <option name="localTasksCounter" value="53" />
+    <task id="LOCAL-00053" summary="合并login">
+      <option name="closed" value="true" />
+      <created>1702611773307</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1702611773307</updated>
+    </task>
+    <option name="localTasksCounter" value="54" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -976,7 +978,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="origin/master" />
+                        <option value="origin/login" />
                       </list>
                     </value>
                   </entry>
@@ -1014,7 +1016,8 @@
     <MESSAGE value="Merge remote-tracking branch 'Yanjiuyukaifa/Probe's' into Probe's" />
     <MESSAGE value="11th commit--修理分支" />
     <MESSAGE value="2th 项目终章" />
-    <option name="LAST_COMMIT_MESSAGE" value="2th 项目终章" />
+    <MESSAGE value="合并login" />
+    <option name="LAST_COMMIT_MESSAGE" value="合并login" />
     <option name="GROUP_MULTIFILE_MERGE_BY_DIRECTORY" value="true" />
   </component>
   <component name="XDebuggerManager">
