@@ -613,6 +613,12 @@
                         <span class="title">用户信息</span>
                     </a>
                 </li>
+                <li>
+                    <a href="../../main/WeatherReport/WeatherReporter.jsp">
+                        <i class="icon-pointer"></i>
+                        <span class="title">天气预报</span>
+                    </a>
+                </li>
             </ul>
             <!-- END SIDEBAR MENU -->
         </div>

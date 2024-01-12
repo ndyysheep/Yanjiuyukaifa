@@ -21,6 +21,7 @@ var Page = function() {
 	var initPageControl=function(){
 		pageId = $("#page_id").val();
 		if(pageId==="monitor_list"){
+			$("#monitor_lists").addClass("active open")
 			$(".sub-menu #monitor_list").addClass("active");
 			//设备列表页面
 			initMonitorList();
@@ -40,6 +41,7 @@ var Page = function() {
 		}
 
 		if(pageId==="monitor_statistics"){
+			$("#monitor_lists").addClass("active open")
 			$(".sub-menu #monitor_statistics").addClass("active");
 			//打印页面
 			initMonitorStatisticsControlEvent();
