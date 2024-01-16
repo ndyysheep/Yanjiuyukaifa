@@ -117,6 +117,7 @@ public class LoginControl extends HttpServlet {
             showDebug("ResponseBack","ajax方式返回数据，页面局部刷新");
             response.setContentType("application/json; charset=UTF-8");
             try {
+                response.setContentType("application/json; charset=UTF-8");
                 response.getWriter().print(res);
                 response.getWriter().flush();
                 response.getWriter().close();
@@ -203,9 +204,9 @@ public class LoginControl extends HttpServlet {
     }
     private void loginEvent(JSONObject param,HttpServletRequest request, HttpServletResponse response,JSONObject resJson) throws JSONException, IOException {
 
-        String user_name = param.getString("username");
-        String password = param.getString("password");
-        if(user_name == "")
+        String user_name = param.has("username") ? param.getString("username") : null;
+        String password = param.has("password") ? param.getString("password") : null;
+        if(user_name == null)
         {
             resJson.put("correct",-1);
             return;
@@ -357,6 +358,12 @@ public class LoginControl extends HttpServlet {
         HttpSession session = request.getSession();
         Object trueCode = session.getAttribute("VerifyCode");
         session.removeAttribute("VerifyCode");
+        if(trueCode == null)
+        {
+            resJson.put("VerifyCode",-2);
+            showDebug("verifyEvent","验证码失效");
+            return;
+        }
         if(code.toLowerCase().equals(trueCode.toString().toLowerCase()))
         {
             resJson.put("VerifyCode",0);
@@ -373,16 +380,15 @@ public class LoginControl extends HttpServlet {
         db.Connect();
         if(param.has("oldPassword"))
         {
-            String sql ="select PASSWORD from user_file where user_name = \""+request.getSession().getAttribute("user_name")+"\"";
+            String sql ="select PASSWORD from user_file where user_name = \""+param.getString("username")+"\"";
             ResultSet rs = db.ExecuteQuery(sql);
             if(rs.next())
             {
                 String truePassword = rs.getString("password");
-
+                System.out.println(truePassword);
                 if(getMD5Str(param.getString("oldPassword")).equals(truePassword))
                 {
                     param.put("newPasswordmd5",getMD5Str(param.getString("newPassword")));
-                    param.put("username",request.getSession().getAttribute("user_name"));
                     // 更新数据库
                     db.UpdatetoDB(param,request.getSession());
                     db.Close();

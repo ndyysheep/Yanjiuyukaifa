@@ -125,7 +125,7 @@ public class DB {
         if (param.has("username")) {
             user_name = param.getString("username");
         }
-        if(existUser(user_name))
+        if(existUser(user_name) || user_name == "")
         {
             return true;
         }

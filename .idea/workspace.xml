@@ -14,17 +14,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="92dc437d-bb51-42f3-93ee-b2423cc3248c" name="Default Changelist" comment="合并login">
-      <change afterPath="$PROJECT_DIR$/web/assets/img/background.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/assets/js/WeatherReport.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/main/WeatherReport/WeatherReporter.jsp" afterDir="false" />
+    <list default="true" id="92dc437d-bb51-42f3-93ee-b2423cc3248c" name="Default Changelist" comment="Merge remote-tracking branch 'origin/login'">
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024_1_12_11_38__Default_Changelist_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024_1_12_11_38__Default_Changelist_.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/home/frame/page_sidebar.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/web/home/frame/page_sidebar.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/main/userManage/UserManage.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/web/main/userManage/UserManage.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/DBControl/DB.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/DBControl/DB.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/servletControl/LoginControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/servletControl/LoginControl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/servletControl/UploadControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/servletControl/UploadControl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/servletControl/UserControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/servletControl/UserControl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web/main/userManage/extra_profile_account.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/web/main/userManage/extra_profile_account.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/main/userManage/todo.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/web/main/userManage/todo.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/maintain/comprehensive_statistics/containers/js/comprehensive.statistics.js" beforeDir="false" afterPath="$PROJECT_DIR$/web/maintain/comprehensive_statistics/containers/js/comprehensive.statistics.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/maintain/monitor/containers/js/monitor.js" beforeDir="false" afterPath="$PROJECT_DIR$/web/maintain/monitor/containers/js/monitor.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -548,14 +545,8 @@
       <workItem from="1702873633996" duration="3081000" />
       <workItem from="1703407041512" duration="54000" />
       <workItem from="1705030480532" duration="14113000" />
-    </task>
-    <task id="LOCAL-00005" summary="测试">
-      <option name="closed" value="true" />
-      <created>1701107646796</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1701107646796</updated>
+      <workItem from="1705249862734" duration="99000" />
+      <workItem from="1705372280478" duration="12455000" />
     </task>
     <task id="LOCAL-00006" summary="测试">
       <option name="closed" value="true" />
@@ -941,7 +932,15 @@
       <option name="project" value="LOCAL" />
       <updated>1702611773307</updated>
     </task>
-    <option name="localTasksCounter" value="54" />
+    <task id="LOCAL-00054" summary="Merge remote-tracking branch 'origin/login'">
+      <option name="closed" value="true" />
+      <created>1705047195207</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1705047195207</updated>
+    </task>
+    <option name="localTasksCounter" value="55" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -978,7 +977,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="origin/login" />
+                        <option value="origin/master" />
                       </list>
                     </value>
                   </entry>
@@ -992,8 +991,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Gjr's pro" />
-    <MESSAGE value="测试" />
     <MESSAGE value="Update README.md" />
     <MESSAGE value="Initial commit" />
     <MESSAGE value="Second commit" />
@@ -1017,7 +1014,9 @@
     <MESSAGE value="11th commit--修理分支" />
     <MESSAGE value="2th 项目终章" />
     <MESSAGE value="合并login" />
-    <option name="LAST_COMMIT_MESSAGE" value="合并login" />
+    <MESSAGE value="天气预报实现" />
+    <MESSAGE value="Merge remote-tracking branch 'origin/login'" />
+    <option name="LAST_COMMIT_MESSAGE" value="Merge remote-tracking branch 'origin/login'" />
     <option name="GROUP_MULTIFILE_MERGE_BY_DIRECTORY" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -1034,7 +1033,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/monitor/dao/MonitorDao.java</url>
-          <line>470</line>
+          <line>502</line>
           <option name="timeStamp" value="20" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">

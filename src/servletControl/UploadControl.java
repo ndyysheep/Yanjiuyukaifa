@@ -17,7 +17,7 @@ public class UploadControl extends HttpServlet  {
     public void service(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         request.setCharacterEncoding("utf-8");
         HttpSession session = request.getSession(true);
-        String uid = session.getAttribute("uid").toString();
+        String uid = session.getAttribute("uid") != null ? session.getAttribute("uid").toString() : request.getParameter("uid") ;
         String path = "F:/Amusement/Capture/pictures/avatar/"; // 我的upload的实际路径是F:/Amusement/Capture/pictures，故我的path是实际路径加上一个avatar文件夹
         String fileName = uid + ".jpg";
         try {
@@ -28,6 +28,7 @@ public class UploadControl extends HttpServlet  {
             }
             // 获取上传的文件
             Part filePart = request.getPart("avatar");
+
             InputStream fileContent = filePart.getInputStream();
             byte[] buffer = new byte[fileContent.available()];
             fileContent.read(buffer);

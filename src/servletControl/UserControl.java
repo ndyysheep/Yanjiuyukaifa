@@ -19,7 +19,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-public class UserControl extends HttpServlet {
+public class  UserControl extends HttpServlet {
 
     private DB db;
     private Object uid;

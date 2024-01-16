@@ -955,6 +955,7 @@
 										<!-- CHANGE PASSWORD TAB -->
 										<div class="tab-pane" id="tab_1_3">
 											<form id="repassword">
+												<input type="hidden" name="username" value="<%=Name%>">
 												<input type="hidden" name="type" value="resetPassword">
 												<div class="form-group">
 													<label class="control-label">Current Password</label>
