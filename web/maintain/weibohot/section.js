@@ -21,7 +21,6 @@ var Page = function() {
 	var initPageControl=function(){
 		pageId = $("#page_id").val();
 		if(pageId==="monitor_list"){
-			$("#monitor_lists").addClass("active open")
 			$(".sub-menu #monitor_list").addClass("active");
 			//设备列表页面
 			initMonitorList();
@@ -41,7 +40,6 @@ var Page = function() {
 		}
 
 		if(pageId==="monitor_statistics"){
-			$("#monitor_lists").addClass("active open")
 			$(".sub-menu #monitor_statistics").addClass("active");
 			//打印页面
 			initMonitorStatisticsControlEvent();
@@ -113,6 +111,9 @@ var Page = function() {
 		$('#print_button_for_word').click(function() {myPrintAPI_Word()});
 		//统计细心
 		$('#statistics_button').click(function() {myStatisticsAPI()});
+       //获取api信息
+		$('#ac_select_button').click(function() {myAllSubmit(),initDeviceQuery();});
+
 
 	}
 
@@ -126,10 +127,14 @@ var Page = function() {
 	}
 
 	var initMonitorStatisticsControlEvent = function(){
-
 		onPageListenerForStatisitcs();
 		$("#time_submit_button").click(function(){onTimeLimitSubmit()})
 	}
+
+
+
+
+
 	//事件处理初始化--结束
 
 	//数据获取初始化--开始
@@ -158,7 +163,7 @@ var Page = function() {
 
 		$.post(url,data,function(json){
 			if(json.result_code==0){
-				console.log(JSON.stringify(json));
+
 
 				var list = json.my_aaData;
 				var type_list = json.aaData;
@@ -183,6 +188,7 @@ var Page = function() {
 
 	//init-monitor_file functions begin
 	var initDeviceFileControlEvent=function(id){
+		$('#jump_div #upload_button').click(function() {onJumpUploadFile();});
 		$('#upload_button').click(function() {onAjaxUploadFile();});
 		console.log("[initDeviceFileControlEvent]");
 	}
@@ -407,21 +413,16 @@ var Page = function() {
 
 	//数据获取函数--开始
 	var getMonitorRecordDatatable =function(data){
-
-		var servletRequest ="../../monitor_data_servlet_action";
+		var servletRequest ="../../weibohot_data_servlet_action";
 		resultList=[];
-
 		if(data==undefined)
 		{
 			data={};
-			data.action="get_monitor_record";
+			data.action="get_weibo_record";
 		}
-
 		var table =$('.datatable').DataTable();
 		table.destroy();
-
 		table =$('.datatable').DataTable( {
-
 			"paging":true,
 			"searching":false,
 			"oLanguage": {
@@ -451,54 +452,40 @@ var Page = function() {
 				},"orderable": false
 			},{
 				"mRender": function(data, type, full) {
-					sReturn = '<div>'+full.id+'</div>';
+					sReturn = '<div>'+full.index+'</div>';
 					return sReturn;
 				},"orderable": true
-			},{
+			},
+				{
 				"mRender": function(data, type, full) {
-					sReturn = '<div>'+full.car_code+'</div>';
-					return sReturn;
-				},"orderable": true
-			},{
-				"mRender": function(data, type, full) {
-
-					sReturn = '<div>'+full.vehicle_type+'</div>';
+					sReturn = '<div>'+full.title+'</div>';
 					return sReturn;
 				},"orderable": true
 			},{
 				"mRender": function(data, type, full) {
 
-					sReturn = '<div>'+explainIllegalCode(full.illegal_status)+'</div>';
+					sReturn = '<div>'+full.hot+'</div>';
 					return sReturn;
 				},"orderable": true
 			},{
 				"mRender": function(data, type, full) {
+					// 使用 HTML a 标签来创建超链接
+					var sReturn = '<div><a href="' + full.url + '" target="_blank">' + full.url + '</a></div>';
 
-					sReturn = '<div>'+full.capture_time+'</div>';
 					return sReturn;
-				},"orderable": true
-			},{
+				},
+				"orderable": true
+			}
+				,{
 				"mRender": function(data, type, full) {
 
-					sReturn = '<div>'+full.speed+'</div>';
-					return sReturn;
-				},"orderable":true
-			},{
-                "mRender": function(data, type, full) {
-
-                    sReturn = '<div>'+full.lane_name+'</div>';
-                    return sReturn;
-                },"orderable":true
-            },{
-				"mRender": function(data, type, full) {
-
-					sReturn = '<a href=\"javascript:Page.onModifyRecord('+full.id+')\"'
+					sReturn = '<a href=\"javascript:Page.onModifyRecord('+full.index+')\"'
 						+'class=\"btn default btn-xs red\"> <i class=\"fa fa-wrench\"></i>'
 						+'修改</a>';
-					sReturn += '<a href=\"javascript:Page.onDeleteRecord('+full.id+')\"'
+					sReturn += '<a href=\"javascript:Page.onDeleteRecord('+full.index+')\"'
 						+'class=\"btn default btn-xs black\"> <i class=\"fa fa-trash-o\"></i>'
 						+'删除</a>';
-					sReturn += '<a href=\"javascript:Page.onViewRecord('+full.id+')\"'
+					sReturn += '<a href=\"javascript:Page.onModifyRecord1('+full.index+')\"'
 						+"class=\"btn default btn-xs purple\"> <i class=\"fa fa-camera\"></i>"
 						+'查看</a>';
 					return sReturn;
@@ -507,13 +494,13 @@ var Page = function() {
 
 			"aLengthMenu": [[5,10,15,20,25,40,50],[5,10,15,20,25,40,50]],
 			"fnDrawCallback": function(){$(".checkboxes").uniform();$(".group-checkable").uniform();},
-			//"sAjaxSource": "get_record.jsp"
 			"ajax": {
 				"url": servletRequest,
 				"type": "POST",
 				"data":data,
 				"dataSrc": function(json) {
 					console.log(json.aaData);
+					console.log(JSON.stringify(json.aaData))
 					resultList = json.aaData;
 					return json.aaData; // 返回的 JSON 数据中的数据源位置
 				}
@@ -548,48 +535,40 @@ var Page = function() {
 	}
 
 	var  getMonitorRecordPrint = function(){
-		var url = "../../monitor_data_servlet_action";
+		var url = "../../weibohot_data_servlet_action";
 		var data={};
-		data.action="monitor_print";
+		data.action="section_print";
 		$.post(url,data,function(json){
 			if(json.result_code==0){
-				console.log(JSON.stringify(json));
-
 				var list = json.aaData;
-
 				var myhtml="";
 				if(list!=undefined && list.length>0)
 				{
 					for(var i=0;i<list.length;i++) {
-
 						var record=list[i];
-						myhtml+="<tr><td class=\"highlight\">" +record.id+"</td>";
-						myhtml+="<td>" +record.car_code+" </td>"
-						myhtml+="<td>"+record.vehicle_type +"</td>";
-						myhtml+="<td class=\"highlight\">"+explainIllegalCode(record.illegal_status) +"</td> "
-						myhtml+="<td class=\"highlight\">"+record.capture_time+"</td>";
-						myhtml+="<td>"+record.speed+"</td>";
-						myhtml+="<td class=\"highlight\">"+record.lane_name+ "</td>";
+						myhtml+="<tr><td class=\"highlight\">" +record.index+"</td>";
+						myhtml+="<td>" +record.title+" </td>"
+						myhtml+="<td>"+record.hot +"</td>";
+						myhtml+="<td class=\"highlight\">"+record.url+"</td>";
 						myhtml+="</tr>";
 					}
 				}
 			}
 			$("#print_list").html(myhtml);
 		});
-
-
 	}
 
+	//word打印
 	var  getMonitorRecordPrint_Word = function(){
-		var url = "../../monitor_data_servlet_action";
+
+		var url = "../../weibohot_data_servlet_action";
 		var data={};
-		data.action="monitor_print";
+		data.action="section_print";
 		$.post(url,data,function(json){
 			if(json.result_code==0){
 				console.log(JSON.stringify(json));
 
 				var list = json.aaData;
-
 				var html="";
 				if(list!=undefined && list.length>0)
 				{
@@ -600,46 +579,27 @@ var Page = function() {
 						html=html+" <td width=63 valign=top style='width:46.95pt;border:none;border-right:solid #C9C9C9 1.0pt;";
 						html=html+"  background:white;padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>";
 						html=html+" <p class=MsoNormal align=center style='text-align:center'><i><span";
-						html=html+" lang=EN-US style='font-family:\"微软雅黑\",sans-serif'>"+record.id+"</span></i></p>";
+						html=html+" lang=EN-US style='font-family:\"微软雅黑\",sans-serif'>"+record.index+"</span></i></p>";
 						html=html+" </td>";
 						html=html+" <td width=63 valign=top style='width:47.05pt;border-top:none;border-left:";
 						html=html+" none;border-bottom:solid #C9C9C9 1.0pt;border-right:solid #C9C9C9 1.0pt;";
 						html=html+" padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>";
 						html=html+" <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US";
-						html=html+" style='font-family:\"微软雅黑\",sans-serif'>"+record.car_code+"</span></p>";
+						html=html+" style='font-family:\"微软雅黑\",sans-serif'>"+record.title+"</span></p>";
 						html=html+" </td>";
 						html=html+" <td width=106 valign=top style='width:79.4pt;border-top:none;border-left:";
 						html=html+"  none;border-bottom:solid #C9C9C9 1.0pt;border-right:solid #C9C9C9 1.0pt;";
 						html=html+"  padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>";
 						html=html+" <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US";
-						html=html+" style='font-family:\"微软雅黑\",sans-serif'>"+record.vehicle_type+"</span></p>";
+						html=html+" style='font-family:\"微软雅黑\",sans-serif'>"+record.hot+"</span></p>";
 						html=html+" </td>";
 						html=html+" <td width=63 valign=top style='width:47.05pt;border-top:none;border-left:";
 						html=html+"  none;border-bottom:solid #C9C9C9 1.0pt;border-right:solid #C9C9C9 1.0pt;";
 						html=html+"  padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>";
 						html=html+" <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US";
-						html=html+" style='font-family:\"微软雅黑\",sans-serif'>"+explainIllegalCode(record.illegal_status)+"</span></p>";
-						html=html+" </td>";
-						html=html+" <td width=63 valign=top style='width:47.05pt;border-top:none;border-left:";
-						html=html+" none;border-bottom:solid #C9C9C9 1.0pt;border-right:solid #C9C9C9 1.0pt;";
-						html=html+" padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>";
-						html=html+" <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US";
-						html=html+" style='font-family:\"微软雅黑\",sans-serif'>"+record.capture_time+"</span></p>";
-						html=html+" </td>";
-						html=html+" <td width=63 valign=top style='width:47.05pt;border-top:none;border-left:";
-						html=html+"  none;border-bottom:solid #C9C9C9 1.0pt;border-right:solid #C9C9C9 1.0pt;";
-						html=html+"  padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>";
-						html=html+" <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US";
-						html=html+" style='font-family:\"微软雅黑\",sans-serif'>"+record.speed+"</span></p>";
-						html=html+" </td>";
-						html=html+" <td width=63 valign=top style='width:47.05pt;border-top:none;border-left:";
-						html=html+"  none;border-bottom:solid #C9C9C9 1.0pt;border-right:solid #C9C9C9 1.0pt;";
-						html=html+"  padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>";
-						html=html+" <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US";
-						html=html+" style='font-family:\"微软雅黑\",sans-serif'>"+record.lane_name+"</span></p>";
+						html=html+" style='font-family:\"微软雅黑\",sans-serif'>"+record.url+"</span></p>";
 						html=html+" </td>";
 						html=html+" </tr>";
-
 					}
 				}
 			}
@@ -662,9 +622,9 @@ var Page = function() {
 	var onDeleteRecord = function(id){
 		if(confirm("您确定要删除这条记录吗？")){
 			if(id>-1){
-				var url="../../monitor_data_servlet_action";
+				var url="../../weibohot_data_servlet_action";
 				var data={};
-				data.action="delete_monitor_record";
+				data.action="delete_section_record";
 				data.id=id;
 				$.post(url,data,function(json){
 					if(json.result_code==0){
@@ -677,106 +637,56 @@ var Page = function() {
 	}
 
 	var onModifyRecord=function(id){
-
-		console.log(id);
-
 		for(var i=0;i<resultList.length;i++)
 		{
-			if(resultList[i].id==id){
-				$("#_id").text(resultList[i].id);
-				$("#record_modify_div #car_code").val(resultList[i].car_code);
-				$("#record_modify_div #vehicle_type").val(resultList[i].vehicle_type);
-				$("#record_modify_div #illegal_status").val(explainIllegalCode(resultList[i].illegal_status));
+			if(resultList[i].index==id){
+				$("#_id").text(resultList[i].index);
+				$("#record_modify_div #title").val(resultList[i].title);
+				$("#record_modify_div #hot").val(resultList[i].hot);
+				$("#record_modify_div #url").val(resultList[i].url);
 
-				$("#record_modify_div #speed").val(resultList[i].speed);
-				$("#record_modify_div #lane_name").val(resultList[i].lane_name);
-				var date="";
-				var time ="";
-				date =resultList[i].capture_time.slice(0,11);
-				time=resultList[i].capture_time.slice(11,19);
-				$("#record_modify_div #capture_time").val(date);
-				$("#record_modify_div #capture_time_sec").val(time);
 			}
 		}
-
-
-		//window.location.href="device_modify.jsp?id="+id;
 		$("#record_modify_div").modal("show");
 	}
 
-	var onViewRecord = function(id){
-		window.location.href = "monitor_view.jsp?id="+id;
+	var onModifyRecord1=function(id){
+		//查看回显
+
+		for(var i=0;i<resultList.length;i++)
+		{
+			if(resultList[i].index==id){
+
+				$("#_id").text(resultList[i].index);
+				$("#record_view_div #title").val(resultList[i].title);
+				$("#record_view_div #hot").val(resultList[i].hot);
+				$("#record_view_div #url").val(resultList[i].url);
+
+			}
+		}
+		$("#record_view_div").modal("show");
 	}
 
-	var onAjaxUploadFile=function(){
-		console.log("[onAjaxUploadFile]====");
-		var deviceId = $("#device_id").val();
-		var deviceName = $("#device_name").val();
-		var options = {
-			type : 'post', /*设置表单以post方法提交*/
-			url : '../../monitor_data_servlet_action?action=upload_file&device_id='+deviceId+"&device_name="+deviceName, /*设置post提交到的页面*/
-			success : function(json) {
-				console.log("[onAjaxUploadFile]上传文件返回结果="+JSON.stringify(json));
-				if(json.upload_files.length>0){
-					var files=json.upload_files;
-					var fileUrl = files[0].file_url_name;
-					var objectId = files[0].file_object_id;
-					$("#current_attachment_name").html("您当前上传的附件是：<span style='color:blue;'><a href='javascript:window.open(\""+fileUrl+"\")'>" + fileUrl + "</a></span>");
-					$("#current_attachment_object_id").val(objectId);
 
-					var html="";
-					html+="<video width=\"640\" height=\"360\" controls>";
-					html+="<source src='"+fileUrl+"' type=\"video/mp4\">"+"</video>"
-
-					$("#video_row").html(html);
-					console.log("[onAjaxUploadFile]fileUrl="+fileUrl);
-					console.log("[onAjaxUploadFile]objectId="+objectId);
-				}else{
-					alert("[onAjaxUploadFile]没有上传文件结果返回！");
-				}
-			},
-			error : function(error) {
-				alert(error);
-			},
-			dataType : "json" /*设置返回值类型为文本*/
-		};
-		$("#ajax_form").ajaxSubmit(options);
-	}
 	//on-functions end
 
-	//submit functions begin
+	//添加热度
 	var submitAddRecord=function(){
-		var url="../../monitor_data_servlet_action";
+
+		var url="../../weibohot_data_servlet_action";
 		var data={};
-		data.action="add_monitor_record";
+		data.action="add_section_record";
+		data.title=$("#record_add_div #title").val();
 
-		var mainDate = $("#record_add_div #capture_time").val();
-		if(mainDate=="")
-		{
-			data.capture_time="";
-		}
-		else
-		{
-			data.capture_time=mainDate+" "
-				+$("#record_add_div #capture_time_sec").val();
-		}
-		var check = false;
-		var checkCol = [];
-		data.car_code=$("#record_add_div #car_code").val();
-		data.vehicle_type=$("#record_add_div #vehicle_type").val();
-		data.illegal_status=explainIllegalCode_Contrary($("#record_add_div #illegal_status").val());
-
-		data.speed=$("#record_add_div #speed").val();
-		data.lane_name=$("#record_add_div #lane_name").val();
-
-
+		data.hot=$("#record_add_div #hot").val();
+		data.url=$("#record_add_div #url").val();
 
 		if(checkValid($("#record_add_div")))
 		{
-			console.log(data);
+
 			$.post(url,data,function(json){
 				if(json.result_code===0){
-					alert("已经完成设备添加。");
+					alert("已经完成热榜添加。");
 					window.location.reload();
 				}
 			});
@@ -792,65 +702,45 @@ var Page = function() {
 	var myModifySubmit = function(id){
 		if(confirm("您确定要修改该记录吗？")){
 			var id=$("#record_modify_div #_id").text();
-			var url="../../monitor_data_servlet_action";
+			var url="../../weibohot_data_servlet_action";
 			var data={};
-			data.action="modify_monitor_record";
-			data.id=id;
-			data.car_code=$("#record_modify_div #car_code").val();
-			data.vehicle_type=$("#record_modify_div #vehicle_type").val();
-			data.illegal_status=explainIllegalCode_Contrary($("#record_modify_div #illegal_status").val());
-			data.capture_time=$("#record_modify_div #capture_time").val()+" "
-			+$("#record_modify_div #capture_time_sec").val();
-			data.speed=$("#record_modify_div #speed").val();
-			data.lane_name=$("#record_modify_div #lane_name").val();
+			data.action="modify_section_record";
+			data.index=id;
+			data.title=$("#record_modify_div #title").val(); //道路名称
+			data.hot=$("#record_modify_div #hot").val();//速度限制
+			data.url=$("#record_modify_div #url").val(); //车速限制
 
-
-			if(checkValid($("#record_modify_div")))
-			{
 				$.post(url,data,function(json){
 					if(json.result_code==0){
-						alert("已经完成设备修改。");
+						alert("已经完成道路修改。");
 						window.location.reload();
 					}
 				});
-			}
-			else
-			{
-				alert("请按照合法格式输入内容!");
-			}
+
 
 
 		}
 
 	}
+	//获取
+   var myAllSubmit=function(){
+	   var url = "../../weibohot_data_servlet_action";
+	   var data={};
+	   data.action="get_api_record";
+	   $.get(url, data, function(json){
+		   location.reload(); // 在这里添加页面刷新
+	   });
+
+   }
+
+
 
 	var myQuerySubmit = function(){
 
-		var url = "../../monitor_data_servlet_action";
+		var url = "../../weibohot_data_servlet_action";
 		var data={};
-		var query = "query_monitor_record";
-		var time_from = $("#record_query_div #capture_time_from").val();
-		var time_to = $("#record_query_div #capture_time_to").val();
-		data.action="query_monitor_record";
-
-		data.id=$("#record_query_div #id").val();
-		data.car_code=$("#record_query_div #car_code").val();
-		data.vehicle_type=$("#record_query_div #vehicle_type").val();
-		data.illegal_status=explainIllegalCode_Contrary($("#record_query_div #illegal_status").val());
-		data.time_from = time_from;
-		data.time_to = time_to;
-		if(time_from!=="")
-		{
-			data.time_from+=" "+$("#record_query_div #capture_time_sec_from").val();
-		}
-
-		if(time_to!=="")
-		{
-			data.time_to+=" " +$("#record_query_div #capture_time_sec_to").val();
-		}
-
-		data.speed=$("#record_query_div #speed").val();
-		data.lane_name=$("#record_query_div #lane_name").val();
+		data.action="query_section_record";
+		data.title=$("#record_query_div #title").val();
 
 		if(checkValid($("#record_query_div")))
 		{
@@ -866,32 +756,52 @@ var Page = function() {
 	}
 
 	var myExportAPI = function(){
-		var url = "../../monitor_data_servlet_action";
-		var data={};
-		data.action="export_record";
-		$.post(url,data,function(json){
+		var url = "../../weibohot_data_servlet_action";
+		var data = {};
+		data.action = "export_record";
 
-			if(json.result_code_for_export==0){
-				console.log(JSON.stringify(json));
-				console.log(json.download_url);
-				$("#record_export_div #download_url").attr("download_url",json.download_url);
+		$.post(url, data, function(json){
+			if(json.result_code_for_export == 0){
+				$("#record_export_div #download_url").attr("data-download_url", "http://localhost:8080" + json.download_url);
 				$("#record_export_div").modal("show");
 			}
 		});
 	}
 
+// 在页面加载完成后，为下载链接添加点击事件处理程序
+	$(document).ready(function(){
+		$("#download_url").on("click", function(e){
+			// 阻止默认行为，防止链接直接打开
+			e.preventDefault();
+
+			// 获取下载链接
+			var downloadUrl = $("#download_url").attr("data-download_url");
+			// 创建一个隐藏的 <a> 元素
+			var downloadLink = document.createElement("a");
+			downloadLink.href = downloadUrl;
+			downloadLink.download = "exported_weibo.xls";
+
+			// 将 <a> 元素添加到页面并触发点击
+			document.body.appendChild(downloadLink);
+			downloadLink.click();
+			document.body.removeChild(downloadLink);
+			setTimeout(function() {
+				$("#record_export_div").modal("hide");
+			}, 1000);
+		});
+	});
+
 	var myPrintAPI = function(){
-		window.open("monitor_print_default.jsp");
+		window.open("section_print_default.jsp");
 	}
 
 	var myPrintAPI_Word = function(){
-		window.open("monitor_print_word.jsp");
+		window.open("section_print_word.jsp");
 
 	}
 
 	var myStatisticsAPI = function() {
-
-		window.open("monitor_statistics.jsp");
+		window.open("weibotongji.jsp");
 	}
 
 	var onTimeLimitSubmit = function(){
@@ -933,7 +843,7 @@ var Page = function() {
 		}
 		else
 		{
-			console.log(time_from);
+
 			barContainer.style.display="none";
 			beginMinuteContainer.style.borderColor="#d6e9c6";
 			endMinuteContainer.style.borderColor="#d6e9c6";
@@ -969,7 +879,7 @@ var Page = function() {
 			{
 
 				var hour = parseInt(list[myIndex].time_interval);
-				console.log( parseInt(list[myIndex].time_interval));
+
 				var hourStr="";
 				if(hour<10)
 				{
@@ -1012,8 +922,7 @@ var Page = function() {
 			json = {"vehicle_type":list[i].vehicle_type,"num":parseInt(list[i].num)};
 			recordData.push(json);
 		}
-		console.log(chartData);
-		console.log(recordData);
+
 	}
 
 	//解析函数--开始
@@ -1047,34 +956,31 @@ var Page = function() {
 
 	}
 
-	var explainIllegalCode_Contrary = function(code) {
-		if(code === "违停")
+
+	var explainIllegalCode_Contrary1 = function(code) {
+		//alert(code)
+		if(code === "是")
 		{
 			return 1;
 		}
-		else if(code === "闯红灯")
+		else if(code === "否")
 		{
-			return 2;
+			return "2";
 		}
-		else if(code === "压双黄线")
+
+
+	}
+
+
+	var explainIllegalCode_Contrary = function(code) {
+		//alert(code)
+		if(code === "1")
 		{
-			return 3;
+			return "是";
 		}
-		else if(code === "逆行")
+		else if(code === "2")
 		{
-			return 4;
-		}
-		else if(code === "正常行驶")
-		{
-			return 0;
-		}
-		else if(code==="")
-		{
-			return code;
-		}
-		else
-		{
-			return 9;
+			return "否";
 		}
 
 
@@ -1087,7 +993,7 @@ var Page = function() {
 			var num = (end_x-start_x)*(end_x-start_x)+(end_y-start_y)*(end_y-start_y);
 			num = Math.sqrt(num);
 
-			console.log(num);  // 输出：150
+
 
 			return num;
 		}
@@ -1246,10 +1152,9 @@ var Page = function() {
 		onModifyRecord:function(id) {
 			onModifyRecord(id);
 		},
+		onModifyRecord1:function(id) {
+			onModifyRecord1(id);
+		},
 
-		onViewRecord:function(id){
-			onViewRecord(id);
-		}
 	}
-}();//Page
-/*================================================================================*/
+}();

@@ -129,4 +129,27 @@
 		<servlet-name>UploadControl</servlet-name>
 		<url-pattern>/UploadControl</url-pattern>
 	</servlet-mapping>
+
+	<!--路段接口层-->
+
+
+	<servlet>
+		<servlet-name>sction_data_servlet_action</servlet-name>
+		<servlet-class>monitor.file.SectionAction</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>sction_data_servlet_action</servlet-name>
+		<url-pattern>/sction_data_servlet_action</url-pattern>
+	</servlet-mapping>
+
+	<!---Api接口-->
+
+	<servlet>
+		<servlet-name>weibohot_data_servlet_action</servlet-name>
+		<servlet-class>monitor.file.WeibohotAction</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>weibohot_data_servlet_action</servlet-name>
+		<url-pattern>/weibohot_data_servlet_action</url-pattern>
+	</servlet-mapping>
   </web-app>

@@ -21,7 +21,6 @@ var Page = function() {
 	var initPageControl=function(){
 		pageId = $("#page_id").val();
 		if(pageId==="monitor_list"){
-			$("#monitor_lists").addClass("active open")
 			$(".sub-menu #monitor_list").addClass("active");
 			//设备列表页面
 			initMonitorList();
@@ -41,7 +40,6 @@ var Page = function() {
 		}
 
 		if(pageId==="monitor_statistics"){
-			$("#monitor_lists").addClass("active open")
 			$(".sub-menu #monitor_statistics").addClass("active");
 			//打印页面
 			initMonitorStatisticsControlEvent();
@@ -183,6 +181,7 @@ var Page = function() {
 
 	//init-monitor_file functions begin
 	var initDeviceFileControlEvent=function(id){
+		$('#jump_div #upload_button').click(function() {onJumpUploadFile();});
 		$('#upload_button').click(function() {onAjaxUploadFile();});
 		console.log("[initDeviceFileControlEvent]");
 	}
@@ -553,7 +552,6 @@ var Page = function() {
 		data.action="monitor_print";
 		$.post(url,data,function(json){
 			if(json.result_code==0){
-				console.log(JSON.stringify(json));
 
 				var list = json.aaData;
 
@@ -586,7 +584,7 @@ var Page = function() {
 		data.action="monitor_print";
 		$.post(url,data,function(json){
 			if(json.result_code==0){
-				console.log(JSON.stringify(json));
+
 
 				var list = json.aaData;
 
@@ -678,7 +676,7 @@ var Page = function() {
 
 	var onModifyRecord=function(id){
 
-		console.log(id);
+
 
 		for(var i=0;i<resultList.length;i++)
 		{
@@ -874,11 +872,34 @@ var Page = function() {
 			if(json.result_code_for_export==0){
 				console.log(JSON.stringify(json));
 				console.log(json.download_url);
-				$("#record_export_div #download_url").attr("download_url",json.download_url);
+				$("#record_export_div #download_url").attr("data-download_url", "http://localhost:8080" + json.download_url);
 				$("#record_export_div").modal("show");
 			}
 		});
 	}
+// 在页面加载完成后，为下载链接添加点击事件处理程序
+	$(document).ready(function(){
+		$("#download_url").on("click", function(e){
+			// 阻止默认行为，防止链接直接打开
+			e.preventDefault();
+
+			// 获取下载链接
+			var downloadUrl = $("#download_url").attr("data-download_url");
+			//alert(downloadUrl)
+			// 创建一个隐藏的 <a> 元素
+			var downloadLink = document.createElement("a");
+			downloadLink.href = downloadUrl;
+			downloadLink.download = "exported_monitor.xls";
+
+			// 将 <a> 元素添加到页面并触发点击
+			document.body.appendChild(downloadLink);
+			downloadLink.click();
+			document.body.removeChild(downloadLink);
+			setTimeout(function() {
+				$("#record_export_div").modal("hide");
+			}, 1000);
+		});
+	});
 
 	var myPrintAPI = function(){
 		window.open("monitor_print_default.jsp");

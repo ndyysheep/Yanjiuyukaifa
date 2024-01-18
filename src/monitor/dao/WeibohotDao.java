@@ -5,6 +5,8 @@ import monitor.file.MyExcel;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -12,24 +14,25 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
  * @author CornerGjr
  */
-public class MonitorDao {
+public class WeibohotDao {
 
     /*
      * 声明数据库名
      */
     private String dbName = "yjykfsj8";
-    private String relationName = "monitoring_data";
+    private String relationName = "weibohot";
 
 
     /**
      * 生成调试信息
-     * 
+     *
      * @param msg 接收的第一个参数,主要调试信息
      */
     public void showDebug(String msg) {
@@ -39,7 +42,7 @@ public class MonitorDao {
 
     /**
      * 判断json对象存储的信息是否合法,拒绝含有特殊字符的请求
-     * 
+     *
      * @param param 接收的第一个参数,接收json对象信息
      * @param field 接收的第二个参数,接收json对象包含列名
      * @return 判断结果
@@ -47,18 +50,15 @@ public class MonitorDao {
      */
     private boolean checkParamValid(JSONObject param, String field) throws JSONException {
         boolean ok = false;
-        ArrayList<Character> inValidList = new ArrayList<>(Arrays.asList('\\','?','=','+','\'','/',',',
-                '\\',';','!','%','*','#','$','^','(',')'));
+        ArrayList<Character> inValidList = new ArrayList<>(Arrays.asList('\\', '?', '=', '+', '\'', '/', ',',
+                '\\', ';', '!', '%', '*', '#', '$', '^', '(', ')'));
         System.out.println(param);
         ok = param.has(field) && param.getString(field) != null && !param.getString(field).isEmpty()
                 && !param.getString(field).equals("undefined") && !param.getString(field).equals("null");
-        if(ok)
-        {
-            for(char ch:inValidList)
-            {
-                if(param.getString(field).contains(String.valueOf(ch)))
-                {
-                  ok = false;
+        if (ok) {
+            for (char ch : inValidList) {
+                if (param.getString(field).contains(String.valueOf(ch))) {
+                    ok = false;
                 }
             }
         }
@@ -72,74 +72,54 @@ public class MonitorDao {
      *
      * @param table1 连接用第一个表
      * @param table2 连接用第二个表
-     * @param key1 第一个表主键
-     * @param key2 第二个表主键
-     * @param outer key:{0:none;1:"left outer",2:"right outer",3:"full outer"}
+     * @param key1   第一个表主键
+     * @param key2   第二个表主键
      * @return 返回sql语句
      */
-    private String createJoinSql(String table1, String table2, String key1, String key2,int outer) {
+    private String createJoinSql(String table1, String table2, String key1, String key2, int outer) {
         String subSql = "";
         String outerSql = "";
-        if(outer==0)
-        {
+        if (outer == 0) {
             outerSql = "";
-        }
-        else if(outer==1)
-        {
+        } else if (outer == 1) {
             outerSql = " left outer ";
-        }
-        else if(outer==2)
-        {
+        } else if (outer == 2) {
             outerSql = " right outer ";
-        }
-        else if(outer==3)
-        {
+        } else if (outer == 3) {
             outerSql = " full outer ";
+        } else {
+            return "";
         }
-        else
-        {
-            return"";
-        }
-        subSql +=outerSql +" join " + table2 + " on " + table1 + "." + key1 + " = " + table2 + "." + key2;
+        subSql += outerSql + " join " + table2 + " on " + table1 + "." + key1 + " = " + table2 + "." + key2;
 
         return subSql;
     }
 
     /**
-     * @param param json数据对象
+     * @param param    json数据对象
      * @param keyParam key键值
-     * @param where 原where语句
-     * @param isLike 判断使用'=' 还是 "like"
+     * @param where    原where语句
+     * @param isLike   判断使用'=' 还是 "like"
      * @return String 返回构造好的where语句
      * @throws JSONException 抛出Json类异常
      */
-    private String useWhere(JSONObject param, String keyParam, String where,boolean isLike) throws JSONException {
+    private String useWhere(JSONObject param, String keyParam, String where, boolean isLike) throws JSONException {
         String subStr = where;
         String keyCommand = " where ";
 
-        if(param.has(keyParam))
-        {
+        if (param.has(keyParam)) {
             if (checkParamValid(param, keyParam)) {
-                if(isLike)
-                {
-                    if (!subStr.isEmpty())
-                    {
+                if (isLike) {
+                    if (!subStr.isEmpty()) {
                         subStr += " and " + keyParam + " like '%" + param.getString(keyParam) + "%'";
-                    }
-                    else
-                    {
+                    } else {
                         subStr = keyCommand + keyParam + " like '%" + param.getString(keyParam) + "%'";
                     }
 
-                }
-                else
-                {
-                    if (!subStr.isEmpty())
-                    {
-                        subStr   +=" and " + keyParam + " = '" + param.getString(keyParam) + "'";
-                    }
-                    else
-                    {
+                } else {
+                    if (!subStr.isEmpty()) {
+                        subStr += " and " + keyParam + " = '" + param.getString(keyParam) + "'";
+                    } else {
                         subStr = keyCommand + keyParam + "='" + param.getString(keyParam) + "'";
                     }
                 }
@@ -152,78 +132,65 @@ public class MonitorDao {
 
     /**
      * 拼接where-between时间段查询语句
-     * @param param json数据对象
-     * @param where 原where语句
+     *
+     * @param param       json数据对象
+     * @param where       原where语句
      * @param timeFromKey json中开始时间键值
-     * @param timeToKey json中截止时间键值
+     * @param timeToKey   json中截止时间键值
      * @return sql中的where部分语句
      * @throws JSONException 抛出Json类异常
      */
-    private String useTimeWhere(JSONObject param,String where, String timeFromKey,String timeToKey)throws JSONException
-    {
+    private String useTimeWhere(JSONObject param, String where, String timeFromKey, String timeToKey) throws JSONException {
         String timeWhere = where;
         String timeTo = "";
-        String timeFrom  = "";
-        String Now=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
-        if(checkParamValid(param, timeFromKey) || checkParamValid(param, timeToKey))
-        {
-            if(checkParamValid(param, timeFromKey))
-            {
+        String timeFrom = "";
+        String Now = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+        if (checkParamValid(param, timeFromKey) || checkParamValid(param, timeToKey)) {
+            if (checkParamValid(param, timeFromKey)) {
                 timeFrom = param.getString(timeFromKey);
-            }
-            else
-            {
+            } else {
                 timeFrom = Now;
             }
 
-            if(checkParamValid(param, timeToKey))
-            {
+            if (checkParamValid(param, timeToKey)) {
                 timeTo = param.getString(timeToKey);
-            }
-            else
-            {
+            } else {
                 timeTo = Now;
             }
 
-            if (!where.isEmpty())
-            {
+            if (!where.isEmpty()) {
                 timeWhere += " and capture_time between '" + timeFrom + "' and '"
                         + timeTo + "'";
-            }
-            else
-            {
-                timeWhere =" where "+"capture_time between '" + timeFrom + "' and '" + timeTo
+            } else {
+                timeWhere = " where " + "capture_time between '" + timeFrom + "' and '" + timeTo
                         + "'";
             }
 
         }
 
-        return timeWhere ;
+        return timeWhere;
     }
 
     /**
      * 判断输入是否合法,并构建合适的 更新 语句
-     * @param param json对象
+     *
+     * @param param   json对象
      * @param keyPara 关键字
-     * @param sql 现有的sql语句
+     * @param sql     现有的sql语句
      * @return 构建好的sql语句
      * @throws JSONException 抛出sql异常
      */
-    private String useSet(JSONObject param,String keyPara,String sql) throws JSONException {
+    private String useSet(JSONObject param, String keyPara, String sql) throws JSONException {
         String thisSql = sql;
-        showDebug("每次调用"+sql);
-        if(checkParamValid(param,keyPara))
-        {
+        showDebug("每次调用" + sql);
+        if (checkParamValid(param, keyPara)) {
             String keyData = param.getString(keyPara);
 
-                if(Objects.equals(thisSql, ""))
-                {
-                    thisSql = thisSql + " set "+keyPara+" = '"+keyData +"'";
-                }
-                else
-                {
-                    thisSql = thisSql + ","+keyPara+" = '"+keyData +"'";
-                }
+            if (Objects.equals(thisSql, "")) {
+                thisSql = thisSql + " set " + keyPara + " = '" + keyData + "'";
+            } else {
+                thisSql = thisSql + "," + keyPara + " = '" + keyData + "'";
+            }
 
         }
 
@@ -232,119 +199,83 @@ public class MonitorDao {
 
     /**
      * 判断输入是否合法,并构建合适的 更新 语句
-     * @param param json对象
+     *
+     * @param param   json对象
      * @param keyPara 关键字
-     * @param sql 现有的sql语句
+     * @param sql     现有的sql语句
      * @return 构建好的sql语句
      * @throws JSONException 抛出sql异常
      */
-    private String useInsert(JSONObject param,String keyPara,String sql) throws JSONException {
+    private String useInsert(JSONObject param, String keyPara, String sql) throws JSONException {
         String thisSql = sql;
-        showDebug("每次调用"+sql);
+        showDebug("每次调用" + sql);
         String keyData = null;
-        if(checkParamValid(param,keyPara))
-        {
+        if (checkParamValid(param, keyPara)) {
             keyData = param.getString(keyPara);
 
-            if(Objects.equals(thisSql, ""))
-            {
-                thisSql = thisSql + " select '" +keyData+ "'";
-            }
-            else
-            {
-                thisSql = thisSql + ",'"+keyData +"'";
+            if (Objects.equals(thisSql, "")) {
+                thisSql = thisSql + " select '" + keyData + "'";
+            } else {
+                thisSql = thisSql + ",'" + keyData + "'";
             }
 
-        }
-        else
-        {
-            if(Objects.equals(thisSql, ""))
-            {
-                thisSql = thisSql + " select " +keyData;
-            }
-            else
-            {
-                thisSql = thisSql + ","+keyData ;
+        } else {
+            if (Objects.equals(thisSql, "")) {
+                thisSql = thisSql + " select " + keyData;
+            } else {
+                thisSql = thisSql + "," + keyData;
             }
         }
 
         return thisSql;
     }
+
     /**
      * 添加设备记录
-     * 
+     *
      * @param data 接收的第一个参数,json对象中的数据信息
      * @param json 接收的第二个参数,json对象
      * @throws JSONException 抛出json类异常
-     * @throws SQLException 抛出sql类异常
+     * @throws SQLException  抛出sql类异常
      */
     public void addMonitorRecord(Data data, JSONObject json) throws JSONException, SQLException {
 
 
+
+
         JSONObject param = data.getParam();
-        // 构造sql语句，根据传递过来的条件参数
+        String title = param.getString("title"); //道路名称
+        String hot = param.getString("hot"); //速度限制
+        String url = param.getString("url"); //车速限制
+        String sql = "INSERT INTO `yjykfsj8`.`weibohot`(`index`,`title`, `hot`, `url`) VALUES ('"+generateUniqueId()+"','" + title + "', '" + hot + "', '" + url + "')";
 
-        String lane_name = null;
-
-
-
-        String create_time = (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).format(new Date());
-        String capture_time = create_time;
-        String commandSql = "insert into " + relationName + "(car_code,vehicle_type,illegal_status,"
-                + "capture_time,speed,create_time,lane_id)";
-
-        //构建sql语句部分
-        String sql = "";
-
-        sql = useInsert(param,"car_code",sql);
-        sql = useInsert(param,"vehicle_type",sql);
-        sql = useInsert(param,"illegal_status",sql);
-
-        if(checkParamValid(param,"capture_time"))
-        {
-            capture_time = param.getString("capture_time");
-        }
-        //添加capture_time字段
-        sql+=",'"+capture_time+"'";
-
-        sql = useInsert(param,"speed",sql);
-
-        //添加create_time字段
-        sql+=",'"+create_time+"'";
-
-        if(checkParamValid(param,"lane_name"))
-        {
-            lane_name=param.getString("lane_name");
-
-        }
-
-        sql+=",(select lane_id from lane_data where lane_name = '"+ lane_name +"')";
-
-
-
-        //进行sql语句的处理
-        sql = commandSql+sql;
         data.getParam().put("sql", sql);
         updateRecord(data, json);
 
 
     }
 
+    private static int counter = 35; // 设置初始值为2
+
+    public static int generateUniqueId() {
+        // 递增计数器的值
+        return ++counter;
+    }
 
     /**
      * 删除设备记录
-     * 
+     *
      * @param data 接收的第一个参数,json对象中的数据信息
      * @param json 接收的第二个参数,json对象
      * @throws JSONException 抛出json类异常
-     * @throws SQLException 抛出sql类异常
+     * @throws SQLException  抛出sql类异常
      */
     public void deleteMonitorRecord(Data data, JSONObject json) throws JSONException, SQLException {
         // 构造sql语句，根据传递过来的条件参数
         String id = data.getParam().has("id") ? data.getParam().getString("id") : null;
 
         if (id != null) {
-            String sql = "delete from " + relationName + " where id=" + data.getParam().getString("id");
+            String sql = "delete from " + relationName + " where `index`=" + data.getParam().getString("id");
             data.getParam().put("sql", sql);
             updateRecord(data, json);
         }
@@ -357,29 +288,15 @@ public class MonitorDao {
     public void modifyMonitorRecord(Data data, JSONObject json) throws JSONException, SQLException {
         // 构造sql语句，根据传递过来的条件参数
         JSONObject param = data.getParam();
-        String id = data.getParam().has("id") ? data.getParam().getString("id") : null;
-
-        if (id != null) {
+        if (param.get("index") != null) {
             String sql = "";
             String commandSql = "update " + relationName;
+            sql = useSet(param, "title", sql);
+            sql = useSet(param, "hot", sql);
+            sql = useSet(param, "url", sql);
+            sql = sql + " where `index`=" + param.get("index");
 
-            sql = useSet(param,"car_code",sql);
-            sql = useSet(param,"vehicle_type",sql);
-            sql = useSet(param,"illegal_status",sql);
-            sql = useSet(param,"capture_time",sql);
-            sql = useSet(param,"speed",sql);
-
-            // 需要道路名
-
-            if(checkParamValid(param,"lane_name"))
-            {
-                String keyData = param.getString("lane_name");
-                sql+= ",lane_id= "+ " (select lane_id from lane_data where lane_name ='"+keyData+"')";
-
-            }
-            sql = sql + " where id=" + id;
-
-            sql = commandSql+sql;
+            sql = commandSql + sql;
             data.getParam().put("sql", sql);
             updateRecord(data, json);
 
@@ -402,12 +319,13 @@ public class MonitorDao {
 
     }
 
+
     /**
      * 查询记录
      */
     public void getMonitorRecord(Data data, JSONObject json) throws JSONException, SQLException {
         // 构造sql语句，根据传递过来的查询条件参数
-        String sql = createGetQueryRecordSql(data,true); // 构造sql语句，根据传递过来的查询条件参数
+        String sql = selectAll(data, true); // 构造sql语句，根据传递过来的查询条件参数
         data.getParam().put("sql", sql);
         queryRecord(data, json);
     }
@@ -421,7 +339,7 @@ public class MonitorDao {
 
     public void getQueryRecord(Data data, JSONObject json) throws JSONException, SQLException {
         // 构造sql语句，根据传递过来的查询条件参数
-        String sql = createGetQueryRecordSql(data,true); // 构造sql语句，根据传递过来的查询条件参数
+        String sql = createGetQueryRecordSql(data, true); // 构造sql语句，根据传递过来的查询条件参数
         data.getParam().put("sql", sql);
         queryRecord(data, json);
     }
@@ -432,7 +350,7 @@ public class MonitorDao {
 
         String where = "";
         JSONObject param = data.getParam();
-        where = useTimeWhere(param,where,"time_from","time_to");
+        where = useTimeWhere(param, where, "time_from", "time_to");
 
         int resultCode = 0;
         List jsonList = new ArrayList();
@@ -440,9 +358,9 @@ public class MonitorDao {
         /*--------------------数据操作 开始--------------------*/
         Db queryDb = new Db(dbName);
         String sql = "select DATE_FORMAT(capture_time,\"%H\") as time_interval,count(*) as total, "
-                +"count(case when illegal_status<>0 then 1 end) as illegal_total,"
-                +"count(case when illegal_status=0 then 1 end) as legal_total"
-                +" from " + relationName;
+                + "count(case when illegal_status<>0 then 1 end) as illegal_total,"
+                + "count(case when illegal_status=0 then 1 end) as legal_total"
+                + " from " + relationName;
         sql += where;
         sql += " group by time_interval";
         showDebug("[toStatistics]构造的SQL语句是：" + sql);
@@ -495,14 +413,8 @@ public class MonitorDao {
         queryRecord(data, json);
     }
 
-    public void getRecordForStatisticsForWeiboHot(Data data, JSONObject json) throws JSONException, SQLException {
-        // 构造sql语句，根据传递过来的查询条件参数
-        String sql = createStatisticsSqlForWeiboHot(data); // 构造sql语句，根据传递过来的查询条件参数
-        data.getParam().put("sql", sql);
-        queryRecord(data, json);
-    }
-
     //数据库交互接口函数-----开始
+
     /**
      * 这是一个样板的函数，可以拷贝做修改用
      * 修改数据库数据时调用
@@ -526,8 +438,74 @@ public class MonitorDao {
         /*--------------------返回数据 结束--------------------*/
     }
 
+    //api新增
+    private void insertApi(String sql) {
+        Db updateDb = new Db(dbName);
+        updateDb.executeUpdate(sql);
+        updateDb.close();
+    }
+
+    private Statement statement;
+
+    public void queryApi(JSONObject jsonObject, JSONObject json, HttpServletResponse response) throws JSONException, IOException, SQLException {
+
+        String sql2 = "DELETE w FROM weibohot w\n" +
+                "JOIN (\n" +
+                "    SELECT `index`  FROM weibohot ORDER BY `index`  ASC LIMIT 30\n" +
+                ") AS temp ON w.`index`  = temp.`index` ;\n";
+        Db updateDb = new Db(dbName);
+       updateDb.executeUpdate(sql2);
+
+        try {
+            Thread.sleep(1000);
+            String resultMsg = "ok";
+            int resultCode = 0;
+            JSONArray dataArray = jsonObject.getJSONArray("data");
+            int numItemsToProcess = Math.min(dataArray.length(), 30);
+            JSONArray resultDataArray = new JSONArray(); // 创建一个新的 JSONArray 用于存储结果
+            for (int i = 0; i < numItemsToProcess; i++) {
+                JSONObject itemNode = dataArray.getJSONObject(i);
+                JSONObject resultItem = new JSONObject(); // 为每个数据项创建一个新的 JSONObject
+                // 将每个字段添加到 resultItem 中
+                resultItem.put("index", itemNode.getString("index"));
+                resultItem.put("title", itemNode.getString("title"));
+                resultItem.put("hot", itemNode.getString("hot"));
+                resultItem.put("url", itemNode.getString("url"));
+                //新增
+                String sql = "INSERT INTO `yjykfsj8`.`weibohot`(`index`, `title`, `hot`, `url`) " +
+                        "VALUES ('" + itemNode.getString("index") + "','" + itemNode.getString("title") + "', '" +
+                        itemNode.getString("hot") + "', '" + itemNode.getString("url") + "')";
+                insertApi(sql);
+                // 将 resultItem 添加到 resultDataArray 中
+                resultDataArray.put(resultItem);
+            }
+
+            // 创建列名数组
+            JSONArray jsonColumnArray = new JSONArray();
+            jsonColumnArray.put("index");
+            jsonColumnArray.put("title");
+            jsonColumnArray.put("hot");
+            jsonColumnArray.put("url");
+
+            // 将列名和数据添加到响应 JSON 对象中
+            json.put("aaColumn", jsonColumnArray);
+            json.put("aaData", resultDataArray);
+            json.put("result_msg", resultMsg);
+            json.put("result_code", resultCode);
+        } catch (Exception e) {
+            handleApiError(json, response, "处理API响应时出错", 500);
+        }
+    }
+
+    public void handleApiError(JSONObject json, HttpServletResponse response, String errorMsg, int errorCode) throws IOException, JSONException {
+        json.put("result_msg", errorMsg);
+        json.put("result_code", errorCode);
+        response.getWriter().write(json.toString());
+    }
+
     /**
      * 进行主要的数据库查询处理和交互(接口)
+     *
      * @param data Data类对象,是json对象的容器
      * @param json json对象,储存交互信息
      * @throws JSONException 抛出json类异常
@@ -590,8 +568,10 @@ public class MonitorDao {
     //数据库交互接口函数-----结束
 
     //构建SQL语句函数-----开始
+
     /**
      * 构建Sql语句,供查询功能使用
+     *
      * @param data 自定义Data变量
      * @return sql语句
      * @throws JSONException 抛出json异常
@@ -599,99 +579,81 @@ public class MonitorDao {
     public String createGetQueryRecordSql(Data data, boolean isNeedJoin) throws JSONException {
         JSONObject param = data.getParam();
         String sql = "select * from " + relationName;
-
-        if(!isNeedJoin)
-        {
-            if(data.getParam().has("lane_name"))
-            {
-                sql += createJoinSql(relationName, "lane_data", "lane_id", "lane_id",0);
-            }
-        }
-        else
-        {
-            sql += createJoinSql(relationName, "lane_data", "lane_id", "lane_id",0);
-
-        }
-
-
         String where = "";
-
-        where = useWhere(param,"id",where,false);
-        where=  useTimeWhere(param,where,"time_from","time_to");
-        where = useWhere(param, "car_code", where,true);
-        where = useWhere(param, "vehicle_type", where,false);
-        where = useWhere(param, "speed", where,false);
-        where = useWhere(param, "lane_name", where,true);
-        where = useWhere(param,"illegal_status",where,false);
-
+        where = useWhere(param, "title", where, true);
         showDebug(where);
         // 判断是否有条件
         if (!where.isEmpty()) {
             sql = sql + where;
         }
-
         showDebug(sql);
         return sql;
     }
+
+
+    public String selectAll(Data data, boolean isNeedJoin) throws JSONException {
+        JSONObject param = data.getParam();
+        String sql = "select * from " + relationName;
+        showDebug(sql);
+        return sql;
+    }
+
 
     private String createViewRecordSql(Data data) throws JSONException {
         JSONObject param = data.getParam();
-        String sql = "select * from " + relationName ;
-        String where="";
-        sql += createJoinSql(relationName, "lane_data", "lane_id", "lane_id",1);
-        sql += createJoinSql(relationName,"illegal_info","id","monitor_id",1);
+        String sql = "select * from " + relationName;
+        String where = "";
+        sql += createJoinSql(relationName, "lane_data", "lane_id", "lane_id", 1);
+        sql += createJoinSql(relationName, "illegal_info", "id", "monitor_id", 1);
 
-        if(checkParamValid(param,"id"))
-        {
-            where +=" where "+relationName+"."+"id="+param.getString("id");
+        if (checkParamValid(param, "id")) {
+            where += " where " + relationName + "." + "id=" + param.getString("id");
         }
 
         showDebug(sql);
-        sql+=where;
+        sql += where;
         return sql;
 
     }
 
-    private String createStatisticsSqlForType(Data data) throws JSONException
-    {
-
-        String Now=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+    private String createStatisticsSqlForType(Data data) throws JSONException {
+        String timeTo = "";
+        String timeFrom = "";
+        String Now = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
 
         String where = "";
         JSONObject param = data.getParam();
         String sql = " select vehicle_type,count(vehicle_type) as num "
-                +" from " + relationName;
-        where = useTimeWhere(param, where,"time_from", "time_to");
+                + " from " + relationName;
+        where = useTimeWhere(param, where, "time_from", "time_to");
         sql += where;
         sql += " group by vehicle_type";
         showDebug("[percentageToStatistics]构造的SQL语句是：" + sql);
-
 
 
         return sql;
     }
     //构建SQL语句函数-----结束
 
-    private String createStatisticsSqlForWeiboHot(Data data) throws JSONException
-    {
-
-        String sql="SELECT title, COUNT(*) as num\n" +
-                "FROM weibohot\n" +
-                "WHERE hot > 60000" +
-                "GROUP BY title;";
-        showDebug("[percentageToStatistics]构造的SQL语句是：" + sql);
-
-        return sql;
-    }
-
 
     //导出处理函数-----开始
 
     public void getExportMonitorRecordToExcel(JSONObject json, Data data) throws JSONException, IOException {
-        json.put("download_url", "/upload/maintain/monitor/export_monitor.xls");
-        json.put("file_path", "/upload/maintain/monitor/export_monitor.xls");
+        // 指定保存目录的路径
+
+        String saveDirectory = "D:\\ykpro\\web\\upload\\weibo";
+
+        String filePath = saveDirectory + "\\export_weibo.xls";
+
+        json.put("download_url", "/upload/weibo/export_weibo.xls");
+        json.put("file_path", filePath);
+
         MyExcel m = new MyExcel();
-        m.exportData(data, json);
+        try {
+            m.exportData(data, json);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void getExportMonitorRecordToTxt(JSONObject json, Data data) throws JSONException {

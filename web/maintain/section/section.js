@@ -1,4 +1,4 @@
-var module="monitor";
+var module="section";
 var sub="data";
 var check = 0;
 document.domain="localhost";
@@ -20,32 +20,30 @@ var Page = function() {
 	/*----------------------------------------入口函数  开始----------------------------------------*/
 	var initPageControl=function(){
 		pageId = $("#page_id").val();
-		if(pageId==="monitor_list"){
-			$("#monitor_lists").addClass("active open")
-			$(".sub-menu #monitor_list").addClass("active");
+		if(pageId==="section_list"){
+			$(".sub-menu #section_list").addClass("active");
 			//设备列表页面
-			initMonitorList();
+			initSectionList();
 		}
-		if(pageId==="monitor_file"){
+		if(pageId==="section_file"){
 			//文件
 			initDeviceFile();
 		}
 
-		if(pageId==="monitor_print"){
+		if(pageId==="section_print"){
 			//打印页面
-			initMonitorPrint();
+			initSectionPrint();
 		}
-		if(pageId==="monitor_print_word"){
+		if(pageId==="section_print_word"){
 			//Word打印页面
-			initMonitorPrint_Word();
+			initSectionPrint_Word();
 		}
 
-		if(pageId==="monitor_statistics"){
-			$("#monitor_lists").addClass("active open")
-			$(".sub-menu #monitor_statistics").addClass("active");
+		if(pageId==="section_statistics"){
+			$(".sub-menu #section_statistics").addClass("active");
 			//打印页面
-			initMonitorStatisticsControlEvent();
-			initMonitorStatistics();
+			initSectionStatisticsControlEvent();
+			initSectionStatistics();
 		}
 	};
 	/*----------------------------------------入口函数  结束----------------------------------------*/
@@ -58,20 +56,20 @@ var Page = function() {
 	var pageLength = 0;
 	/*----------------------------------------业务函数  开始----------------------------------------*/
 	/*------------------------------针对各个页面的入口  开始------------------------------*/
-	var initMonitorList=function(){
+	var initSectionList=function(){
 
-		onPageListenerForMonitorList();
-		initMonitorListControlEvent();
-		initMonitorRecordList();
+		onPageListenerForSectionList();
+		initSectionListControlEvent();
+		initSectionRecordList();
 		initDeviceFile();
 	}
 
-	var initMonitorAdd=function(){
-		initMonitorAddControlEvent();
+	var initSectionAdd=function(){
+		initSectionAddControlEvent();
 	}
 
 	var initDeviceQuery=function(){
-		initMonitorQueryControlEvent();
+		initSectionQueryControlEvent();
 	}
 
 	var initDeviceFile=function(){
@@ -79,17 +77,17 @@ var Page = function() {
 		initDeviceFileControlEvent();
 	}
 
-	var initMonitorPrint = function(){
-		initMonitorRecordForPrint();
+	var initSectionPrint = function(){
+		initSectionRecordForPrint();
 	}
 
-	var initMonitorPrint_Word = function(){
-		initMonitorRecordForPrint_Word();
+	var initSectionPrint_Word = function(){
+		initSectionRecordForPrint_Word();
 	}
 
-	var initMonitorStatistics = function(time_from,time_to){
+	var initSectionStatistics = function(time_from,time_to){
 		$.ajaxSettings.async=false;
-		initMonitorRecordForStatistics(time_from,time_to);
+		initSectionRecordForStatistics(time_from,time_to);
 		$.ajaxSettings.async=true;
 		initChartSets();
 		initChartSample7();
@@ -99,9 +97,9 @@ var Page = function() {
 	/*------------------------------针对各个页面的入口 结束------------------------------*/
 
 	//事件处理初始化--开始
-	var initMonitorListControlEvent=function(){
+	var initSectionListControlEvent=function(){
 		//添加信息
-		$('#ac_add_button').click(function() {onAddRecord(),initMonitorAdd();});
+		$('#ac_add_button').click(function() {onAddRecord(),initSectionAdd();});
 		//查询信息
 		$('#ac_query_button').click(function() {onQueryRecord(),initDeviceQuery();});
 		//修改信息
@@ -116,16 +114,16 @@ var Page = function() {
 
 	}
 
-	var initMonitorAddControlEvent=function(){
+	var initSectionAddControlEvent=function(){
 		$('#record_add_div #submit_button').click(function() {submitAddRecord();});
 	}
 
-	var initMonitorQueryControlEvent=function(){
+	var initSectionQueryControlEvent=function(){
 		$("#help_button").click(function() {help();});
 		$('#record_query_div #query_button').click(function() {myQuerySubmit();});
 	}
 
-	var initMonitorStatisticsControlEvent = function(){
+	var initSectionStatisticsControlEvent = function(){
 
 		onPageListenerForStatisitcs();
 		$("#time_submit_button").click(function(){onTimeLimitSubmit()})
@@ -133,23 +131,23 @@ var Page = function() {
 	//事件处理初始化--结束
 
 	//数据获取初始化--开始
-	var initMonitorRecordList=function(){
+	var initSectionRecordList=function(){
 		//使用Datatable的数据表,统计总数据
-		getMonitorRecordDatatable();
+		getSectionRecordDatatable();
 	}
 
-	var initMonitorRecordForPrint=function(){
-		getMonitorRecordPrint();
+	var initSectionRecordForPrint=function(){
+		getSectionRecordPrint();
 	}
 
-	var initMonitorRecordForPrint_Word=function(){
-		getMonitorRecordPrint_Word();
+	var initSectionRecordForPrint_Word=function(){
+		getSectionRecordPrint_Word();
 	}
 
-	var initMonitorRecordForStatistics =function(time_from,time_to){
-		var url = "../../monitor_data_servlet_action";
+	var initSectionRecordForStatistics =function(time_from,time_to){
+		var url = "../../section_data_servlet_action";
 		var data={};
-		data.action="monitor_statistics";
+		data.action="section_statistics";
 		if(time_from!=undefined&&time_to!=undefined)
 		{
 			data.time_from = time_from;
@@ -181,12 +179,13 @@ var Page = function() {
 
 	}
 
-	//init-monitor_file functions begin
+	//init-section_file functions begin
 	var initDeviceFileControlEvent=function(id){
+		$('#jump_div #upload_button').click(function() {onJumpUploadFile();});
 		$('#upload_button').click(function() {onAjaxUploadFile();});
 		console.log("[initDeviceFileControlEvent]");
 	}
-	//init-monitor_file functions end
+	//init-section_file functions end
 
 	var initChartSets = function(){
 
@@ -315,7 +314,7 @@ var Page = function() {
 
 
 	//页面监听函数--开始
-	var onPageListenerForMonitorList= function() {
+	var onPageListenerForSectionList= function() {
 
 		var inputListener = $(".form-group input");
 		var colorContainer=inputListener.css("borderColor");
@@ -406,15 +405,15 @@ var Page = function() {
 
 
 	//数据获取函数--开始
-	var getMonitorRecordDatatable =function(data){
+	var getSectionRecordDatatable =function(data){
 
-		var servletRequest ="../../monitor_data_servlet_action";
+		var servletRequest ="../../sction_data_servlet_action";
 		resultList=[];
 
 		if(data==undefined)
 		{
 			data={};
-			data.action="get_monitor_record";
+			data.action="get_section_record";
 		}
 
 		var table =$('.datatable').DataTable();
@@ -451,54 +450,44 @@ var Page = function() {
 				},"orderable": false
 			},{
 				"mRender": function(data, type, full) {
-					sReturn = '<div>'+full.id+'</div>';
+					sReturn = '<div>'+full.lane_id+'</div>';
 					return sReturn;
 				},"orderable": true
 			},{
 				"mRender": function(data, type, full) {
-					sReturn = '<div>'+full.car_code+'</div>';
-					return sReturn;
-				},"orderable": true
-			},{
-				"mRender": function(data, type, full) {
-
-					sReturn = '<div>'+full.vehicle_type+'</div>';
+					sReturn = '<div>'+full.lane_name+'</div>';
 					return sReturn;
 				},"orderable": true
 			},{
 				"mRender": function(data, type, full) {
 
-					sReturn = '<div>'+explainIllegalCode(full.illegal_status)+'</div>';
+					sReturn = '<div>'+full.speed_limit+'</div>';
 					return sReturn;
 				},"orderable": true
 			},{
 				"mRender": function(data, type, full) {
 
-					sReturn = '<div>'+full.capture_time+'</div>';
+					sReturn = '<div>'+full.speed_limit_for_others+'</div>';
 					return sReturn;
 				},"orderable": true
 			},{
 				"mRender": function(data, type, full) {
 
-					sReturn = '<div>'+full.speed+'</div>';
+					sReturn = '<div>'+explainIllegalCode_Contrary(full.park_limit_tag)+'</div>';
 					return sReturn;
-				},"orderable":true
-			},{
-                "mRender": function(data, type, full) {
-
-                    sReturn = '<div>'+full.lane_name+'</div>';
-                    return sReturn;
-                },"orderable":true
-            },{
+				},
+				"orderable": true
+			}
+				,{
 				"mRender": function(data, type, full) {
 
-					sReturn = '<a href=\"javascript:Page.onModifyRecord('+full.id+')\"'
+					sReturn = '<a href=\"javascript:Page.onModifyRecord('+full.lane_id+')\"'
 						+'class=\"btn default btn-xs red\"> <i class=\"fa fa-wrench\"></i>'
 						+'修改</a>';
-					sReturn += '<a href=\"javascript:Page.onDeleteRecord('+full.id+')\"'
+					sReturn += '<a href=\"javascript:Page.onDeleteRecord('+full.lane_id+')\"'
 						+'class=\"btn default btn-xs black\"> <i class=\"fa fa-trash-o\"></i>'
 						+'删除</a>';
-					sReturn += '<a href=\"javascript:Page.onViewRecord('+full.id+')\"'
+					sReturn += '<a href=\"javascript:Page.onModifyRecord1('+full.lane_id+')\"'
 						+"class=\"btn default btn-xs purple\"> <i class=\"fa fa-camera\"></i>"
 						+'查看</a>';
 					return sReturn;
@@ -513,8 +502,9 @@ var Page = function() {
 				"type": "POST",
 				"data":data,
 				"dataSrc": function(json) {
-					console.log(json.aaData);
+					console.log(JSON.stringify(json.aaData));
 					resultList = json.aaData;
+
 					return json.aaData; // 返回的 JSON 数据中的数据源位置
 				}
 
@@ -547,49 +537,44 @@ var Page = function() {
 
 	}
 
-	var  getMonitorRecordPrint = function(){
-		var url = "../../monitor_data_servlet_action";
+	var  getSectionRecordPrint = function(){
+		var url = "../../sction_data_servlet_action";
 		var data={};
-		data.action="monitor_print";
+		data.action="section_print";
 		$.post(url,data,function(json){
 			if(json.result_code==0){
-				console.log(JSON.stringify(json));
-
 				var list = json.aaData;
-
 				var myhtml="";
 				if(list!=undefined && list.length>0)
 				{
 					for(var i=0;i<list.length;i++) {
 
 						var record=list[i];
-						myhtml+="<tr><td class=\"highlight\">" +record.id+"</td>";
-						myhtml+="<td>" +record.car_code+" </td>"
-						myhtml+="<td>"+record.vehicle_type +"</td>";
-						myhtml+="<td class=\"highlight\">"+explainIllegalCode(record.illegal_status) +"</td> "
-						myhtml+="<td class=\"highlight\">"+record.capture_time+"</td>";
-						myhtml+="<td>"+record.speed+"</td>";
-						myhtml+="<td class=\"highlight\">"+record.lane_name+ "</td>";
+						myhtml+="<tr><td class=\"highlight\">" +record.lane_id+"</td>";
+						myhtml+="<td>" +record.lane_name+" </td>"
+						myhtml+="<td>"+record.speed_limit +"</td>";
+						myhtml+="<td class=\"highlight\">"+record.speed_limit_for_others+"</td>";
+						myhtml+="<td class=\"highlight\">"+explainIllegalCode_Contrary(record.park_limit_tag) +"</td> "
 						myhtml+="</tr>";
 					}
 				}
 			}
 			$("#print_list").html(myhtml);
 		});
-
-
 	}
 
-	var  getMonitorRecordPrint_Word = function(){
-		var url = "../../monitor_data_servlet_action";
+	//word打印
+	var  getSectionRecordPrint_Word = function(){
+
+		var url = "../../sction_data_servlet_action";
 		var data={};
-		data.action="monitor_print";
+		data.action="section_print";
 		$.post(url,data,function(json){
+			alert(1)
 			if(json.result_code==0){
 				console.log(JSON.stringify(json));
 
 				var list = json.aaData;
-
 				var html="";
 				if(list!=undefined && list.length>0)
 				{
@@ -600,46 +585,33 @@ var Page = function() {
 						html=html+" <td width=63 valign=top style='width:46.95pt;border:none;border-right:solid #C9C9C9 1.0pt;";
 						html=html+"  background:white;padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>";
 						html=html+" <p class=MsoNormal align=center style='text-align:center'><i><span";
-						html=html+" lang=EN-US style='font-family:\"微软雅黑\",sans-serif'>"+record.id+"</span></i></p>";
+						html=html+" lang=EN-US style='font-family:\"微软雅黑\",sans-serif'>"+record.lane_id+"</span></i></p>";
 						html=html+" </td>";
 						html=html+" <td width=63 valign=top style='width:47.05pt;border-top:none;border-left:";
 						html=html+" none;border-bottom:solid #C9C9C9 1.0pt;border-right:solid #C9C9C9 1.0pt;";
 						html=html+" padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>";
 						html=html+" <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US";
-						html=html+" style='font-family:\"微软雅黑\",sans-serif'>"+record.car_code+"</span></p>";
+						html=html+" style='font-family:\"微软雅黑\",sans-serif'>"+record.lane_name+"</span></p>";
 						html=html+" </td>";
 						html=html+" <td width=106 valign=top style='width:79.4pt;border-top:none;border-left:";
 						html=html+"  none;border-bottom:solid #C9C9C9 1.0pt;border-right:solid #C9C9C9 1.0pt;";
 						html=html+"  padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>";
 						html=html+" <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US";
-						html=html+" style='font-family:\"微软雅黑\",sans-serif'>"+record.vehicle_type+"</span></p>";
+						html=html+" style='font-family:\"微软雅黑\",sans-serif'>"+record.speed_limit+"</span></p>";
 						html=html+" </td>";
 						html=html+" <td width=63 valign=top style='width:47.05pt;border-top:none;border-left:";
 						html=html+"  none;border-bottom:solid #C9C9C9 1.0pt;border-right:solid #C9C9C9 1.0pt;";
 						html=html+"  padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>";
 						html=html+" <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US";
-						html=html+" style='font-family:\"微软雅黑\",sans-serif'>"+explainIllegalCode(record.illegal_status)+"</span></p>";
+						html=html+" style='font-family:\"微软雅黑\",sans-serif'>"+record.speed_limit_for_others+"</span></p>";
 						html=html+" </td>";
 						html=html+" <td width=63 valign=top style='width:47.05pt;border-top:none;border-left:";
 						html=html+" none;border-bottom:solid #C9C9C9 1.0pt;border-right:solid #C9C9C9 1.0pt;";
 						html=html+" padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>";
 						html=html+" <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US";
-						html=html+" style='font-family:\"微软雅黑\",sans-serif'>"+record.capture_time+"</span></p>";
-						html=html+" </td>";
-						html=html+" <td width=63 valign=top style='width:47.05pt;border-top:none;border-left:";
-						html=html+"  none;border-bottom:solid #C9C9C9 1.0pt;border-right:solid #C9C9C9 1.0pt;";
-						html=html+"  padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>";
-						html=html+" <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US";
-						html=html+" style='font-family:\"微软雅黑\",sans-serif'>"+record.speed+"</span></p>";
-						html=html+" </td>";
-						html=html+" <td width=63 valign=top style='width:47.05pt;border-top:none;border-left:";
-						html=html+"  none;border-bottom:solid #C9C9C9 1.0pt;border-right:solid #C9C9C9 1.0pt;";
-						html=html+"  padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>";
-						html=html+" <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US";
-						html=html+" style='font-family:\"微软雅黑\",sans-serif'>"+record.lane_name+"</span></p>";
+						html=html+" style='font-family:\"微软雅黑\",sans-serif'>"+explainIllegalCode_Contrary(record.park_limit_tag)+"</span></p>";
 						html=html+" </td>";
 						html=html+" </tr>";
-
 					}
 				}
 			}
@@ -662,10 +634,10 @@ var Page = function() {
 	var onDeleteRecord = function(id){
 		if(confirm("您确定要删除这条记录吗？")){
 			if(id>-1){
-				var url="../../monitor_data_servlet_action";
+				var url="../../sction_data_servlet_action";
 				var data={};
-				data.action="delete_monitor_record";
-				data.id=id;
+				data.action="delete_section_record";
+				data.lane_id=id;
 				$.post(url,data,function(json){
 					if(json.result_code==0){
 						alert("删除成功!");
@@ -677,36 +649,38 @@ var Page = function() {
 	}
 
 	var onModifyRecord=function(id){
-
-		console.log(id);
-
 		for(var i=0;i<resultList.length;i++)
 		{
-			if(resultList[i].id==id){
-				$("#_id").text(resultList[i].id);
-				$("#record_modify_div #car_code").val(resultList[i].car_code);
-				$("#record_modify_div #vehicle_type").val(resultList[i].vehicle_type);
-				$("#record_modify_div #illegal_status").val(explainIllegalCode(resultList[i].illegal_status));
-
-				$("#record_modify_div #speed").val(resultList[i].speed);
+			if(resultList[i].lane_id==id){
+				$("#_id").text(resultList[i].lane_id);
 				$("#record_modify_div #lane_name").val(resultList[i].lane_name);
-				var date="";
-				var time ="";
-				date =resultList[i].capture_time.slice(0,11);
-				time=resultList[i].capture_time.slice(11,19);
-				$("#record_modify_div #capture_time").val(date);
-				$("#record_modify_div #capture_time_sec").val(time);
+				$("#record_modify_div #speed_limit").val(resultList[i].speed_limit);
+				$("#record_modify_div #park_limit_tag").val(explainIllegalCode_Contrary(resultList[i].park_limit_tag));
+				$("#record_modify_div #speed_limit_for_others").val(resultList[i].speed_limit_for_others);
+
 			}
 		}
-
-
-		//window.location.href="device_modify.jsp?id="+id;
 		$("#record_modify_div").modal("show");
 	}
 
-	var onViewRecord = function(id){
-		window.location.href = "monitor_view.jsp?id="+id;
+	var onModifyRecord1=function(id){
+		//查看回显
+		console.log(id);
+		for(var i=0;i<resultList.length;i++)
+		{
+			if(resultList[i].lane_id==id){
+
+				$("#_id").text(resultList[i].lane_id);
+				$("#record_view_div #lane_name").val(resultList[i].lane_name);
+				$("#record_view_div #speed_limit").val(resultList[i].speed_limit);
+				$("#record_view_div #park_limit_tag").val(explainIllegalCode_Contrary(resultList[i].park_limit_tag));
+				$("#record_view_div #speed_limit_for_others").val(resultList[i].speed_limit_for_others);
+
+			}
+		}
+		$("#record_view_div").modal("show");
 	}
+
 
 	var onAjaxUploadFile=function(){
 		console.log("[onAjaxUploadFile]====");
@@ -714,7 +688,7 @@ var Page = function() {
 		var deviceName = $("#device_name").val();
 		var options = {
 			type : 'post', /*设置表单以post方法提交*/
-			url : '../../monitor_data_servlet_action?action=upload_file&device_id='+deviceId+"&device_name="+deviceName, /*设置post提交到的页面*/
+			url : '../../section_data_servlet_action?action=upload_file&device_id='+deviceId+"&device_name="+deviceName, /*设置post提交到的页面*/
 			success : function(json) {
 				console.log("[onAjaxUploadFile]上传文件返回结果="+JSON.stringify(json));
 				if(json.upload_files.length>0){
@@ -744,39 +718,24 @@ var Page = function() {
 	}
 	//on-functions end
 
-	//submit functions begin
+	//添加道路
 	var submitAddRecord=function(){
-		var url="../../monitor_data_servlet_action";
+
+		var url="../../sction_data_servlet_action";
 		var data={};
-		data.action="add_monitor_record";
+		data.action="add_section_record";
+		data.park_limit_tag=explainIllegalCode_Contrary1($("#record_add_div #park_limit_tag").val());
 
-		var mainDate = $("#record_add_div #capture_time").val();
-		if(mainDate=="")
-		{
-			data.capture_time="";
-		}
-		else
-		{
-			data.capture_time=mainDate+" "
-				+$("#record_add_div #capture_time_sec").val();
-		}
-		var check = false;
-		var checkCol = [];
-		data.car_code=$("#record_add_div #car_code").val();
-		data.vehicle_type=$("#record_add_div #vehicle_type").val();
-		data.illegal_status=explainIllegalCode_Contrary($("#record_add_div #illegal_status").val());
-
-		data.speed=$("#record_add_div #speed").val();
-		data.lane_name=$("#record_add_div #lane_name").val();
-
-
-
+		data.speed_limit_for_others=$("#record_add_div #speed_limit_for_others").val(); //车速限制
+		data.speed_limit=$("#record_add_div #speed_limit").val();//速度限制
+		data.lane_name=$("#record_add_div #lane_name").val(); //道路名字
+		alert($("#record_add_div #park_limit_tag").val())
 		if(checkValid($("#record_add_div")))
 		{
 			console.log(data);
 			$.post(url,data,function(json){
 				if(json.result_code===0){
-					alert("已经完成设备添加。");
+					alert("已经完成道路添加。");
 					window.location.reload();
 				}
 			});
@@ -792,24 +751,19 @@ var Page = function() {
 	var myModifySubmit = function(id){
 		if(confirm("您确定要修改该记录吗？")){
 			var id=$("#record_modify_div #_id").text();
-			var url="../../monitor_data_servlet_action";
+			var url="../../sction_data_servlet_action";
 			var data={};
-			data.action="modify_monitor_record";
-			data.id=id;
-			data.car_code=$("#record_modify_div #car_code").val();
-			data.vehicle_type=$("#record_modify_div #vehicle_type").val();
-			data.illegal_status=explainIllegalCode_Contrary($("#record_modify_div #illegal_status").val());
-			data.capture_time=$("#record_modify_div #capture_time").val()+" "
-			+$("#record_modify_div #capture_time_sec").val();
-			data.speed=$("#record_modify_div #speed").val();
-			data.lane_name=$("#record_modify_div #lane_name").val();
-
-
+			data.action="modify_section_record";
+			data.lane_id=id;
+			data.lane_name=$("#record_modify_div #lane_name").val(); //道路名称
+			data.speed_limit=$("#record_modify_div #speed_limit").val();//速度限制
+			data.speed_limit_for_others=$("#record_modify_div #speed_limit_for_others").val(); //车速限制
+			data.park_limit_tag=explainIllegalCode_Contrary1($("#record_modify_div #park_limit_tag").val());//是否禁停
 			if(checkValid($("#record_modify_div")))
 			{
 				$.post(url,data,function(json){
 					if(json.result_code==0){
-						alert("已经完成设备修改。");
+						alert("已经完成道路修改。");
 						window.location.reload();
 					}
 				});
@@ -826,37 +780,16 @@ var Page = function() {
 
 	var myQuerySubmit = function(){
 
-		var url = "../../monitor_data_servlet_action";
+		var url = "../../sction_data_servlet_action";
 		var data={};
-		var query = "query_monitor_record";
-		var time_from = $("#record_query_div #capture_time_from").val();
-		var time_to = $("#record_query_div #capture_time_to").val();
-		data.action="query_monitor_record";
-
-		data.id=$("#record_query_div #id").val();
-		data.car_code=$("#record_query_div #car_code").val();
-		data.vehicle_type=$("#record_query_div #vehicle_type").val();
-		data.illegal_status=explainIllegalCode_Contrary($("#record_query_div #illegal_status").val());
-		data.time_from = time_from;
-		data.time_to = time_to;
-		if(time_from!=="")
-		{
-			data.time_from+=" "+$("#record_query_div #capture_time_sec_from").val();
-		}
-
-		if(time_to!=="")
-		{
-			data.time_to+=" " +$("#record_query_div #capture_time_sec_to").val();
-		}
-
-		data.speed=$("#record_query_div #speed").val();
-		data.lane_name=$("#record_query_div #lane_name").val();
+		data.action="query_section_record";
+		data.lane_name=$("#record_query_div #lane_name").val(); //道路名称
 
 		if(checkValid($("#record_query_div")))
 		{
 			$("#record_query_div").modal("hide");
 
-			getMonitorRecordDatatable(data);
+			getSectionRecordDatatable(data);
 		}
 		else
 		{
@@ -866,32 +799,55 @@ var Page = function() {
 	}
 
 	var myExportAPI = function(){
-		var url = "../../monitor_data_servlet_action";
-		var data={};
-		data.action="export_record";
-		$.post(url,data,function(json){
+		var url = "../../sction_data_servlet_action";
+		var data = {};
+		data.action = "export_record";
 
-			if(json.result_code_for_export==0){
+		$.post(url, data, function(json){
+			if(json.result_code_for_export == 0){
 				console.log(JSON.stringify(json));
 				console.log(json.download_url);
-				$("#record_export_div #download_url").attr("download_url",json.download_url);
+				$("#record_export_div #download_url").attr("data-download_url", "http://localhost:8080" + json.download_url);
 				$("#record_export_div").modal("show");
 			}
 		});
 	}
 
+// 在页面加载完成后，为下载链接添加点击事件处理程序
+	$(document).ready(function(){
+		$("#download_url").on("click", function(e){
+			// 阻止默认行为，防止链接直接打开
+			e.preventDefault();
+
+			// 获取下载链接
+			var downloadUrl = $("#download_url").attr("data-download_url");
+			// 创建一个隐藏的 <a> 元素
+			var downloadLink = document.createElement("a");
+			downloadLink.href = downloadUrl;
+			downloadLink.download = "exported_section.xls";
+
+			// 将 <a> 元素添加到页面并触发点击
+			document.body.appendChild(downloadLink);
+			downloadLink.click();
+			document.body.removeChild(downloadLink);
+			setTimeout(function() {
+				$("#record_export_div").modal("hide");
+			}, 1000);
+		});
+	});
+
 	var myPrintAPI = function(){
-		window.open("monitor_print_default.jsp");
+		window.open("section_print_default.jsp");
 	}
 
 	var myPrintAPI_Word = function(){
-		window.open("monitor_print_word.jsp");
+		window.open("section_print_word.jsp");
 
 	}
 
 	var myStatisticsAPI = function() {
 
-		window.open("monitor_statistics.jsp");
+		window.open("sectiontongji.jsp");
 	}
 
 	var onTimeLimitSubmit = function(){
@@ -937,7 +893,7 @@ var Page = function() {
 			barContainer.style.display="none";
 			beginMinuteContainer.style.borderColor="#d6e9c6";
 			endMinuteContainer.style.borderColor="#d6e9c6";
-			initMonitorStatistics(time_from,time_to);
+			initSectionStatistics(time_from,time_to);
 		}
 
 
@@ -1047,34 +1003,31 @@ var Page = function() {
 
 	}
 
-	var explainIllegalCode_Contrary = function(code) {
-		if(code === "违停")
+
+	var explainIllegalCode_Contrary1 = function(code) {
+		//alert(code)
+		if(code === "是")
 		{
 			return 1;
 		}
-		else if(code === "闯红灯")
+		else if(code === "否")
 		{
-			return 2;
+			return "2";
 		}
-		else if(code === "压双黄线")
+
+
+	}
+
+
+	var explainIllegalCode_Contrary = function(code) {
+		//alert(code)
+		if(code === "1")
 		{
-			return 3;
+			return "是";
 		}
-		else if(code === "逆行")
+		else if(code === "2")
 		{
-			return 4;
-		}
-		else if(code === "正常行驶")
-		{
-			return 0;
-		}
-		else if(code==="")
-		{
-			return code;
-		}
-		else
-		{
-			return 9;
+			return "否";
 		}
 
 
@@ -1246,10 +1199,9 @@ var Page = function() {
 		onModifyRecord:function(id) {
 			onModifyRecord(id);
 		},
+		onModifyRecord1:function(id) {
+			onModifyRecord1(id);
+		},
 
-		onViewRecord:function(id){
-			onViewRecord(id);
-		}
 	}
-}();//Page
-/*================================================================================*/
+}();
