@@ -14,64 +14,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="92dc437d-bb51-42f3-93ee-b2423cc3248c" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/monitor/dao/SectionDao.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/monitor/dao/WeibohotDao.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/monitor/file/ExcelUploadServlet.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/monitor/file/SectionAction.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/monitor/file/WeibohotAction.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/WEB-INF/lib/commons-fileupload-1.4.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/WEB-INF/lib/commons-io-2.6.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/WEB-INF/lib/commons-math3-3.6.1.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/WEB-INF/lib/jackson-core-2.13.0.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/WEB-INF/lib/jackson-databind-2.13.0.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/WEB-INF/lib/poi-4.1.2.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/WEB-INF/lib/poi-ooxml-4.1.2.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/assets/global/plugins/echarts/echarts.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/maintain/monitor/containers/css/LESLIEB.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/maintain/monitor/containers/earth.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/maintain/monitor/video_statistics.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/maintain/section/echarts.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/maintain/section/jquery.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/maintain/section/section.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/maintain/section/section.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/maintain/section/section_add_div.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/maintain/section/section_export_div.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/maintain/section/section_modify_div.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/maintain/section/section_print_default.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/maintain/section/section_print_word.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/maintain/section/section_query_div.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/maintain/section/section_statistics.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/maintain/section/section_view.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/maintain/section/section_view_div.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/maintain/section/sectiontongji.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/maintain/weibohot/echarts.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/maintain/weibohot/jquery.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/maintain/weibohot/monitor.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/maintain/weibohot/section.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/maintain/weibohot/section.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/maintain/weibohot/section_add_div.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/maintain/weibohot/section_export_div.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/maintain/weibohot/section_modify_div.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/maintain/weibohot/section_print_default.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/maintain/weibohot/section_print_word.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/maintain/weibohot/section_query_div.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/maintain/weibohot/section_tongji_div.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/maintain/weibohot/section_view.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/maintain/weibohot/section_view_div.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/maintain/weibohot/weibotongji.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024_1_12_11_38__Default_Changelist_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024_1_12_11_38__Default_Changelist_.xml" afterDir="false" />
+    <list default="true" id="92dc437d-bb51-42f3-93ee-b2423cc3248c" name="Default Changelist" comment="一点小修改">
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024_1_12_11_38_[Default_Changelist]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024_1_12_11_38__Default_Changelist_.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/monitor/dao/MonitorDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/monitor/dao/MonitorDao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/monitor/dao/MySQLDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/monitor/dao/MySQLDao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/WEB-INF/lib/poi-3.8-20120326.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/WEB-INF/web.xml" beforeDir="false" afterPath="$PROJECT_DIR$/web/WEB-INF/web.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/home/frame/page_sidebar.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/web/home/frame/page_sidebar.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/home/main/index.jsp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/home/main/login.jsp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/home/main/login_error.jsp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/DBControl/DB.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/DBControl/DB.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/servletControl/UserControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/servletControl/UserControl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/assets/js/table-advanced.js" beforeDir="false" afterPath="$PROJECT_DIR$/web/assets/js/table-advanced.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/main/userManage/UserManage.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/web/main/userManage/UserManage.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web/main/userManage/extra_profile_account.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/web/main/userManage/extra_profile_account.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/maintain/monitor/containers/js/monitor.js" beforeDir="false" afterPath="$PROJECT_DIR$/web/maintain/monitor/containers/js/monitor.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -96,9 +47,9 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="HTML File" />
+        <option value="Class" />
         <option value="Jsp File" />
         <option value="JavaScript File" />
-        <option value="Class" />
       </list>
     </option>
   </component>
@@ -200,54 +151,52 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "DefaultHtmlFileTemplate": "HTML File",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "Tomcat 服务器.Mypro_withdemo.executor": "Run",
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "master",
-    "jdk.selected.JAVA_MODULE": "1.8",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/.Probe0311/研究与开发实践/Opencv/web/assets/global/plugins",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "库",
-    "project.structure.proportion": "0.15039062",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "Errors",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Probe's&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;1.8&quot;,
+    &quot;last_opened_file_path&quot;: &quot;F:/WorkSpace/LearningResource/CodeResource/Java/Login/Yanjiuyukaifa&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;库&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15039062&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.fonts.default&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="device.file" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\.Probe0311\研究与开发实践\Opencv\web\assets\global\plugins" />
-      <recent name="D:\.Probe0311\研究与开发实践\Opencv\web\maintain\monitor\containers\css" />
-      <recent name="D:\.Probe0311\研究与开发实践\Opencv\web\maintain\monitor\containers" />
-      <recent name="D:\.Probe0311\研究与开发实践\Opencv\web\maintain\monitor" />
-      <recent name="D:\.Probe0311\研究与开发实践\Opencv\src\monitor\dao" />
+      <recent name="F:\WorkSpace\LearningResource\CodeResource\Java\JointProject\Yanjiuyukaifa\web\assets\js" />
+      <recent name="F:\WorkSpace\LearningResource\CodeResource\Java\JointProject\Yanjiuyukaifa\web\assets\admin\pages\scripts" />
+      <recent name="F:\WorkSpace\LearningResource\CodeResource\Java\JointProject\Yanjiuyukaifa\src" />
+      <recent name="F:\WorkSpace\LearningResource\CodeResource\Java\JointProject\Yanjiuyukaifa\web\WEB-INF\lib" />
+      <recent name="F:\WorkSpace\LearningResource\CodeResource\Java\JointProject\Yanjiuyukaifa\web" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="F:\WorkSpace\LearningResource\CodeResource\Java\Joint2.0\web\assets\img" />
       <recent name="D:\.Probe0311\研究与开发实践\IdeaProjects\my_pro\web\WEB-INF\lib" />
       <recent name="D:\.Probe0311\研究与开发实践\IdeaProjects\my_pro\lib" />
       <recent name="D:\.Probe0311\研究与开发实践\IdeaProjects\my_pro\web\assets" />
       <recent name="D:\.Probe0311\研究与开发实践\IdeaProjects\my_pro\web\maintain\illegal_data\containers\js" />
-      <recent name="D:\.Probe0311\研究与开发实践\IdeaProjects\my_pro\web\maintain\monitor\containers\js" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="monitor.file" />
       <recent name="analysis.file" />
       <recent name="illegal.file" />
+      <recent name="monitor.file" />
       <recent name="user.dao" />
       <recent name="user.center" />
     </key>
@@ -264,7 +213,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Mypro_withdemo" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="Tomcat 8.5.66" ALTERNATIVE_JRE_ENABLED="true" ALTERNATIVE_JRE_PATH="1.8">
+    <configuration name="Mypro_withdemo" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="Tomcat 8.5.93" ALTERNATIVE_JRE_ENABLED="true" ALTERNATIVE_JRE_PATH="1.8">
       <option name="OPEN_IN_BROWSER_URL" value="http://localhost:9999/main/login/login.jsp" />
       <option name="COMMON_VM_ARGUMENTS" value="-Dfile.encoding=UTF-8" />
       <option name="UPDATING_POLICY" value="restart-server" />
@@ -594,65 +543,14 @@
       <workItem from="1702459231739" duration="1198000" />
       <workItem from="1702466398312" duration="1122000" />
       <workItem from="1702604649536" duration="6416000" />
-      <workItem from="1705555695408" duration="603000" />
-      <workItem from="1705562423632" duration="874000" />
-      <workItem from="1705586253753" duration="8202000" />
-    </task>
-    <task id="LOCAL-00004" summary="测试">
-      <option name="closed" value="true" />
-      <created>1701105840334</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1701105840334</updated>
-    </task>
-    <task id="LOCAL-00005" summary="测试">
-      <option name="closed" value="true" />
-      <created>1701107646796</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1701107646796</updated>
-    </task>
-    <task id="LOCAL-00006" summary="测试">
-      <option name="closed" value="true" />
-      <created>1701108282252</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1701108282252</updated>
-    </task>
-    <task id="LOCAL-00007" summary="测试">
-      <option name="closed" value="true" />
-      <created>1701108478755</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1701108478755</updated>
-    </task>
-    <task id="LOCAL-00008" summary="测试">
-      <option name="closed" value="true" />
-      <created>1701109357269</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1701109357270</updated>
-    </task>
-    <task id="LOCAL-00009" summary="测试">
-      <option name="closed" value="true" />
-      <created>1701141097894</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1701141097894</updated>
-    </task>
-    <task id="LOCAL-00010" summary="Initial commit">
-      <option name="closed" value="true" />
-      <created>1701141798479</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1701141798479</updated>
+      <workItem from="1702873633996" duration="3081000" />
+      <workItem from="1703407041512" duration="54000" />
+      <workItem from="1705030480532" duration="14113000" />
+      <workItem from="1705249862734" duration="99000" />
+      <workItem from="1705372280478" duration="12762000" />
+      <workItem from="1705389585916" duration="146000" />
+      <workItem from="1705458564938" duration="1588000" />
+      <workItem from="1705548875785" duration="924000" />
     </task>
     <task id="LOCAL-00011" summary="Initial commit">
       <option name="closed" value="true" />
@@ -990,7 +888,63 @@
       <option name="project" value="LOCAL" />
       <updated>1702303372190</updated>
     </task>
-    <option name="localTasksCounter" value="53" />
+    <task id="LOCAL-00053" summary="合并login">
+      <option name="closed" value="true" />
+      <created>1702611773307</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1702611773307</updated>
+    </task>
+    <task id="LOCAL-00054" summary="Merge remote-tracking branch 'origin/login'">
+      <option name="closed" value="true" />
+      <created>1705047195207</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1705047195207</updated>
+    </task>
+    <task id="LOCAL-00055" summary="一点小修改">
+      <option name="closed" value="true" />
+      <created>1705389086010</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL-00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1705389086010</updated>
+    </task>
+    <task id="LOCAL-00056" summary="一点小修改">
+      <option name="closed" value="true" />
+      <created>1705389126916</created>
+      <option name="number" value="00056" />
+      <option name="presentableId" value="LOCAL-00056" />
+      <option name="project" value="LOCAL" />
+      <updated>1705389126916</updated>
+    </task>
+    <task id="LOCAL-00057" summary="一点小修改">
+      <option name="closed" value="true" />
+      <created>1705389181477</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1705389181477</updated>
+    </task>
+    <task id="LOCAL-00058" summary="一点小修改">
+      <option name="closed" value="true" />
+      <created>1705389234219</created>
+      <option name="number" value="00058" />
+      <option name="presentableId" value="LOCAL-00058" />
+      <option name="project" value="LOCAL" />
+      <updated>1705389234219</updated>
+    </task>
+    <task id="LOCAL-00059" summary="一点小修改">
+      <option name="closed" value="true" />
+      <created>1705389262117</created>
+      <option name="number" value="00059" />
+      <option name="presentableId" value="LOCAL-00059" />
+      <option name="project" value="LOCAL" />
+      <updated>1705389262117</updated>
+    </task>
+    <option name="localTasksCounter" value="60" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1041,9 +995,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Gjr's pro" />
-    <MESSAGE value="测试" />
-    <MESSAGE value="Update README.md" />
     <MESSAGE value="Initial commit" />
     <MESSAGE value="Second commit" />
     <MESSAGE value="Third commit" />
@@ -1065,7 +1016,11 @@
     <MESSAGE value="Merge remote-tracking branch 'Yanjiuyukaifa/Probe's' into Probe's" />
     <MESSAGE value="11th commit--修理分支" />
     <MESSAGE value="2th 项目终章" />
-    <option name="LAST_COMMIT_MESSAGE" value="2th 项目终章" />
+    <MESSAGE value="合并login" />
+    <MESSAGE value="天气预报实现" />
+    <MESSAGE value="Merge remote-tracking branch 'origin/login'" />
+    <MESSAGE value="一点小修改" />
+    <option name="LAST_COMMIT_MESSAGE" value="一点小修改" />
     <option name="GROUP_MULTIFILE_MERGE_BY_DIRECTORY" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -1079,6 +1034,11 @@
           <url>file://$PROJECT_DIR$/web/assets/admin/pages/scripts/charts-amcharts.js</url>
           <line>430</line>
           <option name="timeStamp" value="5" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/monitor/dao/MonitorDao.java</url>
+          <line>510</line>
+          <option name="timeStamp" value="20" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/web/maintain/illegal_data/illegal_data_statistics.jsp</url>

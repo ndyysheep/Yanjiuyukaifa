@@ -122,6 +122,10 @@ public class DB {
         String email = null;
         String occupation = "none";
         int role_id = 3;
+        if(param.has("role_id"))
+        {
+            role_id = param.getInt("role_id");
+        }
         if (param.has("username")) {
             user_name = param.getString("username");
         }

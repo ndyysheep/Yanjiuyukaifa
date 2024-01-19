@@ -129,22 +129,33 @@ public class  UserControl extends HttpServlet {
     // 事件开始
     private void searchUserEvent(HttpServletRequest request, HttpServletResponse response, JSONObject rtJson, JSONObject params) throws JSONException, SQLException {
         db.Connect();
-        String sql = "select user_id,user_name,nickname,mobile_number,email,role_type,create_time,occupation from user_file LEFT JOIN user_role on user_file.role_id=user_role.role_id";
+        String sql = "select user_file.role_id,user_id,user_name,nickname,mobile_number,email,role_type,create_time,occupation from user_file LEFT JOIN user_role on user_file.role_id=user_role.role_id";
         String user_name ="";
         String nickname="";
         String occupation ="";
         String mobile_number="";
         String email="";
+        int role_id = -1;
         String set =" where ";
         boolean hasparam = false;
-        user_name = params.getString("user_name");
-
+        user_name = params.has("user_name") ? params.getString("user_name") : "";
+        role_id=params.has("role_id") ? params.getInt("role_id") : -1;
         if(user_name !="")
         {
             set += "user_name='" + user_name +"'";
             hasparam = true;
         }
-        nickname = params.getString("nickname");
+        if(role_id != -1)
+        {
+            if(hasparam == true)
+                set += " and user_file.role_id=" + role_id;
+            else
+            {
+                set+= " user_file.role_id=" + role_id;
+                hasparam = true;
+            }
+        }
+        nickname = params.has("nickname") ? params.getString("nickname") : "";
         if(nickname !="")
         {
             if(hasparam == true)
@@ -155,7 +166,7 @@ public class  UserControl extends HttpServlet {
                 hasparam = true;
             }
         }
-        occupation = params.getString("occupation");
+        occupation = params.has("occupation") ? params.getString("occupation") : "";
         if(occupation !="")
         {
             if(hasparam == true)
@@ -166,7 +177,7 @@ public class  UserControl extends HttpServlet {
                 hasparam = true;
             }
         }
-        mobile_number =params.getString("mobile_number");
+        mobile_number =params.has("mobile_number") ? params.getString("mobile_number") : "";
         if(mobile_number !="")
         {
             if(hasparam == true)
@@ -177,7 +188,7 @@ public class  UserControl extends HttpServlet {
                 hasparam = true;
             }
         }
-        email = params.getString("email");
+        email = params.has("email") ? params.getString("email") : "";
         if(email !="")
         {
             if(hasparam == true)
@@ -224,15 +235,51 @@ public class  UserControl extends HttpServlet {
 
     }
     private void modifyUserEvent(HttpServletRequest request, HttpServletResponse response, JSONObject rtJson, JSONObject params) throws JSONException, SQLException {
-        String email = params.getString("email");
-        String user_name=params.getString("user_name");
-        String nickname=params.getString("nickname");
-        String mobile_number=params.getString("mobile_number");
-        String occupation = params.getString("occupation");
-        String uid=params.getString("uid");
+        String email = params.has("email") ? params.getString("email") : null;
+        String user_name= params.has("user_name") ? params.getString("user_name") : null;
+        String nickname= params.has("nickname") ? params.getString("nickname") : null;
+        String mobile_number= params.has("mobile_number") ? params.getString("mobile_number") : null;
+        String occupation = params.has("occupation") ? params.getString("occupation") : null;
+        String uid= params.has("uid") ? params.getString("uid") : null;
+        int role_id = params.has("role_id") ? params.getInt("role_id") : -1;
 
-        String sql = "update user_file set user_name='"+user_name+"',email='"+email+"',nickname='"+nickname+"',mobile_number='"+mobile_number+"',occupation='"+occupation+"' ";
-        sql +="where user_id='"+uid + "'";
+        String sql = "update user_file set ";
+        String set = "";
+        if(email != null)
+        {
+            set += "email='"+email + "',";
+        }
+        if(user_name != null)
+        {
+            set += "username='"+user_name + "',";
+        }
+        if(nickname != null)
+        {
+            set += "nickname='"+nickname + "',";
+        }
+        if(mobile_number != null)
+        {
+            set += "mobile_number='"+mobile_number + "',";
+        }
+        if(occupation != null)
+        {
+            set += "occupation='"+occupation + "',";
+        }
+        if(role_id != -1)
+        {
+            set += "role_id=" + role_id + ",";
+        }
+        if(set != "")
+        {
+            set = set.substring(0, set.length() - 1);
+            sql = sql + set;
+            sql +=" where user_id="+uid;
+        }
+        else
+        {
+            rtJson.put("error","nothing is delivered");
+            return;
+        }
         showDebug("modifyUserEvent",sql);
         db.Connect();
         boolean useralreadyexist= db.existUser(user_name);
@@ -246,7 +293,6 @@ public class  UserControl extends HttpServlet {
             rtJson.put("userExist",1);
         }
         db.Close();
-
     }
     private void deleteUserEvent(HttpServletRequest request, HttpServletResponse response, JSONObject rtJson, JSONObject params) throws JSONException {
         String user_id = params.getString("uid");
