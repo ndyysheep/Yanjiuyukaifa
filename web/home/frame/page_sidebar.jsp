@@ -22,7 +22,7 @@
             <li class="start ">
                 <a href="index.html">
                     <i class="icon-home"></i>
-                    <span class="title">Dashboard</span>
+                    <span class="title">大数据页面</span>
                 </a>
             </li>
             <li>
@@ -30,27 +30,7 @@
                     <li>
                         <a href="ecommerce_index.html">
                             <i class="icon-home"></i>
-                            Dashboard</a>
-                    </li>
-                    <li>
-                        <a href="ecommerce_orders.html">
-                            <i class="icon-basket"></i>
-                            Orders</a>
-                    </li>
-                    <li>
-                        <a href="ecommerce_orders_view.html">
-                            <i class="icon-tag"></i>
-                            Order View</a>
-                    </li>
-                    <li>
-                        <a href="ecommerce_products.html">
-                            <i class="icon-handbag"></i>
-                            Products</a>
-                    </li>
-                    <li>
-                        <a href="ecommerce_products_edit.html">
-                            <i class="icon-pencil"></i>
-                            Product Edit</a>
+                            大数据页面</a>
                     </li>
                 </ul>
             </li>
