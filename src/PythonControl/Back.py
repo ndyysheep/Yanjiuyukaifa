@@ -24,26 +24,27 @@ def track_vehicles(frame, model, tracker, class_list, vehicle_types, last_positi
 
     bbox_idx = tracker.update([bbox for bbox, _ in tracked_vehicles])
 
-    for bbox, vehicle_type in zip(bbox_idx, [vt for _, vt in tracked_vehicles]):
-        x3, y3, x4, y4, id1 = bbox
-        current_bbox = [x3, y3, x4, y4]
-        color = (0, 255, 0)  # 默认绿色框（南向北）
+    with open('Data/Back/results.txt', 'a') as file:
+        for bbox, vehicle_type in zip(bbox_idx, [vt for _, vt in tracked_vehicles]):
+            x3, y3, x4, y4, id1 = bbox
+            current_bbox = [x3, y3, x4, y4]
+            color = (0, 255, 0)  # 默认绿色框（南向北）
 
-        reverse_counter[id1] = reverse_counter.get(id1, 0)
+            reverse_counter[id1] = reverse_counter.get(id1, 0)
 
-        if id1 in last_positions:
-            if is_moving_direction(last_positions[id1], current_bbox, 'south'):
-                reverse_counter[id1] += 1  # 增加逆行计数
-                if reverse_counter[id1] >= 3:  # 连续三帧或以上逆行
-                    color = (0, 0, 255)  # 逆行（北向南）为红色框
-                    current_time = start_time + timedelta(seconds=frame_number / frame_rate)
-                    print(f"违规时间: {current_time}, 车辆位置: {current_bbox}")
-            else:
-                reverse_counter[id1] = 0  # 重置逆行计数
+            if id1 in last_positions:
+                if is_moving_direction(last_positions[id1], current_bbox, 'south'):
+                    reverse_counter[id1] += 1  # 增加逆行计数
+                    if reverse_counter[id1] >= 3:  # 连续三帧或以上逆行
+                        color = (0, 0, 255)  # 逆行（北向南）为红色框
+                        current_time = start_time + timedelta(seconds=frame_number / frame_rate)
+                        file.write(f" 车辆位置: {current_bbox}, 逆行时间: {current_time}\n")
+                else:
+                    reverse_counter[id1] = 0  # 重置逆行计数
 
-        cv2.rectangle(frame, (x3, y3), (x4, y4), color, 2)
-        cv2.putText(frame, f"{vehicle_type} ID: {id1}", (x3, y3 - 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
-        last_positions[id1] = current_bbox
+            cv2.rectangle(frame, (x3, y3), (x4, y4), color, 2)
+            cv2.putText(frame, f"{vehicle_type} ID: {id1}", (x3, y3 - 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
+            last_positions[id1] = current_bbox
 
     return frame, tracked_vehicles
 
@@ -65,7 +66,7 @@ def demo_track_vehicles(video_path, model_path, class_file, vehicle_types, start
     frame_height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
     # 创建 VideoWriter 对象以写入视频
-    out = cv2.VideoWriter(current_dir+'/Data/Back/output.mp4', cv2.VideoWriter_fourcc(*'XVID'), frame_rate, (frame_width, frame_height))
+    out = cv2.VideoWriter(current_dir+'/Data/Back/output.mp4', cv2.VideoWriter_fourcc(*'mp4v'), frame_rate, (frame_width, frame_height))
 
     last_positions = {}
     reverse_counter = {}  # 用于跟踪每辆车的逆行帧数
@@ -89,7 +90,15 @@ def demo_track_vehicles(video_path, model_path, class_file, vehicle_types, start
     cap.release()
     out.release()  # 释放 VideoWriter 对象
     cv2.destroyAllWindows()
-
+file_path = 'Data/Back/results.txt'
+if os.path.exists(file_path):
+    # 删除文件
+    os.remove(file_path)
+    print(f"文件 {file_path} 已被删除。")
+else:
+    # 如果文件不存在，则创建它
+    with open(file_path, 'w') as file:
+        file.write('')
 current_dir =os.path.dirname(os.path.abspath(__file__))
 print("当前运行环境的绝对路径：", current_dir)
 video_path = current_dir+'/Data/Back/test.mp4'
