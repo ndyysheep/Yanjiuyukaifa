@@ -59,9 +59,10 @@ def process_frame(frame, object_detector, tracker, vehicle_count, template):
 def display_traffic_info(frame, vehicle_count, detections, last_id):
     global recorded_ids  # 使用全局变量
 
-    # 获取当前时间
-    current_time = datetime.datetime.now()
-    formatted_time = current_time.strftime("%Y-%m-%d %H:%M:%S")
+    fixed_time = datetime.datetime(2024, 1, 15, 12, 0, 0)
+
+    # 将固定时间格式化为字符串
+    formatted_time = fixed_time.strftime("%Y-%m-%d %H:%M:%S")
 
     # 打印违规信息
     if detections and last_id not in recorded_ids:  # 检查ID是否已记录
@@ -75,7 +76,7 @@ def display_traffic_info(frame, vehicle_count, detections, last_id):
 
 
 # 在程序开始时清空文件
-with open('Data/light/result', 'w'):
+with open('Data/light/result.txt', 'w'):
     pass
 
 
