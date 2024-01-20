@@ -82,7 +82,7 @@ def demo_track_vehicles(video_path, model_path, class_file, vehicle_types, start
         # 将处理后的帧写入输出视频
         out.write(updated_frame)
 
-        cv2.imshow("Tracked Vehicles", updated_frame)
+        # cv2.imshow("Tracked Vehicles", updated_frame)
         frame_number += 1
         if cv2.waitKey(1) & 0xFF == 27:  # Press ESC to exit
             break
