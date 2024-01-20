@@ -1,9 +1,12 @@
+import os
+
 import cv2
 import pandas as pd
 import re
 from ultralytics import YOLO
 from tracker import Tracker
 import easyocr
+import datetime
 
 # 创建 OCR 识别器实例
 reader = easyocr.Reader(['en'])
@@ -54,23 +57,37 @@ def track_vehicles(frame, model, tracker, class_list, vehicle_types, height_cuto
 
     bbox_idx = tracker.update([bbox for bbox, _ in tracked_vehicles])
 
-    for bbox, vehicle_type in zip(bbox_idx, [vt for _, vt in tracked_vehicles]):
-        x3, y3, x4, y4, id1 = bbox
-        cv2.rectangle(frame, (x3, y3), (x4, y4), (0, 255, 0), 2)
-        cv2.putText(frame, f"Vehicle ID: {id1}", (x3, y3 - 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+    with open('Data/CarID/results.txt', 'a') as file:
+        fixed_time = datetime.datetime(2024, 1, 15, 12, 0, 0)
 
-        if id1 not in recognized_plates:
-            license_plate = recognize_license_plate(frame[y3:y4, x3:x4])
-            if len(license_plate) >= 6:
-                recognized_plates[id1] = "川" + license_plate
-                print(f"Vehicle ID: {id1}, License Plate: {recognized_plates[id1]}")
+        # 将固定时间格式化为字符串
+        formatted_time = fixed_time.strftime("%Y-%m-%d %H:%M:%S")
+        for bbox, vehicle_type in zip(bbox_idx, [vt for _, vt in tracked_vehicles]):
+            x3, y3, x4, y4, id1 = bbox
+            cv2.rectangle(frame, (x3, y3), (x4, y4), (0, 255, 0), 2)
+            cv2.putText(frame, f"Vehicle ID: {id1}", (x3, y3 - 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
 
-        if id1 in recognized_plates:
-            cv2.putText(frame, recognized_plates[id1], (x3, y4 + 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 2)
+            if id1 not in recognized_plates:
+                license_plate = recognize_license_plate(frame[y3:y4, x3:x4])
+                if len(license_plate) >= 6:
+                    recognized_plates[id1] = "川" + license_plate
+                    file.write(f"车辆ID: {id1}, 车牌号: {recognized_plates[id1]},记录时间{formatted_time}\n")
+
+            if id1 in recognized_plates:
+                cv2.putText(frame, recognized_plates[id1], (x3, y4 + 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 2)
 
     return frame, tracked_vehicles
 
 # 初始化模型和跟踪器
+file_path = 'Data/CarID/results.txt'
+if os.path.exists(file_path):
+    # 删除文件
+    os.remove(file_path)
+    print(f"文件 {file_path} 已被删除。")
+else:
+    # 如果文件不存在，则创建它
+    with open(file_path, 'w') as file:
+        file.write('')
 model_path = 'Data/Flow/yolov8s.pt'
 class_file = 'Data/Flow/coco.txt'
 vehicle_types = ['car', 'bus']
