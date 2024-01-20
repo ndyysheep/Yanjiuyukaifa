@@ -128,7 +128,7 @@ with open('Data/Double/results.txt', 'w') as file:
         # 将处理后的帧写入视频文件
         out.write(frame)
 
-        cv.imshow('Yellow Line Detection', frame)
+        # cv.imshow('Yellow Line Detection', frame)
         if cv.waitKey(1) & 0xFF == ord('q'):
             break
 
