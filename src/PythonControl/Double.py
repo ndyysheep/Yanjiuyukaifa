@@ -108,28 +108,29 @@ prev_subregions = [None] * 4  # 存储前一帧的四个角的小区域
 # 视频开始时间
 start_time = datetime.datetime(2023, 12, 10, 12, 0, 0)
 
-while True:
-    ret, frame = cap.read()
-    if not ret:
-        break
+with open('Data/Double/results.txt', 'w') as file:
+    while True:
+        ret, frame = cap.read()
+        if not ret:
+            break
 
-    frame, longest_rect, max_length = detect_yellow_lines(frame, longest_rect, max_length)
+        frame, longest_rect, max_length = detect_yellow_lines(frame, longest_rect, max_length)
 
-    if longest_rect is not None:
-        current_subregions = extract_subregions(frame, longest_rect)
-        for i, (current_subregion, (x, y)) in enumerate(current_subregions):
-            if has_pixel_changed(prev_subregions[i], current_subregion[0]):
-                current_time = start_time + datetime.timedelta(seconds=cap.get(cv.CAP_PROP_POS_FRAMES) / frame_rate)
-                print(f"Pixel change detected at {current_time} in region near ({x}, {y})")
-                # 可以在这里加入额外的处理
-            prev_subregions[i] = current_subregion[0]  # 更新前一帧的区域
+        if longest_rect is not None:
+            current_subregions = extract_subregions(frame, longest_rect)
+            for i, (current_subregion, (x, y)) in enumerate(current_subregions):
+                if has_pixel_changed(prev_subregions[i], current_subregion[0]):
+                    current_time = start_time + datetime.timedelta(seconds=cap.get(cv.CAP_PROP_POS_FRAMES) / frame_rate)
+                    file.write(f"压线时间：{current_time}压线位置：({x}, {y})\n")
+                    # 可以在这里加入额外的处理
+                prev_subregions[i] = current_subregion[0]  # 更新前一帧的区域
 
-    # 将处理后的帧写入视频文件
-    out.write(frame)
+        # 将处理后的帧写入视频文件
+        out.write(frame)
 
-    cv.imshow('Yellow Line Detection', frame)
-    if cv.waitKey(1) & 0xFF == ord('q'):
-        break
+        cv.imshow('Yellow Line Detection', frame)
+        if cv.waitKey(1) & 0xFF == ord('q'):
+            break
 
 # 释放视频捕获和视频写入器
 cap.release()
