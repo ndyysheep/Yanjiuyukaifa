@@ -87,17 +87,27 @@ public class PythonDao {
             String[] command = {selectionPath, pythonScriptPath};
             ProcessBuilder pb = new ProcessBuilder(command);
             pb.directory(new File(workingDirectory+"\\src\\PythonControl"));
-
+            showDebug("开始执行.py脚本");
             // 启动进程
             Process process = pb.start();
+            BufferedReader stdout = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            BufferedReader stderr = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+            String line;
+            while ((line = stdout.readLine()) != null)
+            {
+                // do something, logging
+            }
+            while ((line = stderr.readLine()) != null)
+            {
+                // do something, logging
+            }
+
 
             //========此处读取处理数据========
 
             //========读取完毕========
-
             // 等待进程执行完成
             int exitCode = process.waitFor();
-
             System.out.println("进程执行完成，退出码: " + exitCode);
         } catch (IOException e) {
             e.printStackTrace();
@@ -117,9 +127,21 @@ public class PythonDao {
             String[] command = {selectionPath, pythonScriptPath};
             ProcessBuilder pb = new ProcessBuilder(command);
             pb.directory(new File(workingDirectory+"\\src\\PythonControl"));
-
+            showDebug("[getFlow]开始运行");
             // 启动进程
             Process process = pb.start();
+            BufferedReader stdout = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            BufferedReader stderr = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+            String line;
+            while ((line = stdout.readLine()) != null)
+            {
+                // do something, logging
+            }
+            while ((line = stderr.readLine()) != null)
+            {
+                // do something, logging
+            }
+
 
             //========此处读取处理数据========
 
@@ -139,8 +161,8 @@ public class PythonDao {
     public void getCarId(Data data,JSONObject json) {
 
         try {
-            operateAttachment(data,json,"CarId");
-            String pythonScriptPath = "CarId.py";
+            operateAttachment(data,json,"CarID");
+            String pythonScriptPath = "CarID.py";
             // 构建命令
             String[] command = {selectionPath, pythonScriptPath};
             ProcessBuilder pb = new ProcessBuilder(command);
@@ -148,6 +170,17 @@ public class PythonDao {
 
             // 启动进程
             Process process = pb.start();
+            BufferedReader stdout = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            BufferedReader stderr = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+            String line;
+            while ((line = stdout.readLine()) != null)
+            {
+                // do something, logging
+            }
+            while ((line = stderr.readLine()) != null)
+            {
+                // do something, logging
+            }
 
             //========此处读取处理数据========
 
@@ -181,6 +214,18 @@ public class PythonDao {
             pb.directory(new File(workingDirectory));
             // 启动进程
             Process process = pb.start();
+            BufferedReader stdout = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            BufferedReader stderr = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+            String line;
+            while ((line = stdout.readLine()) != null)
+            {
+                // do something, logging
+            }
+            while ((line = stderr.readLine()) != null)
+            {
+                // do something, logging
+            }
+
 
             // 等待进程执行完成
             int exitCode = process.waitFor();

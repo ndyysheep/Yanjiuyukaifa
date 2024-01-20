@@ -67,7 +67,7 @@ public class FileManager {
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
-        System.out.println("文件复制完成");
+        showDebug("文件复制完成,文件地址:"+target);
 
     }
 
