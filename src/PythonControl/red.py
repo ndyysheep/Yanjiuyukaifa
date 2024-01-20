@@ -52,7 +52,7 @@ def process_frame(frame, object_detector, tracker, vehicle_count, template):
             last_id = boxes_ids[-1][-1]  # 获取最后一个检测到的id
             display_traffic_info(frame_processed, vehicle_count, detections, last_id)
 
-    cv2.imshow("Final Frame", final_frame)
+    # cv2.imshow("Final Frame", final_frame)
     return vehicle_count
 
 
