@@ -2,11 +2,9 @@ import cv2
 import pandas as pd
 from ultralytics import YOLO
 import datetime
-import Databasecn
 from tracker import *
 import cvzone
 from datetime import datetime, timedelta
-from Databasecn import *
 
 
 def flow_count(video_path, vehicle_types=['car'], directions=['north', 'south'], model_path='Data/Flow/yolov8s.pt', class_file='Data/Flow/coco.txt', cy1=424, offset=6, output_video_path='output.mp4'):
@@ -89,20 +87,20 @@ def flow_count(video_path, vehicle_types=['car'], directions=['north', 'south'],
     out.release()  # 关闭视频写入器
     cv2.destroyAllWindows()
     total_num = 0
-    for direction in directions:
-        for vehicle_type, counter in counters[direction].items():
-            print(f"总计 {direction} {vehicle_type}: {len(counter)} 辆")
-            total_num += len(counter)
+    with open('Data/Flow/results.txt', 'w') as file:
+        for direction in directions:
+            for vehicle_type, counter in counters[direction].items():
+                file.write(f"总计 {direction} {vehicle_type}: {len(counter)} 辆\n")
+                total_num += len(counter)
 
-    video_duration = timedelta(seconds=total_frames / frame_rate)
-    end_time = start_time + video_duration
+        video_duration = timedelta(seconds=total_frames / frame_rate)
+        end_time = start_time + video_duration
 
-    print(f"总计车流量为：{total_num}")
-    print(f"视频起始时间: {start_time}")
-    print(f"视频结束时间: {end_time}")
-    print(f"视频时长: {video_duration}")
+        file.write(f"总计车流量为：{total_num}\n")
+        file.write(f"视频起始时间: {start_time}\n")
+        file.write(f"视频结束时间: {end_time}\n")
 
-    list = [str(start_time), str(end_time), total_num]
+        lst = [str(start_time), str(end_time), str(total_num)]
 
     return list
 
@@ -116,8 +114,6 @@ def flow_count(video_path, vehicle_types=['car'], directions=['north', 'south'],
 #         #     url = row[-1]
 #         #     # print(url)
 url = 'Data/Flow/test.mp4'
-new_values = flow_count(url, ['car', 'bus'], ['north', 'south'], output_video_path='Data/Flow/output.mp4')
-Databasecn.flow_update('count_of_lane', new_values)
-
+new_values = flow_count(url, ['car'], ['north', 'south'], output_video_path='Data/Flow/output.mp4')
 
 
