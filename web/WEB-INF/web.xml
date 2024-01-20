@@ -145,6 +145,15 @@
 	<!---Api接口-->
 
 	<servlet>
+		<servlet-name>video_data_servlet_action</servlet-name>
+		<servlet-class>PythonControl.VideoServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>video_data_servlet_action</servlet-name>
+		<url-pattern>/video_data_servlet_action</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
 		<servlet-name>weibohot_data_servlet_action</servlet-name>
 		<servlet-class>monitor.file.WeibohotAction</servlet-class>
 	</servlet>

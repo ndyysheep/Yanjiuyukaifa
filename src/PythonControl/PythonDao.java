@@ -28,6 +28,10 @@ public class PythonDao {
                 "[" + (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).format(new Date()) + "][PythonControl/PythonDao]" + msg);
     }
 
+    public void setPath(String path)
+    {
+        workingDirectory = path;
+    }
 
     /**
      * 这是一个样板的函数，可以拷贝做修改用
@@ -38,23 +42,17 @@ public class PythonDao {
         JSONObject param = data.getParam();
         int resultCode = 0;
         String resultMsg = "ok";
-        String target = System.getProperty("user.dir") + "\\src\\PythonControl\\"+type+"\\test.mp4";
+        String target = workingDirectory + "\\src\\PythonControl\\Data\\"+type+"\\test.mp4";
         /*--------------------获取变量 完毕--------------------*/
         /*--------------------数据操作 开始--------------------*/
         // 构造sql语句，根据传递过来的查询条件参数
         // 首先分析json里有多少文件，多个文件需要用循环构造多个sql语句
-        showDebug("[saveUploadFileRecord]保存文件后，文件和字段信息json是：" + json.toString());
+        showDebug("[operateAttachment]处理后，文件和字段信息json是：" + json.toString());
         /*--------------------sql语句 开始--------------------*/
 
-        Data videoData = new Data();
-        videoData.setParam(json);
 
-        // 构造sql语句，根据传递过来的条件参数
-
-        JSONArray jsonFileList = videoData.getParam().getJSONArray("upload_files");
-
-        String file_path_name = jsonFileList.getJSONObject(0).has("file_path_name")
-                ? jsonFileList.getJSONObject(0).get("file_path_name").toString()
+        String file_path_name = param.has("file_path_name")
+                ? param.getString("file_path_name")
                 : null;
 
         if (file_path_name == null)
@@ -63,6 +61,7 @@ public class PythonDao {
         }
         else
         {
+            file_path_name = workingDirectory+file_path_name;
             FileManager myFile = new FileManager();
             myFile.copyFile(file_path_name,target);
         }
@@ -87,7 +86,7 @@ public class PythonDao {
             // 构建命令
             String[] command = {selectionPath, pythonScriptPath};
             ProcessBuilder pb = new ProcessBuilder(command);
-            pb.directory(new File(workingDirectory));
+            pb.directory(new File(workingDirectory+"\\src\\PythonControl"));
 
             // 启动进程
             Process process = pb.start();
@@ -117,7 +116,7 @@ public class PythonDao {
             // 构建命令
             String[] command = {selectionPath, pythonScriptPath};
             ProcessBuilder pb = new ProcessBuilder(command);
-            pb.directory(new File(workingDirectory));
+            pb.directory(new File(workingDirectory+"\\src\\PythonControl"));
 
             // 启动进程
             Process process = pb.start();
@@ -140,12 +139,12 @@ public class PythonDao {
     public void getCarId(Data data,JSONObject json) {
 
         try {
-            operateAttachment(data,json,"Flow");
-            String pythonScriptPath = "Flow.py";
+            operateAttachment(data,json,"CarId");
+            String pythonScriptPath = "CarId.py";
             // 构建命令
             String[] command = {selectionPath, pythonScriptPath};
             ProcessBuilder pb = new ProcessBuilder(command);
-            pb.directory(new File(workingDirectory));
+            pb.directory(new File(workingDirectory+"\\src\\PythonControl"));
 
             // 启动进程
             Process process = pb.start();

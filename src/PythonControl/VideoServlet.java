@@ -8,6 +8,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.Test;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.*;
+import java.net.URL;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -113,6 +115,21 @@ public class VideoServlet extends HttpServlet{
                 try {
 
                     getCarIdRecognition(request, response, json);
+
+                } catch (Exception e) {
+
+                    e.printStackTrace();
+
+                }
+
+            }
+
+            if (action.equals("upload_file")) {
+                actionOk = true;
+
+                try {
+
+                    uploadFile(request, response, json);
 
                 } catch (Exception e) {
 
@@ -233,13 +250,19 @@ public class VideoServlet extends HttpServlet{
 
     private void getBackRecognition(HttpServletRequest request, HttpServletResponse response, JSONObject json)
             throws JSONException, SQLException {
+        String absolutePath =request.getServletContext().getRealPath("");
+        String myFilePath = new File(absolutePath).getParentFile().getParentFile().getParent();
         PythonDao dao = new PythonDao();
+        dao.setPath(myFilePath);
         dao.getBack(data, json);
     }
 
     private void getFlowRecognition(HttpServletRequest request, HttpServletResponse response, JSONObject json)
             throws JSONException, SQLException {
+        String absolutePath =request.getServletContext().getRealPath("");
+        String myFilePath = new File(absolutePath).getParentFile().getParentFile().getParent();
         PythonDao dao = new PythonDao();
+        dao.setPath(myFilePath);
         dao.getFlow(data, json);
     }
 
@@ -247,7 +270,10 @@ public class VideoServlet extends HttpServlet{
 
     private void getCarIdRecognition(HttpServletRequest request, HttpServletResponse response, JSONObject json)
             throws JSONException, SQLException {
+        String absolutePath =request.getServletContext().getRealPath("");
+        String myFilePath = new File(absolutePath).getParentFile().getParentFile().getParent();
         PythonDao dao = new PythonDao();
+        dao.setPath(myFilePath);
         dao.getCarId(data,json);
     }
 
@@ -262,7 +288,10 @@ public class VideoServlet extends HttpServlet{
             throws JSONException, SQLException {
         // 先做初始化工作，定义一堆目录变量
         String fileUrl = null;
-        String rootPath = System.getProperty("user.dir")+"\\\\upload";
+        String absolutePath =request.getServletContext().getRealPath("");
+        String myFilePath = new File(absolutePath).getParentFile().getParentFile().getParent();
+
+        String rootPath = myFilePath+"\\\\upload";
         String filePath = rootPath + "\\\\teach\\\\" + (new SimpleDateFormat("yyyyMMddHH")).format(new Date());
         String rootUrl = "/upload";
         String filePathUrl = rootUrl + "/teach/" + (new SimpleDateFormat("yyyyMMddHH")).format(new Date());

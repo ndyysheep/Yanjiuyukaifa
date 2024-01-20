@@ -94,7 +94,8 @@ public class FileManager {
 
         String upload_time = (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).format(new Date());
 
-        if (file_path_name != null) {
+        if (file_path_name != null)
+        {
             String sql = "insert into " + "video_info" + "(upload_time,video_attachment,video_url)";
 
             sql = sql + " values('" + upload_time + "','" + file_path_name + "','" + visual_path_name + "')";
@@ -102,7 +103,9 @@ public class FileManager {
             updateRecord(data, json);
 
             showDebug("[saveUploadFileRecord]保存文件后，构造的sql是：" + sql);
-        } else {
+        }
+        else
+        {
             showDebug("[saveUploadFileRecord]保存文件后,没有得到数据" + file_path_name);
         }
 

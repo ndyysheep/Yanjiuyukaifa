@@ -27,7 +27,7 @@
     <%@include file="../../home/frame/frame_style.jsp"%>
     <script src="../../assets/global/plugins/echarts/echarts.min.js" type="text/javascript"></script>
     <style>
-        .page-content{
+        .page-content-child{
             display: flex;
             flex-flow: row nowrap;
         }
@@ -43,9 +43,10 @@
             flex: 1;
             height: 100%;
             min-height: 600px;
+            min-width : 600px;
             display: flex;
             flex-flow: column nowrap;
-            background: url("./containers/earth.gif") center no-repeat;
+            background: url("containers/earth.gif") center no-repeat;
             -webkit-background-size: contain;
             background-size: contain;
         }
@@ -198,6 +199,8 @@
 ">
             <img src="../../assets/admin/layout/img/loading.gif" alt="loading">
         </div>
+
+        <input type="hidden" id="page_id" name="page_id" value="video_operate">
         <div class="page-content" id="updateVideo">
             <form id="ajax_form" name="ajax_form" class="form-horizontal" method="post" enctype="multipart/form-data">
                 <div id="ajax_div" name="ajax_div">
@@ -215,36 +218,54 @@
                 <div id="record_list_div" name="record_list_div"></div>
             </form>
         </div>
-        <div class="page-content" style="display: none;" id="echartDiv">
-            <div class="left-div">
-                <div class="echart-div" id="echart-div1"></div>
-                <div class="echart-div" id="echart-div2"></div>
-            </div>
-            <div class="center-div" id="center-div">
-                <div class="center-top-div">
-                    <div class="number-item">
-                        <div class="number-title">
-                            8119
+        <div class="page-content">
+            <div class="page-content-child" style="display: none;" id="echartDiv">
+                <div class="left-div">
+                    <div class="echart-div" id="echart-div1"></div>
+                    <div class="echart-div" id="echart-div2"></div>
+                </div>
+                <div class="center-div" id="center-div">
+                    <div class="center-top-div">
+                        <div class="number-item">
+                            <div class="number-title">
+                               0
+                            </div>
+                            <div class="number-text">
+                                总车流量
+                            </div>
                         </div>
-                        <div class="number-text">
-                            总车流量
+                        <div class="number-item">
+                            <div class="number-title">
+                                0
+                            </div>
+                            <div class="number-text">
+                                最近车流量
+                            </div>
                         </div>
                     </div>
-                    <div class="number-item">
-                        <div class="number-title">
-                            562
-                        </div>
-                        <div class="number-text">
-                            最近车流量
+
+                <div id="video_div">
+                </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <button type="button" id="get_back_button" name ="get_back_button" class="btn default red-stripe">逆行检测</button>
+                            <button type="button" id="get_flow_button" name ="get_flow_button" class="btn default blue-stripe">车流量检测</button>
+                            <button type="button" id="get_red_button" name="get_red_button" class="btn default red-stripe">闯红灯检测</button>
+                            <button type="button" id="get_carId_button" name="get_carId_button" class="btn default blue-stripe">车牌号检测</button>
+                            <button type="button" id="get_double_button" name ="get_double_button" class="btn default blue-stripe">压双黄线检测</button>
                         </div>
                     </div>
+
+                </div>
+
+                <div class="right-div">
+                    <div class="echart-div" id="echart-div3"></div>
+                    <div class="echart-div" id="echart-div4"></div>
                 </div>
             </div>
-            <div class="right-div">
-                <div class="echart-div" id="echart-div3"></div>
-                <div class="echart-div" id="echart-div4"></div>
-            </div>
         </div>
+
     </div>
     <!-- END CONTENT -->
 </div>
@@ -306,7 +327,7 @@
                 barWidth:'20',
                 name: '违章数',
                 type: 'bar',
-                data: [10, 152, 200, 334, 190, 30, 220]
+                data: [0, 0, 0, 0, 0, 0, 0]
             }
         ]
     }
@@ -346,7 +367,7 @@
                 barWidth:'20',
                 name: '违章数',
                 type: 'bar',
-                data: [105, 52, 200, 134, 290, 530, 220]
+                data: [0, 0, 0 ,0, 0,0, 0]
             }
         ]
     };
@@ -415,7 +436,7 @@
                 emphasis: {
                     focus: 'series'
                 },
-                data: [140, 232, 101, 264, 90, 340, 250]
+                data: [0, 0, 0, 0, 0, 0, 0]
             }
         ]
     };
@@ -456,7 +477,7 @@
                 barWidth:'20',
                 name: '违章数',
                 type: 'bar',
-                data: [610, 152, 100, 134, 590, 130, 120]
+                data: [0, 0, 0, 0, 0, 0, 0]
             }
         ]
     }
@@ -480,56 +501,58 @@
                     var html="";
                     html+="<video width=\"640\" height=\"360\" controls style=\"width: 100%;height: auto;\">";
                     html+="<source src='"+fileUrl+"' type=\"video/mp4\">"+"</video>"
-
-                    $("#center-div").append(html);
+                    html+="<br>";
+                    $("#video_div").html(html);
                     $("#center-div").css('background','none');
                     $('#updateVideo').hide();
-                    $.ajax({
-                        type : 'post', /*设置表单以post方法提交*/
-                        url : '../../illegal_data_servlet_action', /*设置post提交到的页面*/
-                        data:{
-                            ajax:'ajax',
-                            action:'illegal_statistics',
-
-                        },
-                        success : function(json) {
-                            var echartsarray = [[],[],[],[],[]];
-                            var times = [];
-                            var count = 0;
-                            for (var i = 0; i < json.aaData.length; i++) {
-                                var data = json.aaData[i];
-                                if(data.vehicle_type&&count<2){
-
-                                    $('.number-title',$('.number-item')[count]).text(data.num)
-                                    $('.number-text',$('.number-item')[count]).text(data.vehicle_type)
-                                    count++;
-
-                                }
-                            }
-                            for (var i = 0; i < json.hour_aaData.length; i++) {
-                                var data = json.hour_aaData[i];
-                                echartsarray[0].push(data.status1);
-                                echartsarray[1].push(data.status2);
-                                echartsarray[2].push(data.status3);
-                                echartsarray[3].push(data.status4);
-                                times.push(data.time_interval);
-                            }
-                            echartdata1.series[0].data = echartsarray[0];
-                            echartdata1.xAxis[0].data = times;
-                            echartdata2.series[0].data = echartsarray[1];
-                            echartdata2.xAxis[0].data = times;
-                            echartdata3.series[0].data = echartsarray[2];
-                            echartdata3.xAxis[0].data = times;
-                            echartdata4.series[0].data = echartsarray[3];
-                            echartdata4.xAxis[0].data = times;
-                            initdiv1('echart-div1',echartdata1);
-                            initdiv1('echart-div2',echartdata2);
-                            initdiv1('echart-div3',echartdata3);
-                            initdiv1('echart-div4',echartdata4);
-                            $('#site_activities_loading').hide();
-                            $('#echartDiv').show();
-                        }
-                    })
+                    // $.ajax({
+                    //     type : 'post', /*设置表单以post方法提交*/
+                    //     url : '../../illegal_data_servlet_action', /*设置post提交到的页面*/
+                    //     data:{
+                    //         ajax:'ajax',
+                    //         action:'illegal_statistics',
+                    //
+                    //     },
+                    //     success : function(json) {
+                    //         var echartsarray = [[],[],[],[],[]];
+                    //         var times = [];
+                    //         var count = 0;
+                    //         for (var i = 0; i < json.aaData.length; i++) {
+                    //             var data = json.aaData[i];
+                    //             if(data.vehicle_type&&count<2){
+                    //
+                    //                 $('.number-title',$('.number-item')[count]).text(data.num)
+                    //                 $('.number-text',$('.number-item')[count]).text(data.vehicle_type)
+                    //                 count++;
+                    //
+                    //             }
+                    //         }
+                    //         for (var i = 0; i < json.hour_aaData.length; i++) {
+                    //             var data = json.hour_aaData[i];
+                    //             echartsarray[0].push(data.status1);
+                    //             echartsarray[1].push(data.status2);
+                    //             echartsarray[2].push(data.status3);
+                    //             echartsarray[3].push(data.status4);
+                    //             times.push(data.time_interval);
+                    //         }
+                    //         echartdata1.series[0].data = echartsarray[0];
+                    //         echartdata1.xAxis[0].data = times;
+                    //         echartdata2.series[0].data = echartsarray[1];
+                    //         echartdata2.xAxis[0].data = times;
+                    //         echartdata3.series[0].data = echartsarray[2];
+                    //         echartdata3.xAxis[0].data = times;
+                    //         echartdata4.series[0].data = echartsarray[3];
+                    //         echartdata4.xAxis[0].data = times;
+                    //         initdiv1('echart-div1',echartdata1);
+                    //         initdiv1('echart-div2',echartdata2);
+                    //         initdiv1('echart-div3',echartdata3);
+                    //         initdiv1('echart-div4',echartdata4);
+                    //         $('#site_activities_loading').hide();
+                    //         $('#echartDiv').show();
+                    //     }
+                    // })
+                             $('#site_activities_loading').hide();
+                             $('#echartDiv').show();
 
                 }else{
                     alert("[onAjaxUploadFile]没有上传文件结果返回！");
@@ -552,6 +575,8 @@
         }
     }
 </script>
+
+<script src="containers/js/video.js"></script>
 <!-- END JAVASCRIPTS -->
 </body>
 <!-- END BODY -->
