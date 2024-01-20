@@ -65,17 +65,14 @@ var Page = function() {
 			console.log(JSON.stringify(json));
 			if(json.result_code===0)
 			{
-				if(json.upload_files.length>0){
-					var files=json.upload_files;
-					var fileUrl = files[0].file_url_name;
-					var objectId = files[0].file_object_id;
+				if(json.file_path!==null){
 
+					var fileUrl = json.file_path;
 					var html="";
 					html+="<video width=\"640\" height=\"360\" controls>";
 					html+="<source src='"+fileUrl+"' type=\"video/mp4\">"+"</video>"
 					$("#video_div").html(html);
 					console.log("[onAjaxUploadFile]fileUrl="+fileUrl);
-					console.log("[onAjaxUploadFile]objectId="+objectId);
 				}else{
 					alert("[onAjaxUploadFile]没有上传文件结果返回！");
 				}

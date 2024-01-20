@@ -124,6 +124,36 @@ public class VideoServlet extends HttpServlet{
 
             }
 
+            if (action.equals("get_double_record")) {
+                actionOk = true;
+
+                try {
+
+                    getDoubleLineRecognition(request, response, json);
+
+                } catch (Exception e) {
+
+                    e.printStackTrace();
+
+                }
+
+            }
+
+            if (action.equals("get_red_record")) {
+                actionOk = true;
+
+                try {
+
+                    getRedLightRecognition(request, response, json);
+
+                } catch (Exception e) {
+
+                    e.printStackTrace();
+
+                }
+
+            }
+
             if (action.equals("upload_file")) {
                 actionOk = true;
 
@@ -276,6 +306,26 @@ public class VideoServlet extends HttpServlet{
         dao.setPath(myFilePath);
         dao.getCarId(data,json);
     }
+
+    private void getRedLightRecognition(HttpServletRequest request, HttpServletResponse response, JSONObject json)
+            throws JSONException, SQLException {
+        String absolutePath =request.getServletContext().getRealPath("");
+        String myFilePath = new File(absolutePath).getParentFile().getParentFile().getParent();
+        PythonDao dao = new PythonDao();
+        dao.setPath(myFilePath);
+        dao.getRed(data,json);
+    }
+
+
+    private void getDoubleLineRecognition(HttpServletRequest request, HttpServletResponse response, JSONObject json)
+            throws JSONException, SQLException {
+        String absolutePath =request.getServletContext().getRealPath("");
+        String myFilePath = new File(absolutePath).getParentFile().getParentFile().getParent();
+        PythonDao dao = new PythonDao();
+        dao.setPath(myFilePath);
+        dao.getDoubleLine(data,json);
+    }
+
 
 
     private void uploadFile(HttpServletRequest request, HttpServletResponse response, JSONObject json)

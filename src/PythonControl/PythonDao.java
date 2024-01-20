@@ -81,12 +81,14 @@ public class PythonDao {
 
 
         try {
+            FileManager myFile = new FileManager();
             operateAttachment(data,json,"Back");
             String pythonScriptPath = "Back.py";
+            String directUrl = workingDirectory+"\\src\\PythonControl";
             // 构建命令
             String[] command = {selectionPath, pythonScriptPath};
             ProcessBuilder pb = new ProcessBuilder(command);
-            pb.directory(new File(workingDirectory+"\\src\\PythonControl"));
+            pb.directory(new File(directUrl));
             showDebug("开始执行.py脚本");
             // 启动进程
             Process process = pb.start();
@@ -108,6 +110,18 @@ public class PythonDao {
             //========读取完毕========
             // 等待进程执行完成
             int exitCode = process.waitFor();
+
+            String work_path = workingDirectory+"\\src\\PythonControl\\Data\\Back";
+
+            String file_path =  work_path+"\\output.mp4";
+            String numberName = (new SimpleDateFormat("yyyyMMddHH")).format(new Date())+".mp4";
+            String virtual_path = "\\upload\\Back\\"+numberName;
+
+            myFile.copyFile(file_path,workingDirectory+virtual_path);
+
+            json.put("file_path", virtual_path);
+            json.put("result_code", exitCode); // 返回0表示正常，不等于0就表示有错误产生，错误代码
+            myFile.getResult(work_path+"\\results.txt");
             System.out.println("进程执行完成，退出码: " + exitCode);
         } catch (IOException e) {
             e.printStackTrace();
@@ -199,19 +213,16 @@ public class PythonDao {
         }
     }
 
-    public static void main(String[] arg){
+    public void getRed(Data data,JSONObject json) {
 
         try {
-
-            String selectionPath = "C:\\Users\\15509\\.conda\\envs\\demo\\python.exe";
-            String workingDirectory = System.getProperty("user.dir");
-            System.out.println(workingDirectory);
-            workingDirectory+="\\src\\PythonControl";
+            operateAttachment(data,json,"red");
             String pythonScriptPath = "red.py";
             // 构建命令
             String[] command = {selectionPath, pythonScriptPath};
             ProcessBuilder pb = new ProcessBuilder(command);
-            pb.directory(new File(workingDirectory));
+            pb.directory(new File(workingDirectory+"\\src\\PythonControl"));
+
             // 启动进程
             Process process = pb.start();
             BufferedReader stdout = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -226,19 +237,66 @@ public class PythonDao {
                 // do something, logging
             }
 
+            //========此处读取处理数据========
+
+            //========读取完毕========
 
             // 等待进程执行完成
             int exitCode = process.waitFor();
-
-            FileManager myFile = new FileManager();
-
-            myFile.copyFile(workingDirectory+"\\Data\\light\\output.mp4",System.getProperty("user.dir")+"\\upload\\red\\1.mp4");
-
             System.out.println("进程执行完成，退出码: " + exitCode);
+
         } catch (IOException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
         }
+    }
+
+    public void getDoubleLine(Data data,JSONObject json) {
+
+        try {
+            operateAttachment(data,json,"Double");
+            String pythonScriptPath = "Double.py";
+            // 构建命令
+            String[] command = {selectionPath, pythonScriptPath};
+            ProcessBuilder pb = new ProcessBuilder(command);
+            pb.directory(new File(workingDirectory+"\\src\\PythonControl"));
+
+            // 启动进程
+            Process process = pb.start();
+            BufferedReader stdout = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            BufferedReader stderr = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+            String line;
+            while ((line = stdout.readLine()) != null)
+            {
+                // do something, logging
+            }
+            while ((line = stderr.readLine()) != null)
+            {
+                // do something, logging
+            }
+
+            //========此处读取处理数据========
+
+            //========读取完毕========
+
+            // 等待进程执行完成
+            int exitCode = process.waitFor();
+            System.out.println("进程执行完成，退出码: " + exitCode);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public static void main(String[] arg){
+
+            FileManager myFile = new FileManager();
+            myFile.getResult("D:\\.Probe0311\\研究与开发实践\\Opencv\\src\\PythonControl\\Data\\Back\\results.txt");
     }
 }

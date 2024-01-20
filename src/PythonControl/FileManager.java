@@ -8,6 +8,7 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -15,6 +16,7 @@ import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 
 public class FileManager {
@@ -69,6 +71,25 @@ public class FileManager {
         }
         showDebug("文件复制完成,文件地址:"+target);
 
+    }
+
+    public void getResult(String filePath)
+    {
+
+        try {
+            // 读取文件内容
+            Path path = Paths.get(filePath);
+            List<String> lines = Files.readAllLines(path, StandardCharsets.UTF_8);
+
+            // 处理文件内容
+            for (String line : lines) {
+                // 在这里处理每行的内容
+                System.out.println(line);
+            }
+        } catch (IOException e) {
+            // 处理读取文件时的异常
+            e.printStackTrace();
+        }
     }
 
     public void saveUploadFileRecord(JSONObject json, Data data) throws JSONException, SQLException {

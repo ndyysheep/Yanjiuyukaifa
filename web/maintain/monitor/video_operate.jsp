@@ -333,7 +333,7 @@
     }
     var echartdata2 = {
         title: {
-            text: '违规停车'
+            text: '逆行'
         },
         color:['#28ce89'],
         tooltip: {
