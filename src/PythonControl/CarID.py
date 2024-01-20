@@ -132,7 +132,7 @@ while True:
     out.write(updated_frame)
 
     # 显示处理后的帧
-    cv2.imshow("Tracked Vehicles", updated_frame)
+    # cv2.imshow("Tracked Vehicles", updated_frame)
     if cv2.waitKey(1) & 0xFF == 27:  # 按下 ESC 键退出
         break
 
