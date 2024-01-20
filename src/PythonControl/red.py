@@ -69,7 +69,7 @@ def display_traffic_info(frame, vehicle_count, detections, last_id):
         cv2.putText(frame, f"Violation: ID {last_id}", (20, 40), cv2.FONT_HERSHEY_PLAIN, 1, (255, 0, 0), 2)
 
         # 写入到文件中，并将ID添加到已记录集合中
-        with open('Data/light/result', 'a') as file:
+        with open('Data/light/result.txt', 'a') as file:
             file.write(f"车辆ID:{last_id} 闯红灯位置:(X:{x}, Y:{y}) 闯红灯时间:{formatted_time}\n")
             recorded_ids.add(last_id)  # 记录ID
 
@@ -77,6 +77,7 @@ def display_traffic_info(frame, vehicle_count, detections, last_id):
 # 在程序开始时清空文件
 with open('Data/light/result', 'w'):
     pass
+
 
 def main():
     source = "Data/light/left.mp4"
@@ -87,6 +88,15 @@ def main():
     template = cv2.imread(template_path, 0)
     vehicle_count = 0
 
+    # 获取原始视频的分辨率和帧率
+    frame_width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+    frame_height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+    fps = cap.get(cv2.CAP_PROP_FPS)
+
+    # 初始化VideoWriter对象
+    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+    out = cv2.VideoWriter('Data/light/output.mp4', fourcc, fps, (frame_width, frame_height))
+
     while cap.isOpened():
         ret, frame = cap.read()
         if not ret:
@@ -94,10 +104,15 @@ def main():
 
         vehicle_count = process_frame(frame, object_detector, tracker, vehicle_count, template)
 
+        # 将处理后的帧写入视频文件
+        out.write(frame)
+
         if cv2.waitKey(30) == 27:
             break
 
+    # 释放资源
     cap.release()
+    out.release()  # 释放VideoWriter对象
     cv2.destroyAllWindows()
 
 if __name__ == "__main__":
