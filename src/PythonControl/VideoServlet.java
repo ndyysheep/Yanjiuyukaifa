@@ -92,6 +92,36 @@ public class VideoServlet extends HttpServlet{
 
             }
 
+            if (action.equals("get_flow_record")) {
+                actionOk = true;
+
+                try {
+
+                    getFlowRecognition(request, response, json);
+
+                } catch (Exception e) {
+
+                    e.printStackTrace();
+
+                }
+
+            }
+
+            if (action.equals("get_carId_record")) {
+                actionOk = true;
+
+                try {
+
+                    getCarIdRecognition(request, response, json);
+
+                } catch (Exception e) {
+
+                    e.printStackTrace();
+
+                }
+
+            }
+
 
             try {
 
@@ -218,8 +248,139 @@ public class VideoServlet extends HttpServlet{
     private void getCarIdRecognition(HttpServletRequest request, HttpServletResponse response, JSONObject json)
             throws JSONException, SQLException {
         PythonDao dao = new PythonDao();
-        dao.getCarId();
+        dao.getCarId(data,json);
     }
 
+
+    private void uploadFile(HttpServletRequest request, HttpServletResponse response, JSONObject json)
+            throws JSONException, SQLException {
+        uploadFileAttachment(request, response, json); // 上传文件到指定目录，返回文件存放目录和构造出来的url，放在json里传递出来
+        saveFileAttachmentRecord(data, json); // 把文件上传后，存在json传递的文件存放信息，保存进数据库表里
+    }
+
+    private void uploadFileAttachment(HttpServletRequest request, HttpServletResponse response, JSONObject json)
+            throws JSONException, SQLException {
+        // 先做初始化工作，定义一堆目录变量
+        String fileUrl = null;
+        String rootPath = System.getProperty("user.dir")+"\\\\upload";
+        String filePath = rootPath + "\\\\teach\\\\" + (new SimpleDateFormat("yyyyMMddHH")).format(new Date());
+        String rootUrl = "/upload";
+        String filePathUrl = rootUrl + "/teach/" + (new SimpleDateFormat("yyyyMMddHH")).format(new Date());
+        String tmpPath = rootPath + "\\\\temp\\\\"; // 临时路径
+
+        showDebug("[uploadFileAttachment]服务器保存根目录：" + rootPath);
+        showDebug("[uploadFileAttachment]服务器保存目录：" + filePath + "，临时目录：" + tmpPath);
+        showDebug("[uploadFileAttachment]服务器保存后的URL根路径：" + rootUrl);
+
+        // 接着检查目录是否存在，不存在就创建目录
+        File fileRepository = new File(filePath);
+
+        if (!fileRepository.exists() && !fileRepository.isDirectory()) {
+            fileRepository.mkdirs();
+        }
+
+        File tmpRepository = new File(tmpPath);
+
+        if (!tmpRepository.exists() && !tmpRepository.isDirectory()) {
+            tmpRepository.mkdirs();
+        }
+
+        // 定义两个传递结果出来的数组，字段数组和文件数组
+        JSONArray fileList = new JSONArray(); // 保存收到的文件信息
+        JSONArray fieldList = new JSONArray(); // 保存传递过来的字段信息
+
+        // 开始接收上传文件
+        try {
+
+            if (ServletFileUpload.isMultipartContent(request)) {
+                DiskFileItemFactory dff = new DiskFileItemFactory();// 创建该对象
+                dff.setRepository(tmpRepository); // 指定上传文件的临时目录
+                dff.setSizeThreshold(1024000); // 指定在内存中缓存数据大小,单位为byte
+                ServletFileUpload sfu = new ServletFileUpload(dff); // 创建该对象
+                sfu.setHeaderEncoding("UTF-8"); // 设定编码用统一的
+                sfu.setSizeMax(1000000000); // 指定单个上传文件的最大尺寸
+                /*--------------------收文件 开始--------------------*/
+                List<FileItem> list = sfu.parseRequest(request);
+
+                for (Iterator<FileItem> iter = list.iterator(); iter.hasNext();) {
+                    FileItem item = iter.next();
+                    // item可能是文件，也可能是字段类型，分别区分对待
+                    if (item.isFormField()) {
+                        // 如果是字段，例如：device_id、device_name等
+                        String fieldName = item.getFieldName();
+                        String fieldValue = item.getString("UTF-8");
+                        HashMap map = new HashMap();
+                        map.put(fieldName, fieldValue);
+                        fieldList.put(new JSONObject(map));
+
+                        showDebug("[uploadFileAttachment]收到字段：" + fieldName + "=" + fieldValue);
+                    } else {
+                        // 如果是form-data
+                        String objectId = null;
+                        String filePathName = null;
+                        String fileName = item.getName();
+                        int fileSize = 0;
+                        showDebug("[uploadFileAttachment]收到文件：" + fileName);
+
+                        if (!fileName.isEmpty()) {
+                            // 如果带有路径，就去掉路径，找文件名
+                            fileName = fileName.substring(fileName.lastIndexOf("\\\\") + 1);
+                            // fileName=(new SimpleDateFormat("yyyyMMddHHmmss")).format(new Date());
+                            // //或者自行编写一个流水号的文件名
+                            objectId = "UPLOAD_" + (new SimpleDateFormat("yyyyMMddHHmmssSSS")).format(new Date()); // 生成一个流水号附件id给前端
+
+                            showDebug("[uploadFileAttachment]文件路径：" + filePath + "\\\\" + fileName);
+                            filePathName = filePath + "\\\\" + fileName;
+                            /*--------------------接收文件数据 开始--------------------*/
+                            FileOutputStream out = new FileOutputStream(filePath + "\\" + fileName);
+                            InputStream in = item.getInputStream();
+                            byte buffer[] = new byte[1024];
+                            int len = 0;
+
+                            while ((len = in.read(buffer)) > 0) {
+                                out.write(buffer, 0, len);
+                                fileSize = fileSize + len;
+                            }
+
+                            in.close();
+                            out.close();
+                            /*--------------------接收文件数据 结束--------------------*/
+                            fileUrl = filePathUrl + "/" + fileName; // fileUrl是保存文件后，构造出供前端访问的fileUrl
+                        }
+
+                        // 构造返回结果的json
+                        HashMap map = new HashMap();
+                        map.put("file_size", fileSize);
+                        map.put("file_path_name", filePathName);
+                        map.put("file_url_name", fileUrl);
+                        map.put("file_object_id", objectId);
+                        fileList.put(new JSONObject(map));
+                        showDebug("[uploadFileAttachment]存到：fileName=" + fileName + ",filePath=" + filePath
+                                + ",fileSize=" + fileSize + ",fileUrl=" + fileUrl);
+                    }
+
+                }
+
+                /*--------------------收文件 结束--------------------*/
+            }
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+        }
+
+        json.put("upload_files", fileList);
+        json.put("upload_fields", fieldList);
+    }
+
+    /*
+     * 功能：把上传文件uploadFileAttachment后，得到的文件信息，保存进数据库表里
+     */
+    private void saveFileAttachmentRecord(Data data, JSONObject json) throws JSONException, SQLException {
+        // 这部分需要自己写
+        showDebug("[saveFileRecord]收完文件后，传递出来的json是：" + json.toString());
+        MonitorDao dao = new MonitorDao();
+        dao.saveUploadFileRecord(json, data);
+    }
 
 }

@@ -26,10 +26,6 @@ var Page = function() {
 			//设备列表页面
 			initMonitorList();
 		}
-		if(pageId==="monitor_file"){
-			//文件
-			initDeviceFile();
-		}
 
 		if(pageId==="monitor_print"){
 			//打印页面
@@ -63,7 +59,6 @@ var Page = function() {
 		onPageListenerForMonitorList();
 		initMonitorListControlEvent();
 		initMonitorRecordList();
-		initDeviceFile();
 	}
 
 	var initMonitorAdd=function(){
@@ -72,11 +67,6 @@ var Page = function() {
 
 	var initDeviceQuery=function(){
 		initMonitorQueryControlEvent();
-	}
-
-	var initDeviceFile=function(){
-		console.log("[initDeviceFile]");
-		initDeviceFileControlEvent();
 	}
 
 	var initMonitorPrint = function(){
@@ -181,12 +171,6 @@ var Page = function() {
 
 	}
 
-	//init-monitor_file functions begin
-	var initDeviceFileControlEvent=function(id){
-		$('#upload_button').click(function() {onAjaxUploadFile();});
-		console.log("[initDeviceFileControlEvent]");
-	}
-	//init-monitor_file functions end
 
 	var initChartSets = function(){
 
@@ -708,40 +692,6 @@ var Page = function() {
 		window.location.href = "monitor_view.jsp?id="+id;
 	}
 
-	var onAjaxUploadFile=function(){
-		console.log("[onAjaxUploadFile]====");
-		var deviceId = $("#device_id").val();
-		var deviceName = $("#device_name").val();
-		var options = {
-			type : 'post', /*设置表单以post方法提交*/
-			url : '../../monitor_data_servlet_action?action=upload_file&device_id='+deviceId+"&device_name="+deviceName, /*设置post提交到的页面*/
-			success : function(json) {
-				console.log("[onAjaxUploadFile]上传文件返回结果="+JSON.stringify(json));
-				if(json.upload_files.length>0){
-					var files=json.upload_files;
-					var fileUrl = files[0].file_url_name;
-					var objectId = files[0].file_object_id;
-					$("#current_attachment_name").html("您当前上传的附件是：<span style='color:blue;'><a href='javascript:window.open(\""+fileUrl+"\")'>" + fileUrl + "</a></span>");
-					$("#current_attachment_object_id").val(objectId);
-
-					var html="";
-					html+="<video width=\"640\" height=\"360\" controls>";
-					html+="<source src='"+fileUrl+"' type=\"video/mp4\">"+"</video>"
-
-					$("#video_row").html(html);
-					console.log("[onAjaxUploadFile]fileUrl="+fileUrl);
-					console.log("[onAjaxUploadFile]objectId="+objectId);
-				}else{
-					alert("[onAjaxUploadFile]没有上传文件结果返回！");
-				}
-			},
-			error : function(error) {
-				alert(error);
-			},
-			dataType : "json" /*设置返回值类型为文本*/
-		};
-		$("#ajax_form").ajaxSubmit(options);
-	}
 	//on-functions end
 
 	//submit functions begin
