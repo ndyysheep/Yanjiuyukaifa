@@ -223,6 +223,11 @@ public class DB {
             set = set + "mobile_number='" +phone+"',";
             session.setAttribute("mobile_number",phone);
         }
+        if (param.has("mobile_number")) {
+            phone = param.getString("mobile_number");
+            set = set + "mobile_number='" +phone+"',";
+            session.setAttribute("mobile_number",phone);
+        }
         if (param.has("nickname")) {
             nickname = param.getString("nickname");
             set = set + "nickname='" +nickname+"',";

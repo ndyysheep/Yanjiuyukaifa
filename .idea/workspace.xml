@@ -14,40 +14,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="92dc437d-bb51-42f3-93ee-b2423cc3248c" name="Default Changelist" comment="整合1">
-      <change afterPath="$PROJECT_DIR$/src/PythonControl/Back.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/PythonControl/CarID.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/PythonControl/Data/Back/output.mp4" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/PythonControl/Data/Back/test.mp4" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/PythonControl/Data/CarID/output.mp4" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/PythonControl/Data/CarID/test.mp4" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/PythonControl/Data/Double/output.mp4" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/PythonControl/Data/Double/test.mp4" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/PythonControl/Data/Flow/coco.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/PythonControl/Data/Flow/output.mp4" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/PythonControl/Data/Flow/test.mp4" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/PythonControl/Data/Flow/yolov8s.pt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/PythonControl/Data/light/left.mp4" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/PythonControl/Data/light/mid.mp4" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/PythonControl/Data/light/output.mp4" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/PythonControl/Data/light/right.mp4" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/PythonControl/Data/light/template_image/green.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/PythonControl/Data/light/template_image/red.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/PythonControl/Databasecn.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/PythonControl/Double.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/PythonControl/FileManager.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/PythonControl/Flow.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/PythonControl/PythonDao.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/PythonControl/VideoServlet.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/PythonControl/red.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/PythonControl/red_tracker.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/PythonControl/requirements.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/PythonControl/test.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/PythonControl/tracker.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/PythonControl/trafficSignal.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/upload/red/1.mp4" afterDir="false" />
+    <list default="true" id="92dc437d-bb51-42f3-93ee-b2423cc3248c" name="Default Changelist" comment="一点小修改">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/home/frame/page_sidebar.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/web/home/frame/page_sidebar.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/DBControl/DB.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/DBControl/DB.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -72,9 +41,9 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="HTML File" />
+        <option value="Class" />
         <option value="Jsp File" />
         <option value="JavaScript File" />
-        <option value="Class" />
       </list>
     </option>
   </component>
@@ -176,73 +145,57 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "DefaultHtmlFileTemplate": "HTML File",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "Tomcat 服务器.Mypro_withdemo.executor": "Run",
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "master",
-    "jdk.selected.JAVA_MODULE": "1.8",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/.Probe0311/研究与开发实践/Opencv/web/assets/global/plugins",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "库",
-    "project.structure.proportion": "0.15039062",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "Errors",
-    "vue.rearranger.settings.migration": "true",
-    "应用程序.PythonDao.executor": "Run"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Probe's&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;1.8&quot;,
+    &quot;last_opened_file_path&quot;: &quot;F:/WorkSpace/LearningResource/CodeResource/Java/Login/Yanjiuyukaifa&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;库&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15039062&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.fonts.default&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="device.file" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\.Probe0311\研究与开发实践\Opencv\web\assets\global\plugins" />
-      <recent name="D:\.Probe0311\研究与开发实践\Opencv\web\maintain\monitor\containers\css" />
-      <recent name="D:\.Probe0311\研究与开发实践\Opencv\web\maintain\monitor\containers" />
-      <recent name="D:\.Probe0311\研究与开发实践\Opencv\web\maintain\monitor" />
-      <recent name="D:\.Probe0311\研究与开发实践\Opencv\src\monitor\dao" />
+      <recent name="F:\WorkSpace\LearningResource\CodeResource\Java\JointProject\Yanjiuyukaifa\web\assets\js" />
+      <recent name="F:\WorkSpace\LearningResource\CodeResource\Java\JointProject\Yanjiuyukaifa\web\assets\admin\pages\scripts" />
+      <recent name="F:\WorkSpace\LearningResource\CodeResource\Java\JointProject\Yanjiuyukaifa\src" />
+      <recent name="F:\WorkSpace\LearningResource\CodeResource\Java\JointProject\Yanjiuyukaifa\web\WEB-INF\lib" />
+      <recent name="F:\WorkSpace\LearningResource\CodeResource\Java\JointProject\Yanjiuyukaifa\web" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="D:\.Probe0311\研究与开发实践\Opencv\src\PythonControl" />
+      <recent name="F:\WorkSpace\LearningResource\CodeResource\Java\Joint2.0\web\assets\img" />
       <recent name="D:\.Probe0311\研究与开发实践\IdeaProjects\my_pro\web\WEB-INF\lib" />
       <recent name="D:\.Probe0311\研究与开发实践\IdeaProjects\my_pro\lib" />
       <recent name="D:\.Probe0311\研究与开发实践\IdeaProjects\my_pro\web\assets" />
       <recent name="D:\.Probe0311\研究与开发实践\IdeaProjects\my_pro\web\maintain\illegal_data\containers\js" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="monitor.file" />
       <recent name="analysis.file" />
       <recent name="illegal.file" />
+      <recent name="monitor.file" />
       <recent name="user.dao" />
       <recent name="user.center" />
     </key>
   </component>
-  <component name="RunManager" selected="应用程序.PythonDao">
-    <configuration name="PythonDao" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="PythonControl.PythonDao" />
-      <module name="my_pro" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="PythonControl.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
+  <component name="RunManager">
     <configuration default="true" type="JetRunConfigurationType">
       <method v="2">
         <option name="Make" enabled="true" />
@@ -254,7 +207,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Mypro_withdemo" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="Tomcat 8.5.66" ALTERNATIVE_JRE_ENABLED="true" ALTERNATIVE_JRE_PATH="1.8">
+    <configuration name="Mypro_withdemo" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="Tomcat 8.5.93" ALTERNATIVE_JRE_ENABLED="true" ALTERNATIVE_JRE_PATH="1.8">
       <option name="OPEN_IN_BROWSER_URL" value="http://localhost:9999/main/login/login.jsp" />
       <option name="COMMON_VM_ARGUMENTS" value="-Dfile.encoding=UTF-8" />
       <option name="UPDATING_POLICY" value="restart-server" />
@@ -417,11 +370,6 @@
         </option>
       </method>
     </configuration>
-    <recent_temporary>
-      <list>
-        <item itemvalue="应用程序.PythonDao" />
-      </list>
-    </recent_temporary>
   </component>
   <component name="ServiceViewManager">
     <option name="viewStates">
@@ -589,60 +537,14 @@
       <workItem from="1702459231739" duration="1198000" />
       <workItem from="1702466398312" duration="1122000" />
       <workItem from="1702604649536" duration="6416000" />
-      <workItem from="1705555695408" duration="603000" />
-      <workItem from="1705562423632" duration="874000" />
-      <workItem from="1705586253753" duration="8325000" />
-      <workItem from="1705625585606" duration="830000" />
-      <workItem from="1705627013428" duration="3167000" />
-      <workItem from="1705658343902" duration="20118000" />
-    </task>
-    <task id="LOCAL-00005" summary="测试">
-      <option name="closed" value="true" />
-      <created>1701107646796</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1701107646796</updated>
-    </task>
-    <task id="LOCAL-00006" summary="测试">
-      <option name="closed" value="true" />
-      <created>1701108282252</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1701108282252</updated>
-    </task>
-    <task id="LOCAL-00007" summary="测试">
-      <option name="closed" value="true" />
-      <created>1701108478755</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1701108478755</updated>
-    </task>
-    <task id="LOCAL-00008" summary="测试">
-      <option name="closed" value="true" />
-      <created>1701109357269</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1701109357270</updated>
-    </task>
-    <task id="LOCAL-00009" summary="测试">
-      <option name="closed" value="true" />
-      <created>1701141097894</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1701141097894</updated>
-    </task>
-    <task id="LOCAL-00010" summary="Initial commit">
-      <option name="closed" value="true" />
-      <created>1701141798479</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1701141798479</updated>
+      <workItem from="1702873633996" duration="3081000" />
+      <workItem from="1703407041512" duration="54000" />
+      <workItem from="1705030480532" duration="14113000" />
+      <workItem from="1705249862734" duration="99000" />
+      <workItem from="1705372280478" duration="12762000" />
+      <workItem from="1705389585916" duration="146000" />
+      <workItem from="1705458564938" duration="1588000" />
+      <workItem from="1705548875785" duration="924000" />
     </task>
     <task id="LOCAL-00011" summary="Initial commit">
       <option name="closed" value="true" />
@@ -980,15 +882,63 @@
       <option name="project" value="LOCAL" />
       <updated>1702303372190</updated>
     </task>
-    <task id="LOCAL-00053" summary="整合1">
+    <task id="LOCAL-00053" summary="合并login">
       <option name="closed" value="true" />
-      <created>1705595975651</created>
+      <created>1702611773307</created>
       <option name="number" value="00053" />
       <option name="presentableId" value="LOCAL-00053" />
       <option name="project" value="LOCAL" />
-      <updated>1705595975651</updated>
+      <updated>1702611773307</updated>
     </task>
-    <option name="localTasksCounter" value="54" />
+    <task id="LOCAL-00054" summary="Merge remote-tracking branch 'origin/login'">
+      <option name="closed" value="true" />
+      <created>1705047195207</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1705047195207</updated>
+    </task>
+    <task id="LOCAL-00055" summary="一点小修改">
+      <option name="closed" value="true" />
+      <created>1705389086010</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL-00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1705389086010</updated>
+    </task>
+    <task id="LOCAL-00056" summary="一点小修改">
+      <option name="closed" value="true" />
+      <created>1705389126916</created>
+      <option name="number" value="00056" />
+      <option name="presentableId" value="LOCAL-00056" />
+      <option name="project" value="LOCAL" />
+      <updated>1705389126916</updated>
+    </task>
+    <task id="LOCAL-00057" summary="一点小修改">
+      <option name="closed" value="true" />
+      <created>1705389181477</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1705389181477</updated>
+    </task>
+    <task id="LOCAL-00058" summary="一点小修改">
+      <option name="closed" value="true" />
+      <created>1705389234219</created>
+      <option name="number" value="00058" />
+      <option name="presentableId" value="LOCAL-00058" />
+      <option name="project" value="LOCAL" />
+      <updated>1705389234219</updated>
+    </task>
+    <task id="LOCAL-00059" summary="一点小修改">
+      <option name="closed" value="true" />
+      <created>1705389262117</created>
+      <option name="number" value="00059" />
+      <option name="presentableId" value="LOCAL-00059" />
+      <option name="project" value="LOCAL" />
+      <updated>1705389262117</updated>
+    </task>
+    <option name="localTasksCounter" value="60" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1039,9 +989,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Gjr's pro" />
-    <MESSAGE value="测试" />
-    <MESSAGE value="Update README.md" />
     <MESSAGE value="Initial commit" />
     <MESSAGE value="Second commit" />
     <MESSAGE value="Third commit" />
@@ -1063,8 +1010,11 @@
     <MESSAGE value="Merge remote-tracking branch 'Yanjiuyukaifa/Probe's' into Probe's" />
     <MESSAGE value="11th commit--修理分支" />
     <MESSAGE value="2th 项目终章" />
-    <MESSAGE value="整合1" />
-    <option name="LAST_COMMIT_MESSAGE" value="整合1" />
+    <MESSAGE value="合并login" />
+    <MESSAGE value="天气预报实现" />
+    <MESSAGE value="Merge remote-tracking branch 'origin/login'" />
+    <MESSAGE value="一点小修改" />
+    <option name="LAST_COMMIT_MESSAGE" value="一点小修改" />
     <option name="GROUP_MULTIFILE_MERGE_BY_DIRECTORY" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -1078,6 +1028,11 @@
           <url>file://$PROJECT_DIR$/web/assets/admin/pages/scripts/charts-amcharts.js</url>
           <line>430</line>
           <option name="timeStamp" value="5" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/monitor/dao/MonitorDao.java</url>
+          <line>510</line>
+          <option name="timeStamp" value="20" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/web/maintain/illegal_data/illegal_data_statistics.jsp</url>
