@@ -135,13 +135,15 @@ public class PythonDao {
     public void getFlow(Data data,JSONObject json) {
 
         try {
+            FileManager myFile = new FileManager();
             operateAttachment(data,json,"Flow");
             String pythonScriptPath = "Flow.py";
+            String directUrl = workingDirectory+"\\src\\PythonControl";
             // 构建命令
             String[] command = {selectionPath, pythonScriptPath};
             ProcessBuilder pb = new ProcessBuilder(command);
-            pb.directory(new File(workingDirectory+"\\src\\PythonControl"));
-            showDebug("[getFlow]开始运行");
+            pb.directory(new File(directUrl));
+            showDebug("开始执行.py脚本");
             // 启动进程
             Process process = pb.start();
             BufferedReader stdout = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -160,16 +162,29 @@ public class PythonDao {
             //========此处读取处理数据========
 
             //========读取完毕========
-
             // 等待进程执行完成
             int exitCode = process.waitFor();
-            System.out.println("进程执行完成，退出码: " + exitCode);
 
-        } catch (IOException | JSONException e) {
+            String work_path = workingDirectory+"\\src\\PythonControl\\Data\\Flow";
+
+            String file_path =  work_path+"\\output.mp4";
+            String numberName = (new SimpleDateFormat("yyyyMMddHH")).format(new Date())+".mp4";
+            String virtual_path = "\\upload\\Flow\\"+numberName;
+
+            myFile.copyFile(file_path,workingDirectory+virtual_path);
+
+            json.put("file_path", virtual_path);
+            json.put("result_code", exitCode); // 返回0表示正常，不等于0就表示有错误产生，错误代码
+            myFile.getFlowResult(work_path+"\\results.txt");
+            System.out.println("进程执行完成，退出码: " + exitCode);
+        } catch (IOException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
         }
+
     }
 
     public void getCarId(Data data,JSONObject json) {

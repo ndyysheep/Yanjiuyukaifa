@@ -108,7 +108,7 @@ prev_subregions = [None] * 4  # 存储前一帧的四个角的小区域
 # 视频开始时间
 start_time = datetime.datetime(2023, 12, 10, 12, 0, 0)
 
-with open('Data/Double/results.txt', 'w') as file:
+with open('Data/Double/results.txt', 'w', encoding='utf-8') as file:
     while True:
         ret, frame = cap.read()
         if not ret:

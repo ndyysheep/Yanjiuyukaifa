@@ -92,6 +92,53 @@ public class FileManager {
         }
     }
 
+    public String getFlowResult(String filePath)
+    {
+        int totalNum = -1;
+        String beginDatetime = null;
+        String endDatetime = null;
+        String sql = null;
+
+        try {
+            // 读取文件内容
+            Path path = Paths.get(filePath);
+            List<String> lines = Files.readAllLines(path, StandardCharsets.UTF_8);
+
+            // 处理文件内容
+            for (String line : lines) {
+
+                if(line.contains("总计车流量为："))
+                {
+                    int index= line.lastIndexOf('：');
+                    totalNum=Integer.parseInt(line.substring(index+1));
+                }
+                else if(line.contains("视频起始时间:"))
+                {
+                    int index= line.lastIndexOf(": ");
+                    beginDatetime=line.substring(index+2);
+                }
+                else if(line.contains("视频结束时间:"))
+                {
+                    int index= line.lastIndexOf(": ");
+                    endDatetime=line.substring(index+2);
+                }
+
+                // 在这里处理每行的内容
+
+            }
+
+            sql = "insert into count_of_lane"+ "(start_time,lane_id,end_time,total_num)";
+            sql = sql + " select '" + beginDatetime + "'" + " ,1"
+                    + " ,'" + endDatetime + "','" + totalNum + "'";
+
+        } catch (IOException e) {
+            // 处理读取文件时的异常
+            e.printStackTrace();
+        }
+        showDebug(sql);
+        return sql;
+    }
+
     public void saveUploadFileRecord(JSONObject json, Data data) throws JSONException, SQLException {
         // 构造sql语句，根据传递过来的查询条件参数
         // 首先分析json里有多少文件，多个文件需要用循环构造多个sql语句
