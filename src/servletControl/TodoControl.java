@@ -144,7 +144,7 @@ public class TodoControl extends HttpServlet {
             set += "user_name='" + user_name +"'";
             hasparam = true;
         }
-        nickname = params.getString("nickname");
+        nickname = params.has("nickname") ? params.getString("nickname"): "";
         if(nickname !="")
         {
             if(hasparam == true)
@@ -155,7 +155,7 @@ public class TodoControl extends HttpServlet {
                 hasparam = true;
             }
         }
-        todo = params.getString("todo");
+        todo = params.has("todo") ?  params.getString("todo") :"";
         if(todo !="")
         {
             if(hasparam == true)
@@ -166,7 +166,7 @@ public class TodoControl extends HttpServlet {
                 hasparam = true;
             }
         }
-        todo_time =params.getString("todo_time");
+        todo_time =params.has("todo_time") ?  params.getString("todo_time") :"";
         if(todo_time !="")
         {
             if(hasparam == true)
@@ -177,7 +177,7 @@ public class TodoControl extends HttpServlet {
                 hasparam = true;
             }
         }
-        todo_notes = params.getString("todo_notes");
+        todo_notes = params.has("todo_notes") ? params.getString("todo_notes") :"";
         if(todo_notes !="")
         {
             if(hasparam == true)
@@ -216,15 +216,46 @@ public class TodoControl extends HttpServlet {
 
     }
     private void modifyUserEvent(HttpServletRequest request, HttpServletResponse response, JSONObject rtJson, JSONObject params) throws JSONException, SQLException {
-        String todo_notes = params.getString("todo_notes");
-        String user_name=params.getString("user_name");
-        String nickname=params.getString("nickname");
-        String todo_time=params.getString("todo_time");
-        String todo = params.getString("todo");
-        String tid=params.getString("tid");
+        String todo_notes = params.has("todo_notes") ? params.getString("todo_notes") : null;
+        String user_name=params.has("user_name") ? params.getString("user_name"):null;
+        String nickname=params.has("nickname") ? params.getString("nickname"):null;
+        String todo_time=params.has("todo_time") ? params.getString("todo_time"):null;
+        String todo = params.has("todo") ? params.getString("todo"):null;
+        String tid=params.has("tid") ? params.getString("tid"):null;
 
-        String sql = "update todo set user_name='"+user_name+"',todo_notes='"+todo_notes+"',nickname='"+nickname+"',todo_time='"+todo_time+"',todo='"+todo+"' ";
-        sql +="where todo_id='"+tid + "'";
+        String sql = "update todo set ";
+        String set = "";
+        if(todo_notes != null)
+        {
+            set += "todo_notes='"+todo_notes + "',";
+        }
+        if(user_name != null)
+        {
+            set += "user_name='"+user_name + "',";
+        }
+        if(nickname != null)
+        {
+            set += "nickname='"+nickname + "',";
+        }
+        if(todo_time != null)
+        {
+            set += "todo_time='"+todo_time + "',";
+        }
+        if(todo != null)
+        {
+            set += "todo='"+todo + "',";
+        }
+        if(set != "")
+        {
+            set = set.substring(0, set.length() - 1);
+            sql = sql + set;
+            sql +=" where todo_id="+tid;
+        }
+        else
+        {
+            rtJson.put("error","nothing is delivered");
+            return;
+        }
         showDebug("modifyUserEvent",sql);
         db.Connect();
         db.ExecuteUpdate(sql);
