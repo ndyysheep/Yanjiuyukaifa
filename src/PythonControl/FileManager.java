@@ -139,6 +139,143 @@ public class FileManager {
         return sql;
     }
 
+    public void getCarIdResult(String filePath)
+    {
+        String ID = null;
+        String carCode = null;
+        String recordTime = null;
+        String sql = null;
+
+        try {
+            // 读取文件内容
+            Path path = Paths.get(filePath);
+            List<String> lines = Files.readAllLines(path, StandardCharsets.UTF_8);
+
+            // 处理文件内容
+            for (String line : lines) {
+
+                String str = "车辆ID: ";
+                int index= line.lastIndexOf("车辆ID: ")+str.length();
+                int endIndex = line.lastIndexOf(", 车牌号");
+                ID=line.substring(index,endIndex);
+
+                str = "车牌号: ";
+                index = line.lastIndexOf(str)+str.length();
+                endIndex = line.lastIndexOf(',');
+                carCode = line.substring(index,endIndex);
+
+                str ="记录时间";
+                index = line.lastIndexOf(str)+str.length();
+                recordTime = line.substring(index);
+                // 在这里处理每行的内容
+
+            }
+
+            sql=ID+","+carCode+","+recordTime;
+
+
+        } catch (IOException e) {
+            // 处理读取文件时的异常
+            e.printStackTrace();
+        }
+        showDebug(sql);
+
+    }
+
+    public void getDoubleLineResult(String filePath)
+    {
+        int locationX = -1;
+        int locationY = -1;
+        String carCode = null;
+        String recordTime = null;
+        String sql = null;
+
+        try {
+            // 读取文件内容
+            Path path = Paths.get(filePath);
+            List<String> lines = Files.readAllLines(path, StandardCharsets.UTF_8);
+
+            // 处理文件内容
+            for (String line : lines) {
+
+                String str = "压线时间：";
+                int index= line.lastIndexOf(str)+str.length();
+                int endIndex = line.lastIndexOf("压线位置：(");
+                recordTime=line.substring(index,endIndex);
+
+                str = "压线位置：(";
+                index = line.lastIndexOf(str)+str.length();
+                endIndex = line.lastIndexOf(", ");
+                locationX = Integer.parseInt(line.substring(index,endIndex));
+
+                str =", ";
+                index = line.lastIndexOf(str)+str.length();
+                endIndex = line.lastIndexOf(')');
+                locationY = Integer.parseInt(line.substring(index,endIndex));
+                // 在这里处理每行的内容
+
+            }
+
+            sql=recordTime+","+locationX+","+locationY;
+
+
+        } catch (IOException e) {
+            // 处理读取文件时的异常
+            e.printStackTrace();
+        }
+        showDebug(sql);
+
+    }
+
+    public void getRedLightResult(String filePath)
+    {
+        int locationX = -1;
+        int locationY = -1;
+        String ID = null;
+        String recordTime = null;
+        String sql = null;
+
+        try {
+            // 读取文件内容
+            Path path = Paths.get(filePath);
+            List<String> lines = Files.readAllLines(path, StandardCharsets.UTF_8);
+
+            // 处理文件内容
+            for (String line : lines) {
+
+                String str = "车辆ID:";
+                int index= line.lastIndexOf(str)+str.length();
+                int endIndex = line.lastIndexOf(" 闯红灯位置");
+                ID=line.substring(index,endIndex);
+
+                str = "闯红灯位置:(X:";
+                index = line.lastIndexOf(str)+str.length();
+                endIndex = line.lastIndexOf(", Y:");
+                locationX = Integer.parseInt(line.substring(index,endIndex));
+
+                str =", Y:";
+                index = line.lastIndexOf(str)+str.length();
+                endIndex = line.lastIndexOf(')');
+                locationY = Integer.parseInt(line.substring(index,endIndex));
+                // 在这里处理每行的内容
+
+                str = "闯红灯时间:";
+                index= line.lastIndexOf(str)+str.length();
+                recordTime=line.substring(index);
+            }
+
+            sql=recordTime+","+locationX+","+locationY+","+ID;
+
+
+        } catch (IOException e) {
+            // 处理读取文件时的异常
+            e.printStackTrace();
+        }
+        showDebug(sql);
+
+    }
+
+
     public void saveUploadFileRecord(JSONObject json, Data data) throws JSONException, SQLException {
         // 构造sql语句，根据传递过来的查询条件参数
         // 首先分析json里有多少文件，多个文件需要用循环构造多个sql语句
