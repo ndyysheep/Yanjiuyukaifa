@@ -113,7 +113,7 @@ if ret:
 
 # 设置输出视频的文件名和格式
 output_video_path = 'Data/CarID/output.mp4'
-fourcc = cv2.VideoWriter_fourcc(*'mp4v')  # 设置视频编码格式为 mp4v
+fourcc = cv2.VideoWriter_fourcc(*'avc1')  # 设置视频编码格式为 mp4v
 fps = cap.get(cv2.CAP_PROP_FPS)
 out = cv2.VideoWriter(output_video_path, fourcc, fps, (width, height))
 
