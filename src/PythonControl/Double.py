@@ -97,7 +97,7 @@ frame_height = int(cap.get(cv.CAP_PROP_FRAME_HEIGHT))
 frame_rate = int(cap.get(cv.CAP_PROP_FPS))
 
 # 创建视频写入器对象
-fourcc = cv.VideoWriter_fourcc(*'mp4v')  # 使用 MP4 兼容的编解码器
+fourcc = cv.VideoWriter_fourcc(*'avc1')  # 使用 MP4 兼容的编解码器
 out = cv.VideoWriter('Data/Double/output.mp4', fourcc, frame_rate, (frame_width, frame_height))
 
 # 初始化用于存储最长矩形的变量和第一次覆盖时间
