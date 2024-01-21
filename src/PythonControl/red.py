@@ -52,7 +52,7 @@ def process_frame(frame, object_detector, tracker, vehicle_count, template):
             last_id = boxes_ids[-1][-1]  # 获取最后一个检测到的id
             display_traffic_info(frame_processed, vehicle_count, detections, last_id)
 
-    # cv2.imshow("Final Frame", final_frame)
+    cv2.imshow("Final Frame", final_frame)
     return vehicle_count
 
 
@@ -70,13 +70,13 @@ def display_traffic_info(frame, vehicle_count, detections, last_id):
         cv2.putText(frame, f"Violation: ID {last_id}", (20, 40), cv2.FONT_HERSHEY_PLAIN, 1, (255, 0, 0), 2)
 
         # 写入到文件中，并将ID添加到已记录集合中
-        with open('Data/light/result.txt', 'a') as file:
+        with open('Data/light/results.txt', 'a') as file:
             file.write(f"车辆ID:{last_id} 闯红灯位置:(X:{x}, Y:{y}) 闯红灯时间:{formatted_time}\n")
             recorded_ids.add(last_id)  # 记录ID
 
 
 # 在程序开始时清空文件
-with open('Data/light/result.txt', 'w'):
+with open('Data/light/results.txt', 'w'):
     pass
 
 
