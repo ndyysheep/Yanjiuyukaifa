@@ -95,7 +95,7 @@ def main():
     fps = cap.get(cv2.CAP_PROP_FPS)
 
     # 初始化VideoWriter对象
-    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+    fourcc = cv2.VideoWriter_fourcc(*'avc1')
     out = cv2.VideoWriter('Data/light/output.mp4', fourcc, fps, (frame_width, frame_height))
 
     while cap.isOpened():
