@@ -249,7 +249,7 @@ public class TodoControl extends HttpServlet {
         {
             set = set.substring(0, set.length() - 1);
             sql = sql + set;
-            sql +=" where user_id="+tid;
+            sql +=" where tid="+tid;
         }
         else
         {
