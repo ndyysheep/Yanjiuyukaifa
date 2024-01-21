@@ -20,7 +20,7 @@ def flow_count(video_path, vehicle_types=['car'], directions=['north', 'south'],
     frame_rate = int(cap.get(5))
     total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))  # 获取视频总帧数
 
-    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+    fourcc = cv2.VideoWriter_fourcc(*'avc1')
     out = cv2.VideoWriter(output_video_path, fourcc, frame_rate, (frame_width, frame_height))
 
     with open(class_file, "r") as my_file:
