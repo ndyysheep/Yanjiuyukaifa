@@ -120,7 +120,7 @@ public class FileManager {
                 {
                     int index= line.lastIndexOf(": ");
                     beginDatetime=line.substring(index+2);
-                    map.put(" beginDatetime", beginDatetime);
+                    map.put("beginDatetime", beginDatetime);
                 }
                 else if(line.contains("视频结束时间:"))
                 {

@@ -21,8 +21,8 @@ var Page = function() {
 	var initPageControl=function(){
 		pageId = $("#page_id").val();
 		if(pageId==="video_operate"){
-			$("#monitor_lists").addClass("active open")
-			$(".sub-menu #monitor_list").addClass("active");
+			$("#video_lists").addClass("active open")
+			$(".sub-menu #video_analysis").addClass("active");
 			//设备列表页面
 			initVideoControl();
 		}
@@ -69,10 +69,13 @@ var Page = function() {
 
 					var fileUrl = json.file_path;
 					var html="";
-					html+="<video width=\"640\" height=\"360\" controls>";
+					html+="<video width=\"640\" height=\"360\" controls style=\"width: 100%;height: auto;\">";
 					html+="<source src='"+fileUrl+"' type=\"video/mp4\">"+"</video>"
-					$("#video_div").html(html);
+					$("#result_div").html(html);
+
 					console.log("[onAjaxUploadFile]fileUrl="+fileUrl);
+
+
 				}else{
 					alert("[onAjaxUploadFile]没有上传文件结果返回！");
 				}
@@ -95,17 +98,46 @@ var Page = function() {
 			console.log(JSON.stringify(json));
 			if(json.result_code===0)
 			{
-				if(json.upload_files.length>0){
-					var files=json.upload_files;
-					var fileUrl = files[0].file_url_name;
-					var objectId = files[0].file_object_id;
-
+				console.log(JSON.stringify(json));
+				if(json.file_path!==null){
+					var fileUrl = json.file_path;
 					var html="";
-					html+="<video width=\"640\" height=\"360\" controls>";
+					html+="<video width=\"640\" height=\"360\" controls style=\"width: 100%;height: auto;\">";
 					html+="<source src='"+fileUrl+"' type=\"video/mp4\">"+"</video>"
-					$("#video_div").html(html);
+					$("#result_div").html(html);
 					console.log("[onAjaxUploadFile]fileUrl="+fileUrl);
-					console.log("[onAjaxUploadFile]objectId="+objectId);
+
+					if(json.flowData[0]!=null)
+					{
+						var record = json.flowData[0];
+						var numberHtml = "";
+						var beginTime = new Date(record.beginDatetime);
+						var endTime = new Date(record.endDatetime);
+						var difference = (endTime.getTime() - beginTime.getTime()) / 1000;
+						numberHtml+="<div class=\"number-item\">\n" +
+							"                            <div class=\"number-title\">\n" ;
+						numberHtml+=record.totalNum;
+						numberHtml+="                            </div>\n" +
+							"                            <div class=\"number-text\">\n" +
+							"                                总车流量\n" +
+							"                            </div>\n" +
+							"                        </div>"
+
+						numberHtml+="<div class=\"number-item\">\n" +
+							"                            <div class=\"number-title\">\n" ;
+						numberHtml+=difference;
+						numberHtml+="                            </div>\n" +
+							"                            <div class=\"number-text\">\n" +
+							"                                统计时间(秒)\n" +
+							"                            </div>\n" +
+							"                        </div>"
+						$("#center-top-div").html(numberHtml);
+						$("#center-top-div").show();
+					}
+					else{
+						alert("[onAjaxUploadFile]没有上传文件结果返回！");
+					}
+
 				}else{
 					alert("[onAjaxUploadFile]没有上传文件结果返回！");
 				}
@@ -128,17 +160,44 @@ var Page = function() {
 			console.log(JSON.stringify(json));
 			if(json.result_code===0)
 			{
-				if(json.upload_files.length>0){
-					var files=json.upload_files;
-					var fileUrl = files[0].file_url_name;
-					var objectId = files[0].file_object_id;
+				console.log(JSON.stringify(json));
+				if(json.result_code===0)
+				{
+					console.log(JSON.stringify(json));
+					if(json.file_path!==null){
+						var fileUrl = json.file_path;
+						var html="";
+						html+="<video width=\"640\" height=\"360\" controls style=\"width: 100%;height: auto;\">";
+						html+="<source src='"+fileUrl+"' type=\"video/mp4\">"+"</video>"
+						$("#result_div").html(html);
+						console.log("[onAjaxUploadFile]fileUrl="+fileUrl);
 
-					var html="";
-					html+="<video width=\"640\" height=\"360\" controls>";
-					html+="<source src='"+fileUrl+"' type=\"video/mp4\">"+"</video>"
-					$("#video_div").html(html);
-					console.log("[onAjaxUploadFile]fileUrl="+fileUrl);
-					console.log("[onAjaxUploadFile]objectId="+objectId);
+						var redNum  = json.redLineData.length;
+						var numberHtml = "";
+
+						numberHtml+="<div class=\"number-item\">\n" +
+							"                            <div class=\"number-title\">\n" ;
+						numberHtml+=redNum;
+						numberHtml+="                            </div>\n" +
+							"                            <div class=\"number-text\">\n" +
+							"                                识别闯红灯数量\n" +
+							"                            </div>\n" +
+							"                        </div>"
+
+						$("#center-top-div").html(numberHtml);
+						$("#center-top-div").show();
+
+						var tableHtml = "";
+						tableHtml+="<th>车辆ID</th>\n"+
+							"<th>横坐标</th>\n" +
+							"<th>纵坐标</th>\n" +
+							"<th>记录时间</th>\n" ;
+						$("#tableHead").html(tableHtml);
+						getRedLightDatatable(json.redLineData);
+						$("#row_res").show();
+					}else{
+						alert("[onAjaxUploadFile]没有上传文件结果返回！");
+					}
 				}else{
 					alert("[onAjaxUploadFile]没有上传文件结果返回！");
 				}
@@ -161,17 +220,44 @@ var Page = function() {
 			console.log(JSON.stringify(json));
 			if(json.result_code===0)
 			{
-				if(json.upload_files.length>0){
-					var files=json.upload_files;
-					var fileUrl = files[0].file_url_name;
-					var objectId = files[0].file_object_id;
+				console.log(JSON.stringify(json));
+				if(json.result_code===0)
+				{
+					console.log(JSON.stringify(json));
+					if(json.file_path!==null){
+						var fileUrl = json.file_path;
+						var html="";
+						html+="<video width=\"640\" height=\"360\" controls style=\"width: 100%;height: auto;\">";
+						html+="<source src='"+fileUrl+"' type=\"video/mp4\">"+"</video>"
+						$("#result_div").html(html);
+						console.log("[onAjaxUploadFile]fileUrl="+fileUrl);
 
-					var html="";
-					html+="<video width=\"640\" height=\"360\" controls>";
-					html+="<source src='"+fileUrl+"' type=\"video/mp4\">"+"</video>"
-					$("#video_div").html(html);
-					console.log("[onAjaxUploadFile]fileUrl="+fileUrl);
-					console.log("[onAjaxUploadFile]objectId="+objectId);
+						var carNum  = json.carIDData.length;
+						var numberHtml = "";
+
+						numberHtml+="<div class=\"number-item\">\n" +
+							"                            <div class=\"number-title\">\n" ;
+						numberHtml+=carNum;
+						numberHtml+="                            </div>\n" +
+							"                            <div class=\"number-text\">\n" +
+							"                                识别车牌数量\n" +
+							"                            </div>\n" +
+							"                        </div>"
+
+						$("#center-top-div").html(numberHtml);
+						$("#center-top-div").show();
+
+						var tableHtml = "";
+						tableHtml+="<th>车辆序号</th>\n" +
+							"<th>车牌号</th>\n" +
+							"<th>记录时间</th>\n" ;
+						$("#tableHead").html(tableHtml);
+						getCarCodeResultDatatable(json.carIDData);
+						$("#row_res").show();
+
+					}else{
+						alert("[onAjaxUploadFile]没有上传文件结果返回！");
+					}
 				}else{
 					alert("[onAjaxUploadFile]没有上传文件结果返回！");
 				}
@@ -194,17 +280,44 @@ var Page = function() {
 			console.log(JSON.stringify(json));
 			if(json.result_code===0)
 			{
-				if(json.upload_files.length>0){
-					var files=json.upload_files;
-					var fileUrl = files[0].file_url_name;
-					var objectId = files[0].file_object_id;
+				console.log(JSON.stringify(json));
+				if(json.result_code===0)
+				{
+					console.log(JSON.stringify(json));
+					if(json.file_path!==null){
+						var fileUrl = json.file_path;
+						var html="";
+						html+="<video width=\"640\" height=\"360\" controls style=\"width: 100%;height: auto;\">";
+						html+="<source src='"+fileUrl+"' type=\"video/mp4\">"+"</video>"
+						$("#result_div").html(html);
+						console.log("[onAjaxUploadFile]fileUrl="+fileUrl);
 
-					var html="";
-					html+="<video width=\"640\" height=\"360\" controls>";
-					html+="<source src='"+fileUrl+"' type=\"video/mp4\">"+"</video>"
-					$("#video_div").html(html);
-					console.log("[onAjaxUploadFile]fileUrl="+fileUrl);
-					console.log("[onAjaxUploadFile]objectId="+objectId);
+						var doubleLineNum  = json.doubleLineData.length;
+						var numberHtml = "";
+
+						numberHtml+="<div class=\"number-item\">\n" +
+							"                            <div class=\"number-title\">\n" ;
+						numberHtml+=doubleLineNum;
+						numberHtml+="                            </div>\n" +
+							"                            <div class=\"number-text\">\n" +
+							"                                识别压双黄线数量\n" +
+							"                            </div>\n" +
+							"                        </div>"
+
+						$("#center-top-div").html(numberHtml);
+						$("#center-top-div").show();
+
+						var tableHtml = "";
+						tableHtml+=
+							"<th>横坐标</th>\n" +
+							"<th>纵坐标</th>\n" +
+							"<th>记录时间</th>\n" ;
+						$("#tableHead").html(tableHtml);
+						getDoubleLineDatatable(json.doubleLineData);
+						$("#row_res").show();
+					}else{
+						alert("[onAjaxUploadFile]没有上传文件结果返回！");
+					}
 				}else{
 					alert("[onAjaxUploadFile]没有上传文件结果返回！");
 				}
@@ -216,6 +329,267 @@ var Page = function() {
 		});
 	}
 
+
+	var getCarCodeResultDatatable =function(full){
+
+		var table =$('.datatable').DataTable();
+		table.destroy();
+
+		table =$('.datatable').DataTable( {
+
+			"paging":true,
+			"searching":false,
+			"oLanguage": {
+				"aria": {
+					"sortAscending": ": activate to sort column ascending",
+					"sortDescending": ": activate to sort column descending"
+				},
+				"sProcessing":   "处理中...",
+				"sLengthMenu":   "_MENU_ 记录/页",
+				"sZeroRecords":  "没有匹配的记录",
+				"sInfo":         "显示第 _START_ 至 _END_ 项记录，共 _TOTAL_ 项",
+				"sInfoEmpty":    "显示第 0 至 0 项记录，共 0 项",
+				"sInfoFiltered": "(由 _MAX_ 项记录过滤)",
+				"sInfoPostFix":  "",
+				"sSearch":       "过滤:",
+				"oPaginate": {
+					"sFirst":    "首页",
+					"sPrevious": "上页",
+					"sNext":     "下页",
+					"sLast":     "末页"
+				}
+			},
+			"data": full,
+			"columns": [
+				{
+					"data": "carID",
+					"render": function(data, type, row, meta) {
+						// 在渲染函数中访问完整的行数据
+						return '<div>' + row.carID + '</div>';
+					},"orderable": true
+				},
+				{
+					"data": "carCode","render": function(data, type, row, meta) {
+						// 在渲染函数中访问完整的行数据
+						return '<div>' + row.carCode + '</div>';
+					},
+					"orderable": true
+				},
+				{
+					"data": "recordTime",
+					"render": function(data, type, row, meta) {
+						// 在渲染函数中访问完整的行数据
+						return '<div>' + row.recordTime + '</div>';
+					},
+					"orderable": true
+				}
+			],
+			"aLengthMenu": [[5,10,15,20,25,40,50],[5,10,15,20,25,40,50]],
+			"fnDrawCallback": function(){$(".checkboxes").uniform();$(".group-checkable").uniform();},
+		});
+
+		$('.datatable').find('.group-checkable').change(function () {
+			var set = jQuery(this).attr("data-set");
+			var checked = jQuery(this).is(":checked");
+			jQuery(set).each(function () {
+				if (checked) {
+					$(this).attr("checked", true);
+					$(this).parents('tr').addClass("active");
+				} else {
+					$(this).attr("checked", false);
+					$(this).parents('tr').removeClass("active");
+				}
+			});
+			jQuery.uniform.update(set);
+		});
+		$('.datatable').on('change', 'tbody tr .checkboxes', function () {
+			$(this).parents('tr').toggleClass("active");
+		});
+
+		var tableWrapper = $('#sample_1_wrapper'); // datatable creates the table wrapper by adding with id {your_table_jd}_wrapper
+
+		tableWrapper.find('.dataTables_length select').select2(); // initialize select2 dropdown
+
+
+
+	}
+
+	var getDoubleLineDatatable =function(full){
+
+		var table =$('.datatable').DataTable();
+		table.destroy();
+
+		table =$('.datatable').DataTable( {
+
+			"paging":true,
+			"searching":false,
+			"oLanguage": {
+				"aria": {
+					"sortAscending": ": activate to sort column ascending",
+					"sortDescending": ": activate to sort column descending"
+				},
+				"sProcessing":   "处理中...",
+				"sLengthMenu":   "_MENU_ 记录/页",
+				"sZeroRecords":  "没有匹配的记录",
+				"sInfo":         "显示第 _START_ 至 _END_ 项记录，共 _TOTAL_ 项",
+				"sInfoEmpty":    "显示第 0 至 0 项记录，共 0 项",
+				"sInfoFiltered": "(由 _MAX_ 项记录过滤)",
+				"sInfoPostFix":  "",
+				"sSearch":       "过滤:",
+				"oPaginate": {
+					"sFirst":    "首页",
+					"sPrevious": "上页",
+					"sNext":     "下页",
+					"sLast":     "末页"
+				}
+			},
+			"data": full,
+			"columns": [
+				{
+					"data": "locationX", "render": function(data, type, row, meta) {
+						// 在渲染函数中访问完整的行数据
+						return '<div>' + row.locationX + '</div>';
+					},"orderable": true
+				},
+				{
+					"data": "locationY","render": function(data, type, row, meta) {
+						// 在渲染函数中访问完整的行数据
+						return '<div>' + row.locationY + '</div>';
+					},
+					"orderable": true
+				},
+				{
+					"data": "recordTime",
+					"render": function(data, type, row, meta) {
+						// 在渲染函数中访问完整的行数据
+						return '<div>' + row.recordTime + '</div>';
+					},
+					"orderable": true
+				}
+			],
+
+			"aLengthMenu": [[5,10,15,20,25,40,50],[5,10,15,20,25,40,50]],
+			"fnDrawCallback": function(){$(".checkboxes").uniform();$(".group-checkable").uniform();}
+		});
+
+		$('.datatable').find('.group-checkable').change(function () {
+			var set = jQuery(this).attr("data-set");
+			var checked = jQuery(this).is(":checked");
+			jQuery(set).each(function () {
+				if (checked) {
+					$(this).attr("checked", true);
+					$(this).parents('tr').addClass("active");
+				} else {
+					$(this).attr("checked", false);
+					$(this).parents('tr').removeClass("active");
+				}
+			});
+			jQuery.uniform.update(set);
+		});
+		$('.datatable').on('change', 'tbody tr .checkboxes', function () {
+			$(this).parents('tr').toggleClass("active");
+		});
+
+		var tableWrapper = $('#sample_1_wrapper'); // datatable creates the table wrapper by adding with id {your_table_jd}_wrapper
+
+		tableWrapper.find('.dataTables_length select').select2(); // initialize select2 dropdown
+
+
+
+	}
+
+	var getRedLightDatatable =function(full){
+
+		var table =$('.datatable').DataTable();
+		table.destroy();
+
+		table =$('.datatable').DataTable( {
+
+			"paging":true,
+			"searching":false,
+			"oLanguage": {
+				"aria": {
+					"sortAscending": ": activate to sort column ascending",
+					"sortDescending": ": activate to sort column descending"
+				},
+				"sProcessing":   "处理中...",
+				"sLengthMenu":   "_MENU_ 记录/页",
+				"sZeroRecords":  "没有匹配的记录",
+				"sInfo":         "显示第 _START_ 至 _END_ 项记录，共 _TOTAL_ 项",
+				"sInfoEmpty":    "显示第 0 至 0 项记录，共 0 项",
+				"sInfoFiltered": "(由 _MAX_ 项记录过滤)",
+				"sInfoPostFix":  "",
+				"sSearch":       "过滤:",
+				"oPaginate": {
+					"sFirst":    "首页",
+					"sPrevious": "上页",
+					"sNext":     "下页",
+					"sLast":     "末页"
+				}
+			},
+			"data": full,
+			"columns": [
+				{
+					"data": "ID",
+					"render": function(data, type, row, meta) {
+						// 在渲染函数中访问完整的行数据
+						return '<div>' + row.ID + '</div>';
+					},"orderable": true
+				},
+				{
+					"data": "locationX","render": function(data, type, row, meta) {
+						// 在渲染函数中访问完整的行数据
+						return '<div>' + row.locationX + '</div>';
+					},
+					"orderable": true
+				},
+				{
+					"data": "locationY","render": function(data, type, row, meta) {
+						// 在渲染函数中访问完整的行数据
+						return '<div>' + row.locationY + '</div>';
+					},
+					"orderable": true
+				},
+				{
+					"data": "recordTime",
+					"render": function(data, type, row, meta) {
+						// 在渲染函数中访问完整的行数据
+						return '<div>' + row.recordTime + '</div>';
+					},
+					"orderable": true
+				}
+			],
+
+			"aLengthMenu": [[5,10,15,20,25,40,50],[5,10,15,20,25,40,50]],
+			"fnDrawCallback": function(){$(".checkboxes").uniform();$(".group-checkable").uniform();},
+
+		});
+
+		$('.datatable').find('.group-checkable').change(function () {
+			var set = jQuery(this).attr("data-set");
+			var checked = jQuery(this).is(":checked");
+			jQuery(set).each(function () {
+				if (checked) {
+					$(this).attr("checked", true);
+					$(this).parents('tr').addClass("active");
+				} else {
+					$(this).attr("checked", false);
+					$(this).parents('tr').removeClass("active");
+				}
+			});
+			jQuery.uniform.update(set);
+		});
+		$('.datatable').on('change', 'tbody tr .checkboxes', function () {
+			$(this).parents('tr').toggleClass("active");
+		});
+
+		var tableWrapper = $('#sample_1_wrapper'); // datatable creates the table wrapper by adding with id {your_table_jd}_wrapper
+
+		tableWrapper.find('.dataTables_length select').select2(); // initialize select2 dropdown
+
+
+
+	}
 
 	var onAjaxUploadFile=function(){
 		console.log("[onAjaxUploadFile]====");
@@ -234,7 +608,7 @@ var Page = function() {
 					$("#current_attachment_object_id").val(objectId);
 
 					var html="";
-					html+="<video width=\"640\" height=\"360\" controls>";
+					html+="<video width=\"640\" height=\"360\" controls style=\"width: 100%;height: auto;\">";
 					html+="<source src='"+fileUrl+"' type=\"video/mp4\">"+"</video>"
 
 					$("#video_row").html(html);

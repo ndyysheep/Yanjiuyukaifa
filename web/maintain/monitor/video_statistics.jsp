@@ -203,13 +203,13 @@
                 <div id="ajax_div" name="ajax_div">
                     <span class="btn green fileinput-button">
                                     <i class="fa fa-plus"></i>
-                                    <span>Add files... </span>
+                                    <span>添加视频文件... </span>
                                     <input type="file" id="upload_file" name="upload_file" onchange="showFile()">
                                 </span>
 
                     <button type="button" class="btn red fileinput-button" onclick="onAjaxUploadFile()">
                         <i class="fa fa-upload"></i>
-                        <span>Start upload </span>
+                        <span>开始上传 </span>
                     </button>
                 </div>
                 <div id="record_list_div" name="record_list_div"></div>

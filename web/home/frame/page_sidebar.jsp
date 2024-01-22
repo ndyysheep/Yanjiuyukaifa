@@ -38,7 +38,7 @@
                 <a href="javascript:;">
                     <i class="icon-rocket"></i>
                     <span class="title">车辆检测数据</span>
-                    <span class="arrow open"></span>
+                    <span class="arrow "></span>
                 </a>
                 <ul class="sub-menu">
                     <li id ="monitor_list">
@@ -71,7 +71,7 @@
                 <a href="javascript:;">
                     <i class="icon-diamond"></i>
                     <span class="title">流量统计分析</span>
-                    <span class="arrow "></span>
+                    <span class="arrow open"></span>
                 </a>
                 <ul class="sub-menu">
                     <li id="daily_report">
@@ -92,8 +92,7 @@
                     </li>
                 </ul>
             </li>
-            <li>
-
+            <li id="video_lists">
                 <a href="javascript:;">
                     <i class="icon-diamond"></i>
                     <span class="title">视频分析</span>
@@ -110,8 +109,8 @@
                             <span class="badge badge-warning">new</span>Api管理</a>
                     </li>
 
-                    <li>
-                        <a href="../../maintain/monitor/video_statistics.jsp">
+                    <li id="video_analysis">
+                        <a href="../../maintain/monitor/video_operate.jsp">
                             交通视频分析</a>
                     </li>
 

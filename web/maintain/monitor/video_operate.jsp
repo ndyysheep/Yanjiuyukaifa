@@ -201,70 +201,107 @@
         </div>
 
         <input type="hidden" id="page_id" name="page_id" value="video_operate">
-        <div class="page-content" id="updateVideo">
-            <form id="ajax_form" name="ajax_form" class="form-horizontal" method="post" enctype="multipart/form-data">
-                <div id="ajax_div" name="ajax_div">
+        <div class="page-content" style=" flex: 1">
+            <div class="row" id="updateVideo">
+                <div class="col-md-12">
+                    <form id="ajax_form" name="ajax_form" class="form-horizontal" method="post" enctype="multipart/form-data">
+                        <div id="ajax_div" name="ajax_div">
                     <span class="btn green fileinput-button">
                                     <i class="fa fa-plus"></i>
-                                    <span>Add files... </span>
+                                    <span>添加文件... </span>
                                     <input type="file" id="upload_file" name="upload_file" onchange="showFile()">
                                 </span>
 
-                    <button type="button" class="btn red fileinput-button" onclick="onAjaxUploadFile()">
-                        <i class="fa fa-upload"></i>
-                        <span>Start upload </span>
-                    </button>
-                </div>
-                <div id="record_list_div" name="record_list_div"></div>
-            </form>
-        </div>
-        <div class="page-content">
-            <div class="page-content-child" style="display: none;" id="echartDiv">
-                <div class="left-div">
-                    <div class="echart-div" id="echart-div1"></div>
-                    <div class="echart-div" id="echart-div2"></div>
-                </div>
-                <div class="center-div" id="center-div">
-                    <div class="center-top-div">
-                        <div class="number-item">
-                            <div class="number-title">
-                               0
-                            </div>
-                            <div class="number-text">
-                                总车流量
-                            </div>
+                            <button id="upload_button1" type="button" class="btn red fileinput-button" onclick="onAjaxUploadFile()">
+                                <i class="fa fa-upload"></i>
+                                <span>开始上传 </span>
+                            </button>
                         </div>
-                        <div class="number-item">
-                            <div class="number-title">
-                                0
-                            </div>
-                            <div class="number-text">
-                                最近车流量
-                            </div>
-                        </div>
-                    </div>
-
-                <div id="video_div">
-                </div>
-
-                    <div class="row">
-                        <div class="col-md-12">
-                            <button type="button" id="get_back_button" name ="get_back_button" class="btn default red-stripe">逆行检测</button>
-                            <button type="button" id="get_flow_button" name ="get_flow_button" class="btn default blue-stripe">车流量检测</button>
-                            <button type="button" id="get_red_button" name="get_red_button" class="btn default red-stripe">闯红灯检测</button>
-                            <button type="button" id="get_carId_button" name="get_carId_button" class="btn default blue-stripe">车牌号检测</button>
-                            <button type="button" id="get_double_button" name ="get_double_button" class="btn default blue-stripe">压双黄线检测</button>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="right-div">
-                    <div class="echart-div" id="echart-div3"></div>
-                    <div class="echart-div" id="echart-div4"></div>
+                        <div id="record_list_div" name="record_list_div"></div>
+                    </form>
                 </div>
             </div>
+
+                <div class="page-content-child" style="display: none;" id="echartDiv">
+                    <div class="left-div">
+                        <div class="echart-div" id="echart-div1" style="top:55px"></div>
+                        <div class="echart-div" id="echart-div2" style="top:175px"></div>
+                    </div>
+                    <div class="center-div" id="center-div">
+                        <div class="center-top-div" id="center-top-div">
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div id="video_div"></div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <button type="button" id="get_back_button" name ="get_back_button" class="btn default red-stripe">逆行检测</button>
+                                <button type="button" id="get_flow_button" name ="get_flow_button" class="btn default blue-stripe">车流量检测</button>
+                                <button type="button" id="get_red_button" name="get_red_button" class="btn default red-stripe">闯红灯检测</button>
+                                <button type="button" id="get_carId_button" name="get_carId_button" class="btn default blue-stripe">车牌号检测</button>
+                                <button type="button" id="get_double_button" name ="get_double_button" class="btn default blue-stripe">压双黄线检测</button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div id="result_div"></div>
+                            </div>
+                        </div>
+
+
+                        <%--datatable数据表--%>
+
+                    </div>
+
+                    <div class="right-div">
+                        <div class="echart-div" id="echart-div3" style="left:10px;top:55px"></div>
+                        <div class="echart-div" id="echart-div4" style="left:10px;top:175px"></div>
+                    </div>
+
+                    <div class="row" id="row_res" style="display:none">
+                        <div class="col-md-12">
+                            <div class="portlet box blue-hoki">
+                                <div class="portlet-title">
+                                    <div class="caption">
+                                        <i class="fa fa-comments"></i>结果表
+                                    </div>
+                                    <div class="tools">
+                                        <a href="javascript:;" class="collapse">
+                                        </a>
+                                        <a href="#portlet-config" data-toggle="modal" class="config">
+                                        </a>
+                                        <a href="javascript:;" class="reload">
+                                        </a>
+                                        <a href="javascript:;" class="remove">
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <div class="portlet-body">
+                                    <div class="table-scrollable">
+                                        <table class="table table-striped table-bordered table-hover datatable" id="sample_1">
+                                            <thead >
+                                            <tr id = "tableHead">
+
+                                            </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
         </div>
+
+
 
     </div>
     <!-- END CONTENT -->
@@ -279,14 +316,7 @@
 
 <%@include file="../../home/frame/frame_javascript.jsp"%>
 <script>
-    jQuery(document).ready(function() {
-        // initiate layout and plugins
-        Metronic.init(); // init metronic core components
-        Layout.init(); // init current layout
-        Demo.init(); // init demo features
-        ComponentsPickers.init();//选择时间
 
-    });
     function initdiv1(id,data) {
         var echartDiv1 = echarts.init(document.getElementById(id));
         echartDiv1.setOption(data);
@@ -505,54 +535,53 @@
                     $("#video_div").html(html);
                     $("#center-div").css('background','none');
                     $('#updateVideo').hide();
-                    // $.ajax({
-                    //     type : 'post', /*设置表单以post方法提交*/
-                    //     url : '../../illegal_data_servlet_action', /*设置post提交到的页面*/
-                    //     data:{
-                    //         ajax:'ajax',
-                    //         action:'illegal_statistics',
-                    //
-                    //     },
-                    //     success : function(json) {
-                    //         var echartsarray = [[],[],[],[],[]];
-                    //         var times = [];
-                    //         var count = 0;
-                    //         for (var i = 0; i < json.aaData.length; i++) {
-                    //             var data = json.aaData[i];
-                    //             if(data.vehicle_type&&count<2){
-                    //
-                    //                 $('.number-title',$('.number-item')[count]).text(data.num)
-                    //                 $('.number-text',$('.number-item')[count]).text(data.vehicle_type)
-                    //                 count++;
-                    //
-                    //             }
-                    //         }
-                    //         for (var i = 0; i < json.hour_aaData.length; i++) {
-                    //             var data = json.hour_aaData[i];
-                    //             echartsarray[0].push(data.status1);
-                    //             echartsarray[1].push(data.status2);
-                    //             echartsarray[2].push(data.status3);
-                    //             echartsarray[3].push(data.status4);
-                    //             times.push(data.time_interval);
-                    //         }
-                    //         echartdata1.series[0].data = echartsarray[0];
-                    //         echartdata1.xAxis[0].data = times;
-                    //         echartdata2.series[0].data = echartsarray[1];
-                    //         echartdata2.xAxis[0].data = times;
-                    //         echartdata3.series[0].data = echartsarray[2];
-                    //         echartdata3.xAxis[0].data = times;
-                    //         echartdata4.series[0].data = echartsarray[3];
-                    //         echartdata4.xAxis[0].data = times;
-                    //         initdiv1('echart-div1',echartdata1);
-                    //         initdiv1('echart-div2',echartdata2);
-                    //         initdiv1('echart-div3',echartdata3);
-                    //         initdiv1('echart-div4',echartdata4);
-                    //         $('#site_activities_loading').hide();
-                    //         $('#echartDiv').show();
-                    //     }
-                    // })
-                             $('#site_activities_loading').hide();
-                             $('#echartDiv').show();
+                    $.ajax({
+                        type : 'post', /*设置表单以post方法提交*/
+                        url : '../../illegal_data_servlet_action', /*设置post提交到的页面*/
+                        data:{
+                            ajax:'ajax',
+                            action:'illegal_statistics',
+
+                        },
+                        success : function(json) {
+                            var echartsarray = [[],[],[],[],[]];
+                            var times = [];
+                            var count = 0;
+                            // for (var i = 0; i < json.aaData.length; i++) {
+                            //     var data = json.aaData[i];
+                            //     if(data.vehicle_type&&count<2){
+                            //
+                            //         $('.number-title',$('.number-item')[count]).text(data.num)
+                            //         $('.number-text',$('.number-item')[count]).text(data.vehicle_type)
+                            //         count++;
+                            //
+                            //     }
+                            // }
+                            for (var i = 0; i < json.hour_aaData.length; i++) {
+                                var data = json.hour_aaData[i];
+                                echartsarray[0].push(data.status1);
+                                echartsarray[1].push(data.status2);
+                                echartsarray[2].push(data.status3);
+                                echartsarray[3].push(data.status4);
+                                times.push(data.time_interval);
+                            }
+                            echartdata1.series[0].data = echartsarray[0];
+                            echartdata1.xAxis[0].data = times;
+                            echartdata2.series[0].data = echartsarray[1];
+                            echartdata2.xAxis[0].data = times;
+                            echartdata3.series[0].data = echartsarray[2];
+                            echartdata3.xAxis[0].data = times;
+                            echartdata4.series[0].data = echartsarray[3];
+                            echartdata4.xAxis[0].data = times;
+                            initdiv1('echart-div1',echartdata1);
+                            initdiv1('echart-div2',echartdata2);
+                            initdiv1('echart-div3',echartdata3);
+                            initdiv1('echart-div4',echartdata4);
+                            $('#site_activities_loading').hide();
+                            $('#echartDiv').show();
+                        }
+                    })
+
 
                 }else{
                     alert("[onAjaxUploadFile]没有上传文件结果返回！");
@@ -580,12 +609,6 @@
 <!-- END JAVASCRIPTS -->
 </body>
 <!-- END BODY -->
-
-<!--修改数据-->
-<%@include file="monitor_add_div.jsp"%>
-<%@include file="monitor_query_div.jsp"%>
-<%@include file="monitor_modify_div.jsp"%>
-<%@include file="monitor_export_div.jsp"%>
 
 
 </html>
