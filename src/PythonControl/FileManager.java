@@ -5,9 +5,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Files;
@@ -15,7 +13,9 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -73,7 +73,7 @@ public class FileManager {
 
     }
 
-    public void getResult(String filePath)
+    public void getBackResult(String filePath)
     {
 
         try {
@@ -92,18 +92,19 @@ public class FileManager {
         }
     }
 
-    public String getFlowResult(String filePath)
+    public String getFlowResult(String filePath,JSONObject json)
     {
         int totalNum = -1;
         String beginDatetime = null;
         String endDatetime = null;
+        List list = new ArrayList();
         String sql = null;
 
         try {
             // 读取文件内容
             Path path = Paths.get(filePath);
             List<String> lines = Files.readAllLines(path, StandardCharsets.UTF_8);
-
+            HashMap map = new HashMap();
             // 处理文件内容
             for (String line : lines) {
 
@@ -111,21 +112,29 @@ public class FileManager {
                 {
                     int index= line.lastIndexOf('：');
                     totalNum=Integer.parseInt(line.substring(index+1));
+
+                    map.put("totalNum",totalNum);
+
                 }
                 else if(line.contains("视频起始时间:"))
                 {
                     int index= line.lastIndexOf(": ");
                     beginDatetime=line.substring(index+2);
+                    map.put(" beginDatetime", beginDatetime);
                 }
                 else if(line.contains("视频结束时间:"))
                 {
                     int index= line.lastIndexOf(": ");
                     endDatetime=line.substring(index+2);
+                    map.put("endDatetime",endDatetime);
+
                 }
 
                 // 在这里处理每行的内容
 
             }
+            list.add(map);
+            json.put("flowData",list);
 
             sql = "insert into count_of_lane"+ "(start_time,lane_id,end_time,total_num)";
             sql = sql + " select '" + beginDatetime + "'" + " ,1"
@@ -134,18 +143,20 @@ public class FileManager {
         } catch (IOException e) {
             // 处理读取文件时的异常
             e.printStackTrace();
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
         }
-        showDebug(sql);
+        showDebug(list.toString());
         return sql;
     }
 
-    public void getCarIdResult(String filePath)
+    public void getCarIdResult(String filePath,JSONObject json)
     {
         String ID = null;
         String carCode = null;
         String recordTime = null;
         String sql = null;
-
+        List list = new ArrayList();
         try {
             // 读取文件内容
             Path path = Paths.get(filePath);
@@ -169,27 +180,36 @@ public class FileManager {
                 recordTime = line.substring(index);
                 // 在这里处理每行的内容
 
-            }
+               HashMap map = new HashMap();
+               map.put("carID",ID);
+               map.put("carCode",carCode);
+               map.put("recordTime",recordTime);
+               list.add(map);
 
+
+            }
+            json.put("carIDData",list);
             sql=ID+","+carCode+","+recordTime;
 
 
         } catch (IOException e) {
             // 处理读取文件时的异常
             e.printStackTrace();
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
         }
-        showDebug(sql);
+        showDebug(list.toString());
 
     }
 
-    public void getDoubleLineResult(String filePath)
+    //
+    public void getDoubleLineResult(String filePath,JSONObject json)
     {
         int locationX = -1;
         int locationY = -1;
-        String carCode = null;
         String recordTime = null;
         String sql = null;
-
+        List list = new ArrayList();
         try {
             // 读取文件内容
             Path path = Paths.get(filePath);
@@ -214,7 +234,14 @@ public class FileManager {
                 locationY = Integer.parseInt(line.substring(index,endIndex));
                 // 在这里处理每行的内容
 
+                HashMap map = new HashMap();
+                map.put("locationX",locationX);
+                map.put("locationY",locationY);
+                map.put("recordTime",recordTime);
+                list.add(map);
+
             }
+            json.put("doubleLineData",list);
 
             sql=recordTime+","+locationX+","+locationY;
 
@@ -222,13 +249,16 @@ public class FileManager {
         } catch (IOException e) {
             // 处理读取文件时的异常
             e.printStackTrace();
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
         }
-        showDebug(sql);
+        showDebug(list.toString());
 
     }
 
-    public void getRedLightResult(String filePath)
+    public void getRedLightResult(String filePath,JSONObject json)
     {
+        List list = new ArrayList();
         int locationX = -1;
         int locationY = -1;
         String ID = null;
@@ -262,7 +292,16 @@ public class FileManager {
                 str = "闯红灯时间:";
                 index= line.lastIndexOf(str)+str.length();
                 recordTime=line.substring(index);
+
+                HashMap map = new HashMap();
+                map.put("ID",ID);
+                map.put("locationX",locationX);
+                map.put("locationY",locationY);
+                map.put("recordTime",recordTime);
+                list.add(map);
             }
+
+            json.put("redLineData",list);
 
             sql=recordTime+","+locationX+","+locationY+","+ID;
 
@@ -270,8 +309,10 @@ public class FileManager {
         } catch (IOException e) {
             // 处理读取文件时的异常
             e.printStackTrace();
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
         }
-        showDebug(sql);
+        showDebug(list.toString());
 
     }
 
