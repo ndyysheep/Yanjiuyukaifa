@@ -24,7 +24,7 @@ def track_vehicles(frame, model, tracker, class_list, vehicle_types, last_positi
 
     bbox_idx = tracker.update([bbox for bbox, _ in tracked_vehicles])
 
-    with open('Data/Back/results.txt', 'a', encoding='utf-8') as file:
+    with open('Data/Back/results.txt', 'a') as file:
         for bbox, vehicle_type in zip(bbox_idx, [vt for _, vt in tracked_vehicles]):
             x3, y3, x4, y4, id1 = bbox
             current_bbox = [x3, y3, x4, y4]
@@ -66,7 +66,7 @@ def demo_track_vehicles(video_path, model_path, class_file, vehicle_types, start
     frame_height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
     # 创建 VideoWriter 对象以写入视频
-    out = cv2.VideoWriter(current_dir+'/Data/Back/output.mp4', cv2.VideoWriter_fourcc(*'avc1'), frame_rate, (frame_width, frame_height))
+    out = cv2.VideoWriter(current_dir+'/Data/Back/output.mp4', cv2.VideoWriter_fourcc(*'avg1'), frame_rate, (frame_width, frame_height))
 
     last_positions = {}
     reverse_counter = {}  # 用于跟踪每辆车的逆行帧数
@@ -83,7 +83,7 @@ def demo_track_vehicles(video_path, model_path, class_file, vehicle_types, start
         out.write(updated_frame)
 
         # cv2.imshow("Tracked Vehicles", updated_frame)
-        frame_number += 1
+        # frame_number += 1
         if cv2.waitKey(1) & 0xFF == 27:  # Press ESC to exit
             break
 
@@ -97,7 +97,7 @@ if os.path.exists(file_path):
     print(f"文件 {file_path} 已被删除。")
 else:
     # 如果文件不存在，则创建它
-    with open(file_path, 'w', encoding='utf-8') as file:
+    with open(file_path, 'w') as file:
         file.write('')
 current_dir =os.path.dirname(os.path.abspath(__file__))
 print("当前运行环境的绝对路径：", current_dir)
