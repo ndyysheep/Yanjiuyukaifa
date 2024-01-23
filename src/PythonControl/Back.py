@@ -66,7 +66,7 @@ def demo_track_vehicles(video_path, model_path, class_file, vehicle_types, start
     frame_height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
     # 创建 VideoWriter 对象以写入视频
-    out = cv2.VideoWriter(current_dir+'/Data/Back/output.mp4', cv2.VideoWriter_fourcc(*'avg1'), frame_rate, (frame_width, frame_height))
+    out = cv2.VideoWriter(current_dir+'/Data/Back/output.mp4', cv2.VideoWriter_fourcc(*'MP4V'), frame_rate, (frame_width, frame_height))
 
     last_positions = {}
     reverse_counter = {}  # 用于跟踪每辆车的逆行帧数
