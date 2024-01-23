@@ -58,7 +58,9 @@ public class PythonDao {
         }
         else
         {
+
             file_path_name = workingDirectory+file_path_name;
+            showDebug(file_path_name);
             FileManager myFile = new FileManager();
             myFile.copyFile(file_path_name,target);
         }

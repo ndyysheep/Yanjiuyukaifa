@@ -24,7 +24,7 @@ def track_vehicles(frame, model, tracker, class_list, vehicle_types, last_positi
 
     bbox_idx = tracker.update([bbox for bbox, _ in tracked_vehicles])
 
-    with open('Data/Back/results.txt', 'a') as file:
+    with open('Data/Back/results.txt', 'a', encoding='utf-8') as file:
         for bbox, vehicle_type in zip(bbox_idx, [vt for _, vt in tracked_vehicles]):
             x3, y3, x4, y4, id1 = bbox
             current_bbox = [x3, y3, x4, y4]
@@ -97,7 +97,7 @@ if os.path.exists(file_path):
     print(f"文件 {file_path} 已被删除。")
 else:
     # 如果文件不存在，则创建它
-    with open(file_path, 'w') as file:
+    with open(file_path, 'w', encoding='utf-8') as file:
         file.write('')
 current_dir =os.path.dirname(os.path.abspath(__file__))
 print("当前运行环境的绝对路径：", current_dir)

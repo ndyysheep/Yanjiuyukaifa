@@ -81,7 +81,7 @@ with open('Data/light/results.txt', 'w', encoding='utf-8'):
 
 
 def main():
-    source = "Data/light/left.mp4"
+    source = "Data/light/test.mp4"
     cap = cv2.VideoCapture(source)
     object_detector = cv2.createBackgroundSubtractorMOG2(history=100, varThreshold=40)
     tracker = EuclideanDistTracker()

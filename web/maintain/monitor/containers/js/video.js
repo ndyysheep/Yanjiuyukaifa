@@ -29,6 +29,8 @@ var Page = function() {
 
 	};
 	/*----------------------------------------入口函数  结束----------------------------------------*/
+	var dataTableIsExisted = false;
+	var table;
 	/*----------------------------------------业务函数  开始----------------------------------------*/
 	/*------------------------------针对各个页面的入口  开始------------------------------*/
 	var initVideoControl=function(){
@@ -108,8 +110,17 @@ var Page = function() {
 							"<th>车辆位置横坐标X1(右下)</th>\n" +
 							"<th>车辆位置横坐标Y1(右下)</th>\n" +
 							"<th>记录时间</th>\n" ;
+						if(dataTableIsExisted === true)
+						{
+							table.clear().destroy();
+						}
+						else
+						{
+							dataTableIsExisted =true;
+						}
 						$("#tableHead").html(tableHtml);
 						getBackDatatable(record);
+						$("#row_res").hide();
 						$("#row_res").show();
 					}
 
@@ -173,6 +184,8 @@ var Page = function() {
 							"                        </div>"
 						$("#center-top-div").html(numberHtml);
 						$("#center-top-div").show();
+						$("#row_res").hide();
+
 					}
 					else{
 						alert("[onAjaxUploadFile]没有上传文件结果返回！");
@@ -232,8 +245,19 @@ var Page = function() {
 							"<th>横坐标</th>\n" +
 							"<th>纵坐标</th>\n" +
 							"<th>记录时间</th>\n" ;
+
+						if(dataTableIsExisted === true)
+						{
+							table.clear().destroy();
+						}
+						else
+						{
+							dataTableIsExisted =true;
+						}
 						$("#tableHead").html(tableHtml);
 						getRedLightDatatable(json.redLineData);
+
+						$("#row_res").hide();
 						$("#row_res").show();
 					}else{
 						alert("[onAjaxUploadFile]没有上传文件结果返回！");
@@ -291,8 +315,19 @@ var Page = function() {
 						tableHtml+="<th>车辆序号</th>\n" +
 							"<th>车牌号</th>\n" +
 							"<th>记录时间</th>\n" ;
+						if(dataTableIsExisted === true)
+						{
+							table.clear().destroy();
+						}
+						else
+						{
+							dataTableIsExisted =true;
+						}
+
 						$("#tableHead").html(tableHtml);
 						getCarCodeResultDatatable(json.carIDData);
+						$("#row_res").hide();
+						$("#row_res").hide();
 						$("#row_res").show();
 
 					}else{
@@ -347,14 +382,27 @@ var Page = function() {
 						$("#center-top-div").html(numberHtml);
 						$("#center-top-div").show();
 
-						var tableHtml = "";
-						tableHtml+=
-							"<th>横坐标</th>\n" +
-							"<th>纵坐标</th>\n" +
-							"<th>记录时间</th>\n" ;
-						$("#tableHead").html(tableHtml);
-						getDoubleLineDatatable(json.doubleLineData);
-						$("#row_res").show();
+						if(doubleLineNum!==0)
+						{
+							var tableHtml = "";
+							tableHtml+=
+								"<th>横坐标</th>\n" +
+								"<th>纵坐标</th>\n" +
+								"<th>记录时间</th>\n" ;
+							if(dataTableIsExisted === true)
+							{
+								table.clear().destroy();
+							}
+							else
+							{
+								dataTableIsExisted =true;
+							}
+							$("#tableHead").html(tableHtml);
+							getDoubleLineDatatable(json.doubleLineData);
+							$("#row_res").hide();
+							$("#row_res").show();
+						}
+
 					}else{
 						alert("[onAjaxUploadFile]没有上传文件结果返回！");
 					}
@@ -371,9 +419,6 @@ var Page = function() {
 
 
 	var getBackDatatable =function(full){
-
-		var table =$('.datatable').DataTable();
-		table.destroy();
 
 		table =$('.datatable').DataTable( {
 
@@ -440,6 +485,7 @@ var Page = function() {
 			],
 			"aLengthMenu": [[5,10,15,20,25,40,50],[5,10,15,20,25,40,50]],
 			"fnDrawCallback": function(){$(".checkboxes").uniform();$(".group-checkable").uniform();},
+
 		});
 
 		$('.datatable').find('.group-checkable').change(function () {
@@ -463,14 +509,11 @@ var Page = function() {
 		var tableWrapper = $('#sample_1_wrapper'); // datatable creates the table wrapper by adding with id {your_table_jd}_wrapper
 
 		tableWrapper.find('.dataTables_length select').select2(); // initialize select2 dropdown
-
-
+		table.draw();
 
 	}
 	var getCarCodeResultDatatable =function(full){
 
-		var table =$('.datatable').DataTable();
-		table.destroy();
 
 		table =$('.datatable').DataTable( {
 
@@ -546,15 +589,10 @@ var Page = function() {
 		var tableWrapper = $('#sample_1_wrapper'); // datatable creates the table wrapper by adding with id {your_table_jd}_wrapper
 
 		tableWrapper.find('.dataTables_length select').select2(); // initialize select2 dropdown
-
-
-
+		table.draw();
 	}
 
 	var getDoubleLineDatatable =function(full){
-
-		var table =$('.datatable').DataTable();
-		table.destroy();
 
 		table =$('.datatable').DataTable( {
 
@@ -630,6 +668,7 @@ var Page = function() {
 		var tableWrapper = $('#sample_1_wrapper'); // datatable creates the table wrapper by adding with id {your_table_jd}_wrapper
 
 		tableWrapper.find('.dataTables_length select').select2(); // initialize select2 dropdown
+		table.draw();
 
 
 
@@ -637,8 +676,6 @@ var Page = function() {
 
 	var getRedLightDatatable =function(full){
 
-		var table =$('.datatable').DataTable();
-		table.destroy();
 
 		table =$('.datatable').DataTable( {
 
@@ -723,9 +760,7 @@ var Page = function() {
 		var tableWrapper = $('#sample_1_wrapper'); // datatable creates the table wrapper by adding with id {your_table_jd}_wrapper
 
 		tableWrapper.find('.dataTables_length select').select2(); // initialize select2 dropdown
-
-
-
+		table.draw();
 	}
 
 	var onAjaxUploadFile=function(){
