@@ -39,7 +39,6 @@ public class FileManager {
     private void updateRecord(Data data, JSONObject json) throws JSONException {
         /*--------------------获取变量 开始--------------------*/
         JSONObject param = data.getParam();
-        int resultCode = 0;
         String resultMsg = "ok";
         /*--------------------获取变量 完毕--------------------*/
         /*--------------------数据操作 开始--------------------*/
@@ -51,7 +50,6 @@ public class FileManager {
         /*--------------------数据操作 结束--------------------*/
         /*--------------------返回数据 开始--------------------*/
         json.put("result_msg", resultMsg); // 如果发生错误就设置成"error"等
-        json.put("result_code", resultCode); // 返回0表示正常，不等于0就表示有错误产生，错误代码
         /*--------------------返回数据 结束--------------------*/
     }
 
@@ -178,6 +176,10 @@ public class FileManager {
             sql = "insert into count_of_lane"+ "(start_time,lane_id,end_time,total_num)";
             sql = sql + " select '" + beginDatetime + "'" + " ,1"
                     + " ,'" + endDatetime + "','" + totalNum + "'";
+            Data data  = new Data();
+            data.setParam(json);
+            data.getParam().put("sql", sql);
+            updateRecord(data,json);
 
         } catch (IOException e) {
             // 处理读取文件时的异常
