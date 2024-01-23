@@ -75,6 +75,46 @@ var Page = function() {
 
 					console.log("[onAjaxUploadFile]fileUrl="+fileUrl);
 
+					if(json.backData!=null)
+					{
+						var record = json.backData;
+						for(var i = 0;i<record.length;i++)
+						{
+
+							var recordTime = record[i].recordTime;
+							var locations= record.locationArrays;
+
+						}
+
+
+						var recordNum  = json.backData.length;
+						var numberHtml = "";
+
+						numberHtml+="<div class=\"number-item\">\n" +
+							"                            <div class=\"number-title\">\n" ;
+						numberHtml+=recordNum;
+						numberHtml+="                            </div>\n" +
+							"                            <div class=\"number-text\">\n" +
+							"                                识别逆行数量\n" +
+							"                            </div>\n" +
+							"                        </div>"
+
+						$("#center-top-div").html(numberHtml);
+						$("#center-top-div").show();
+
+						var tableHtml = "";
+						tableHtml+="<th>车辆位置横坐标X0(左上)</th>\n"+
+							"<th>车辆位置纵坐标Y0(左上)</th>\n" +
+							"<th>车辆位置横坐标X1(右下)</th>\n" +
+							"<th>车辆位置横坐标Y1(右下)</th>\n" +
+							"<th>记录时间</th>\n" ;
+						$("#tableHead").html(tableHtml);
+						getBackDatatable(record);
+						$("#row_res").show();
+					}
+
+
+
 
 				}else{
 					alert("[onAjaxUploadFile]没有上传文件结果返回！");
@@ -330,6 +370,103 @@ var Page = function() {
 	}
 
 
+	var getBackDatatable =function(full){
+
+		var table =$('.datatable').DataTable();
+		table.destroy();
+
+		table =$('.datatable').DataTable( {
+
+			"paging":true,
+			"searching":false,
+			"oLanguage": {
+				"aria": {
+					"sortAscending": ": activate to sort column ascending",
+					"sortDescending": ": activate to sort column descending"
+				},
+				"sProcessing":   "处理中...",
+				"sLengthMenu":   "_MENU_ 记录/页",
+				"sZeroRecords":  "没有匹配的记录",
+				"sInfo":         "显示第 _START_ 至 _END_ 项记录，共 _TOTAL_ 项",
+				"sInfoEmpty":    "显示第 0 至 0 项记录，共 0 项",
+				"sInfoFiltered": "(由 _MAX_ 项记录过滤)",
+				"sInfoPostFix":  "",
+				"sSearch":       "过滤:",
+				"oPaginate": {
+					"sFirst":    "首页",
+					"sPrevious": "上页",
+					"sNext":     "下页",
+					"sLast":     "末页"
+				}
+			},
+			"data": full,
+			"columns": [
+				{
+					"data": "locationArrays",
+					"render": function(data, type, row, meta) {
+						// 在渲染函数中访问完整的行数据
+						return '<div>' + row.locationArrays[0] + '</div>';
+					},"orderable": true
+				},
+				{
+					"data": "locationArrays",
+					"render": function(data, type, row, meta) {
+						// 在渲染函数中访问完整的行数据
+						return '<div>' + row.locationArrays[1] + '</div>';
+					},"orderable": true
+				},
+				{
+					"data": "locationArrays",
+					"render": function(data, type, row, meta) {
+						// 在渲染函数中访问完整的行数据
+						return '<div>' + row.locationArrays[2] + '</div>';
+					},"orderable": true
+				},
+				{
+					"data": "locationArrays",
+					"render": function(data, type, row, meta) {
+						// 在渲染函数中访问完整的行数据
+						return '<div>' + row.locationArrays[3] + '</div>';
+					},"orderable": true
+				},
+				{
+					"data": "recordTime",
+					"render": function(data, type, row, meta) {
+						// 在渲染函数中访问完整的行数据
+						return '<div>' + row.recordTime + '</div>';
+					},
+					"orderable": true
+				}
+			],
+			"aLengthMenu": [[5,10,15,20,25,40,50],[5,10,15,20,25,40,50]],
+			"fnDrawCallback": function(){$(".checkboxes").uniform();$(".group-checkable").uniform();},
+		});
+
+		$('.datatable').find('.group-checkable').change(function () {
+			var set = jQuery(this).attr("data-set");
+			var checked = jQuery(this).is(":checked");
+			jQuery(set).each(function () {
+				if (checked) {
+					$(this).attr("checked", true);
+					$(this).parents('tr').addClass("active");
+				} else {
+					$(this).attr("checked", false);
+					$(this).parents('tr').removeClass("active");
+				}
+			});
+			jQuery.uniform.update(set);
+		});
+		$('.datatable').on('change', 'tbody tr .checkboxes', function () {
+			$(this).parents('tr').toggleClass("active");
+		});
+
+		var tableWrapper = $('#sample_1_wrapper'); // datatable creates the table wrapper by adding with id {your_table_jd}_wrapper
+
+		tableWrapper.find('.dataTables_length select').select2(); // initialize select2 dropdown
+
+
+
+	}
 	var getCarCodeResultDatatable =function(full){
 
 		var table =$('.datatable').DataTable();

@@ -73,9 +73,15 @@ public class FileManager {
 
     }
 
-    public void getBackResult(String filePath)
+    public void getBackResult(String filePath,JSONObject json)
     {
+        String locations = null;
+        String recordTime = null;
+        String sql = null;
+        List locationCoordinate = new ArrayList();
 
+
+        List list = new ArrayList();
         try {
             // 读取文件内容
             Path path = Paths.get(filePath);
@@ -83,10 +89,43 @@ public class FileManager {
 
             // 处理文件内容
             for (String line : lines) {
+
+                String str = "[";
+                int index= line.lastIndexOf(str)+str.length();
+                int endIndex = line.lastIndexOf(']');
+                locations=line.substring(index,endIndex);
+
+                int beginIndex = 0;
+                for(int i =0;i<locations.length()&&locationCoordinate.size()<4;i++)
+                {
+                    if(locations.charAt(i)==' ')
+                    {
+                        locationCoordinate.add(Integer.parseInt(locations.substring(beginIndex,i-1)));
+                        beginIndex = i+1;
+                    }
+
+                    if(locationCoordinate.size() ==3)
+                    {
+                        locationCoordinate.add(Integer.parseInt(locations.substring(beginIndex)));
+                    }
+                }
+
+
+                str ="逆行时间: ";
+                index = line.lastIndexOf(str)+str.length();
+                recordTime = line.substring(index);
                 // 在这里处理每行的内容
-                System.out.println(line);
+
+                HashMap map = new HashMap();
+                map.put("locationArrays",locationCoordinate);
+                map.put("recordTime",recordTime);
+                list.add(map);
+
+
             }
-        } catch (IOException e) {
+            json.put("backData",list);
+            showDebug(json.toString());
+        } catch (IOException | JSONException e) {
             // 处理读取文件时的异常
             e.printStackTrace();
         }
