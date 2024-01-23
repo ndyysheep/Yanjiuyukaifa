@@ -355,7 +355,56 @@ public class FileManager {
 
     }
 
+    public void getImgCarIdResult(String filePath,JSONObject json)
+    {
+        String ID = null;
+        String carCode = null;
+        String color = null;
+        String sql = null;
+        List list = new ArrayList();
+        try {
+            // 读取文件内容
+            Path path = Paths.get(filePath);
+            List<String> lines = Files.readAllLines(path, StandardCharsets.UTF_8);
 
+            // 处理文件内容
+            for (String line : lines) {
+
+                String str = "ID:";
+                int index= line.lastIndexOf(str)+str.length();
+                int endIndex = line.lastIndexOf(" 车牌号");
+                ID=line.substring(index,endIndex);
+
+                str = "车牌号：";
+                index = line.lastIndexOf(str)+str.length();
+                endIndex = line.lastIndexOf(" 车牌颜色");
+                carCode = line.substring(index,endIndex);
+
+                str ="车牌颜色：";
+                index = line.lastIndexOf(str)+str.length();
+                color = line.substring(index);
+                // 在这里处理每行的内容
+
+                HashMap map = new HashMap();
+                map.put("carID",ID);
+                map.put("carCode",carCode);
+                map.put("color",color);
+                list.add(map);
+
+
+            }
+            json.put("imgData",list);
+
+
+        } catch (IOException e) {
+            // 处理读取文件时的异常
+            e.printStackTrace();
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+        showDebug(list.toString());
+
+    }
     public void saveUploadFileRecord(JSONObject json, Data data) throws JSONException, SQLException {
         // 构造sql语句，根据传递过来的查询条件参数
         // 首先分析json里有多少文件，多个文件需要用循环构造多个sql语句

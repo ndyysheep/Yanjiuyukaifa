@@ -113,8 +113,14 @@
                         <a href="../../maintain/monitor/video_operate.jsp">
                             交通视频分析</a>
                     </li>
-
                 </ul>
+
+            </li>
+            <li id="img_analysis">
+                <a href="../../maintain/section/imageUpload.jsp">
+                    <i class="icon-pointer"></i>
+                    <span class="title">图片识别</span>
+                </a>
             </li>
             <!-- BEGIN ANGULARJS LINK -->
             <!-- END ANGULARJS LINK -->
