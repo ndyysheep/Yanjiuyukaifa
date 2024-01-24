@@ -140,7 +140,7 @@ var Login = function() {
             jQuery('.verify-form').show();
         });
     }
-    var handleverifyCode = function (){
+    var  handleverifyCode = function (){
         $(".verify-form").validate({
             errorElement: 'span', //default input error message container
             errorClass: 'help-block', // default input error message class

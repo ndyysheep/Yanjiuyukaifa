@@ -15,8 +15,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="92dc437d-bb51-42f3-93ee-b2423cc3248c" name="Default Changelist" comment="一点小修改">
+      <change afterPath="$PROJECT_DIR$/upload/teach/2024012219/qtwork.mp4" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/DBControl/DB.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/DBControl/DB.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/assets/admin/pages/scripts/login.js" beforeDir="false" afterPath="$PROJECT_DIR$/web/assets/admin/pages/scripts/login.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/home/frame/page_sidebar.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/web/home/frame/page_sidebar.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/home/frame/top_menu.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/web/home/frame/top_menu.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/main/userManage/UserManage.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/web/main/userManage/UserManage.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/main/userManage/extra_profile_account.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/web/main/userManage/extra_profile_account.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/main/userManage/todo.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/web/main/userManage/todo.jsp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -545,54 +551,13 @@
       <workItem from="1705389585916" duration="146000" />
       <workItem from="1705458564938" duration="1588000" />
       <workItem from="1705548875785" duration="924000" />
-    </task>
-    <task id="LOCAL-00011" summary="Initial commit">
-      <option name="closed" value="true" />
-      <created>1701160529113</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1701160529113</updated>
-    </task>
-    <task id="LOCAL-00012" summary="Second commit">
-      <option name="closed" value="true" />
-      <created>1701160569807</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1701160569807</updated>
-    </task>
-    <task id="LOCAL-00013" summary="Third commit">
-      <option name="closed" value="true" />
-      <created>1701238764994</created>
-      <option name="number" value="00013" />
-      <option name="presentableId" value="LOCAL-00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1701238764994</updated>
-    </task>
-    <task id="LOCAL-00014" summary="Third commit">
-      <option name="closed" value="true" />
-      <created>1701238836118</created>
-      <option name="number" value="00014" />
-      <option name="presentableId" value="LOCAL-00014" />
-      <option name="project" value="LOCAL" />
-      <updated>1701238836118</updated>
-    </task>
-    <task id="LOCAL-00015" summary="Third commit">
-      <option name="closed" value="true" />
-      <created>1701240079239</created>
-      <option name="number" value="00015" />
-      <option name="presentableId" value="LOCAL-00015" />
-      <option name="project" value="LOCAL" />
-      <updated>1701240079239</updated>
-    </task>
-    <task id="LOCAL-00016" summary="Third commit">
-      <option name="closed" value="true" />
-      <created>1701240101723</created>
-      <option name="number" value="00016" />
-      <option name="presentableId" value="LOCAL-00016" />
-      <option name="project" value="LOCAL" />
-      <updated>1701240101723</updated>
+      <workItem from="1705835430332" duration="176000" />
+      <workItem from="1705835774396" duration="296000" />
+      <workItem from="1705837597885" duration="117000" />
+      <workItem from="1705920434613" duration="1844000" />
+      <workItem from="1705925291250" duration="2000" />
+      <workItem from="1705925386087" duration="1086000" />
+      <workItem from="1706067394169" duration="2379000" />
     </task>
     <task id="LOCAL-00017" summary="Third commit">
       <option name="closed" value="true" />
@@ -938,7 +903,55 @@
       <option name="project" value="LOCAL" />
       <updated>1705389262117</updated>
     </task>
-    <option name="localTasksCounter" value="60" />
+    <task id="LOCAL-00060" summary="一点小修改">
+      <option name="closed" value="true" />
+      <created>1705824797785</created>
+      <option name="number" value="00060" />
+      <option name="presentableId" value="LOCAL-00060" />
+      <option name="project" value="LOCAL" />
+      <updated>1705824797785</updated>
+    </task>
+    <task id="LOCAL-00061" summary="一点小修改">
+      <option name="closed" value="true" />
+      <created>1705826144835</created>
+      <option name="number" value="00061" />
+      <option name="presentableId" value="LOCAL-00061" />
+      <option name="project" value="LOCAL" />
+      <updated>1705826144836</updated>
+    </task>
+    <task id="LOCAL-00062" summary="一点小修改">
+      <option name="closed" value="true" />
+      <created>1705834754295</created>
+      <option name="number" value="00062" />
+      <option name="presentableId" value="LOCAL-00062" />
+      <option name="project" value="LOCAL" />
+      <updated>1705834754295</updated>
+    </task>
+    <task id="LOCAL-00063" summary="一点小修改">
+      <option name="closed" value="true" />
+      <created>1705837661769</created>
+      <option name="number" value="00063" />
+      <option name="presentableId" value="LOCAL-00063" />
+      <option name="project" value="LOCAL" />
+      <updated>1705837661769</updated>
+    </task>
+    <task id="LOCAL-00064" summary="一点小修改">
+      <option name="closed" value="true" />
+      <created>1705837680650</created>
+      <option name="number" value="00064" />
+      <option name="presentableId" value="LOCAL-00064" />
+      <option name="project" value="LOCAL" />
+      <updated>1705837680650</updated>
+    </task>
+    <task id="LOCAL-00065" summary="一点小修改">
+      <option name="closed" value="true" />
+      <created>1705837699400</created>
+      <option name="number" value="00065" />
+      <option name="presentableId" value="LOCAL-00065" />
+      <option name="project" value="LOCAL" />
+      <updated>1705837699400</updated>
+    </task>
+    <option name="localTasksCounter" value="66" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
