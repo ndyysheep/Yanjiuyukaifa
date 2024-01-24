@@ -87,7 +87,7 @@ def flow_count(video_path, vehicle_types=['car'], directions=['north', 'south'],
     out.release()  # 关闭视频写入器
     cv2.destroyAllWindows()
     total_num = 0
-    with open('Data/Flow/results.txt', 'w') as file:
+    with open('Data/Flow/results.txt', 'w', encoding='utf-8') as file:
         for direction in directions:
             for vehicle_type, counter in counters[direction].items():
                 file.write(f"总计 {direction} {vehicle_type}: {len(counter)} 辆\n")

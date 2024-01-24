@@ -38,7 +38,7 @@
                 <a href="javascript:;">
                     <i class="icon-rocket"></i>
                     <span class="title">车辆检测数据</span>
-                    <span class="arrow open"></span>
+                    <span class="arrow "></span>
                 </a>
                 <ul class="sub-menu">
                     <li id ="monitor_list">
@@ -71,7 +71,7 @@
                 <a href="javascript:;">
                     <i class="icon-diamond"></i>
                     <span class="title">流量统计分析</span>
-                    <span class="arrow "></span>
+                    <span class="arrow open"></span>
                 </a>
                 <ul class="sub-menu">
                     <li id="daily_report">
@@ -92,7 +92,7 @@
                     </li>
                 </ul>
             </li>
-            <li>
+            <li id="video_lists">
                 <a href="javascript:;">
                     <i class="icon-diamond"></i>
                     <span class="title">视频分析</span>
@@ -103,15 +103,24 @@
                         <a href="../../maintain/section/section.jsp">
                             <span class="badge badge-warning">new</span>路段管理</a>
                     </li>
+
                     <li id ="weibo">
                         <a href="../../maintain/weibohot/section.jsp">
                             <span class="badge badge-warning">new</span>Api管理</a>
                     </li>
-                    <li>
-                        <a href="../../maintain/monitor/video_statistics.jsp">
+
+                    <li id="video_analysis">
+                        <a href="../../maintain/monitor/video_operate.jsp">
                             交通视频分析</a>
                     </li>
                 </ul>
+
+            </li>
+            <li id="img_analysis">
+                <a href="../../maintain/section/imageUpload.jsp">
+                    <i class="icon-pointer"></i>
+                    <span class="title">图片识别</span>
+                </a>
             </li>
             <!-- BEGIN ANGULARJS LINK -->
             <!-- END ANGULARJS LINK -->

@@ -154,6 +154,21 @@ public class VideoServlet extends HttpServlet{
 
             }
 
+            if (action.equals("get_image_analysis")) {
+                actionOk = true;
+
+                try {
+
+                    getImgRecognition(request, response, json);
+
+                } catch (Exception e) {
+
+                    e.printStackTrace();
+
+                }
+
+            }
+
             if (action.equals("upload_file")) {
                 actionOk = true;
 
@@ -324,6 +339,15 @@ public class VideoServlet extends HttpServlet{
         PythonDao dao = new PythonDao();
         dao.setPath(myFilePath);
         dao.getDoubleLine(data,json);
+    }
+
+    private void getImgRecognition(HttpServletRequest request, HttpServletResponse response, JSONObject json)
+            throws JSONException, SQLException {
+        String absolutePath =request.getServletContext().getRealPath("");
+        String myFilePath = new File(absolutePath).getParentFile().getParentFile().getParent();
+        PythonDao dao = new PythonDao();
+        dao.setPath(myFilePath);
+        dao.getImageCarId(data,json);
     }
 
 

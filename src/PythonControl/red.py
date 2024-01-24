@@ -70,18 +70,18 @@ def display_traffic_info(frame, vehicle_count, detections, last_id):
         cv2.putText(frame, f"Violation: ID {last_id}", (20, 40), cv2.FONT_HERSHEY_PLAIN, 1, (255, 0, 0), 2)
 
         # 写入到文件中，并将ID添加到已记录集合中
-        with open('Data/light/results.txt', 'a') as file:
+        with open('Data/light/results.txt', 'a', encoding='utf-8') as file:
             file.write(f"车辆ID:{last_id} 闯红灯位置:(X:{x}, Y:{y}) 闯红灯时间:{formatted_time}\n")
             recorded_ids.add(last_id)  # 记录ID
 
 
 # 在程序开始时清空文件
-with open('Data/light/results.txt', 'w'):
+with open('Data/light/results.txt', 'w', encoding='utf-8'):
     pass
 
 
 def main():
-    source = "Data/light/left.mp4"
+    source = "Data/light/test.mp4"
     cap = cv2.VideoCapture(source)
     object_detector = cv2.createBackgroundSubtractorMOG2(history=100, varThreshold=40)
     tracker = EuclideanDistTracker()

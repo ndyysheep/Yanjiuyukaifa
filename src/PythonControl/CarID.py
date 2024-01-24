@@ -57,7 +57,7 @@ def track_vehicles(frame, model, tracker, class_list, vehicle_types, height_cuto
 
     bbox_idx = tracker.update([bbox for bbox, _ in tracked_vehicles])
 
-    with open('Data/CarID/results.txt', 'a') as file:
+    with open('Data/CarID/results.txt', 'a' , encoding='utf-8') as file:
         fixed_time = datetime.datetime(2024, 1, 15, 12, 0, 0)
 
         # 将固定时间格式化为字符串
@@ -86,7 +86,7 @@ if os.path.exists(file_path):
     print(f"文件 {file_path} 已被删除。")
 else:
     # 如果文件不存在，则创建它
-    with open(file_path, 'w') as file:
+    with open(file_path, 'w', encoding='utf-8') as file:
         file.write('')
 model_path = 'Data/Flow/yolov8s.pt'
 class_file = 'Data/Flow/coco.txt'
