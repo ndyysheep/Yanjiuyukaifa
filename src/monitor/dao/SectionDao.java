@@ -499,7 +499,7 @@ public class SectionDao {
     public void getExportMonitorRecordToExcel(JSONObject json, Data data) throws JSONException, IOException {
         // 指定保存目录的路径
 
-        String saveDirectory = "D:\\ykpro\\web\\upload\\section";
+        String saveDirectory = "\\upload\\maintain\\section";
 
         String filePath = saveDirectory + "\\export_section.xls";
 

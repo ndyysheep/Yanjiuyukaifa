@@ -641,7 +641,7 @@ public class WeibohotDao {
     public void getExportMonitorRecordToExcel(JSONObject json, Data data) throws JSONException, IOException {
         // 指定保存目录的路径
 
-        String saveDirectory = "D:\\ykpro\\web\\upload\\weibo";
+        String saveDirectory = "\\upload\\maintain\\weibo";
 
         String filePath = saveDirectory + "\\export_weibo.xls";
 
