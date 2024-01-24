@@ -19,21 +19,7 @@
         <!-- DOC: Set data-keep-expand="true" to keep the submenues expanded -->
         <!-- DOC: Set data-auto-speed="200" to adjust the sub menu slide up/down speed -->
         <ul class="page-sidebar-menu " data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
-            <li class="start ">
-                <a href="index.html">
-                    <i class="icon-home"></i>
-                    <span class="title">大数据页面</span>
-                </a>
-            </li>
-            <li>
-                <ul class="sub-menu">
-                    <li>
-                        <a href="ecommerce_index.html">
-                            <i class="icon-home"></i>
-                            大数据页面</a>
-                    </li>
-                </ul>
-            </li>
+
             <li id="monitor_lists">
                 <a href="javascript:;">
                     <i class="icon-rocket"></i>

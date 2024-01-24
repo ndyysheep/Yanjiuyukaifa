@@ -18,7 +18,7 @@
 <!-- BEGIN HEAD -->
 <head>
     <meta charset="utf-8"/>
-    <title>XM-08|OpenCV视频识别</title>
+    <title>XM-08 | OpenCV交通视频识别 </title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
@@ -26,10 +26,62 @@
     <meta content="" name="author"/>
     <%@include file="../../home/frame/frame_style.jsp"%>
     <script src="../../assets/global/plugins/echarts/echarts.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="../../assets/css/comon0.css"/>
     <style>
+        #record_list_div{
+            color: #fff;
+        }
+        .fa{
+            color: #fff !important;
+        }
+        .green.btn{
+            color: #fff !important;
+        }
+        .red.btn{
+            color: #fff !important;
+        }
+        html{
+            background: url("/assets/img/bg.jpg") center no-repeat;
+            background-size: cover;
+            background-color: rgb(0,7,64);
+        }
+        body{
+            background: rgba(0,0,0,0) !important;
+        }
+        .slimScrollDiv{
+            background: rgba(0,0,0,0) !important;
+        }
+        .page-sidebar .page-sidebar-menu .sub-menu li > a, .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu .sub-menu li > a{
+            color: #ffffff !important;
+        }
+        .active{
+            background: rgba(0,0,0,0) !important;
+            color: #ffffff !important;
+        }
+        .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu > li.active > a, .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu > li.active.open > a, .page-sidebar .page-sidebar-menu > li.active > a, .page-sidebar .page-sidebar-menu > li.active.open > a{
+            background: rgba(0,0,0,0) !important;
+            color: #ffffff !important;
+        }
+        .page-sidebar .page-sidebar-menu > li > a > .title, .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu > li > a > .title{
+            color: #ffffff !important;
+        }
+        .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu .sub-menu > li:hover > a, .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu .sub-menu > li.open > a, .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu .sub-menu > li.active > a, .page-sidebar .page-sidebar-menu .sub-menu > li:hover > a, .page-sidebar .page-sidebar-menu .sub-menu > li.open > a, .page-sidebar .page-sidebar-menu .sub-menu > li.active > a{
+            background: rgba(0,0,0,0.3) !important;
+            color: #ffffff !important;
+        }
+        .page-header.navbar.navbar-fixed-top{
+            background: rgba(0,0,0,0.3) !important;
+            color: #ffffff !important;
+        }
+        .page-sidebar{
+            background: rgba(0,0,0,0) !important;
+        }
         .page-content-child{
             display: flex;
             flex-flow: row nowrap;
+        }
+        .page-content-wrapper{
+            min-height: 90vh;
         }
         .left-div{
             width: 600px;
@@ -40,6 +92,7 @@
             flex-flow: column nowrap;
         }
         .center-div{
+            padding: 10px;
             flex: 1;
             height: 100%;
             min-height: 600px;
@@ -208,13 +261,13 @@
                         <div id="ajax_div" name="ajax_div">
                     <span class="btn green fileinput-button">
                                     <i class="fa fa-plus"></i>
-                                    <span>添加文件... </span>
-                                    <input type="file" id="upload_file" name="upload_file" onchange="showFile()">
+                                    <span style="color: #ffffff !important;">添加文件... </span>
+                                    <input type="file" id="upload_file" name="upload_file" onchange="showFile()" style="color: #ffffff;">
                                 </span>
 
                             <button id="upload_button1" type="button" class="btn red fileinput-button" onclick="onAjaxUploadFile()">
                                 <i class="fa fa-upload"></i>
-                                <span>开始上传 </span>
+                                <span style="color: #ffffff !important;">开始上传 </span>
                             </button>
                         </div>
                         <div id="record_list_div" name="record_list_div"></div>
@@ -222,81 +275,127 @@
                 </div>
             </div>
 
-                <div class="page-content-child" style="display: none;" id="echartDiv">
-                    <div class="left-div">
-                        <div class="echart-div" id="echart-div1" style="top:55px"></div>
-                        <div class="echart-div" id="echart-div2" style="top:175px"></div>
+            <div class="page-content-child" style="display: none;" id="echartDiv">
+                <div class="left-div">
+                    <div class="boxall" style="height: 3.3rem">
+                        <div class="alltitle">违章统计</div>
+
+                        <div class="sycm">
+                            <ul class="clearfix">
+                                <li><h2>24</h2><span>今日逆行</span></li>
+                                <li><h2>19</h2><span>今日闯红灯</span></li>
+                                <li><h2>12</h2><span>今日压双黄线</span></li>
+                            </ul>
+                            <div style="border-bottom: 1px solid rgba(255,255,255,.1)"></div>
+                            <ul class="clearfix">
+                                <li><h2>82</h2><span>昨日逆行</span></li>
+                                <li><h2>92</h2><span>昨日闯红灯</span></li>
+                                <li><h2>19</h2><span>昨日压双黄线</span></li>
+                            </ul>
+
+
+                        </div>
+                        <div class="boxfoot"></div>
                     </div>
-                    <div class="center-div" id="center-div">
-                        <div class="center-top-div" id="center-top-div">
+                    <div class="echart-div" id="echart-div1" style="margin-top:20px"></div>
+                    <div class="echart-div" id="echart-div2" style="margin-top:20px"></div>
+                </div>
+                <div class="center-div" id="center-div">
+                    <%--<div class="center-top-div" id="center-top-div">--%>
 
-                        </div>
+                    <%--</div>--%>
 
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div id="video_div"></div>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-12">
-                                <button type="button" id="get_back_button" name ="get_back_button" class="btn default red-stripe">逆行检测</button>
-                                <button type="button" id="get_flow_button" name ="get_flow_button" class="btn default blue-stripe">车流量检测</button>
-                                <button type="button" id="get_red_button" name="get_red_button" class="btn default red-stripe">闯红灯检测</button>
-                                <button type="button" id="get_carId_button" name="get_carId_button" class="btn default blue-stripe">车牌号检测</button>
-                                <button type="button" id="get_double_button" name ="get_double_button" class="btn default blue-stripe">压双黄线检测</button>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div id="result_div"></div>
-                            </div>
-                        </div>
-
-
-                        <%--datatable数据表--%>
-
-                    </div>
-
-                    <div class="right-div">
-                        <div class="echart-div" id="echart-div3" style="left:10px;top:55px"></div>
-                        <div class="echart-div" id="echart-div4" style="left:10px;top:175px"></div>
-                    </div>
-
-                    <div class="row" id="row_res" style="display:none">
+                    <div class="row">
                         <div class="col-md-12">
-                            <div class="portlet box blue-hoki">
-                                <div class="portlet-title">
-                                    <div class="caption">
-                                        <i class="fa fa-comments"></i>结果表
-                                    </div>
-                                    <div class="tools">
-                                        <a href="javascript:;" class="collapse">
-                                        </a>
-                                        <a href="#portlet-config" data-toggle="modal" class="config">
-                                        </a>
-                                        <a href="javascript:;" class="reload">
-                                        </a>
-                                        <a href="javascript:;" class="remove">
-                                        </a>
-                                    </div>
+                            <div id="video_div"></div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <button type="button" id="get_back_button" name ="get_back_button" class="btn default red-stripe">逆行检测</button>
+                            <button type="button" id="get_flow_button" name ="get_flow_button" class="btn default blue-stripe">车流量检测</button>
+                            <button type="button" id="get_red_button" name="get_red_button" class="btn default red-stripe">闯红灯检测</button>
+                            <button type="button" id="get_carId_button" name="get_carId_button" class="btn default blue-stripe">车牌号检测</button>
+                            <button type="button" id="get_double_button" name ="get_double_button" class="btn default blue-stripe">压双黄线检测</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div id="result_div"></div>
+                        </div>
+                    </div>
+
+
+                    <%--datatable数据表--%>
+
+                </div>
+
+                <div class="right-div">
+                    <div class="boxall" style="height: 3.4rem">
+                        <div class="alltitle">实时规章记录</div>
+                        <div class="wrap">
+                            <ul>
+                                <li>
+                                    <p>1 京A88888-XXX街道-违章-闯红灯</p>
+                                </li>
+                                <li>
+                                    <p>2 鄂A88888-XXX街道-违章-逆行</p>
+                                </li>
+                                <li>
+                                    <p>3 京A66666-XXX街道-违章-压双黄线</p>
+                                </li>
+                                <li>
+                                    <p>4 鄂A66666-XXX街道-违章-逆行</p>
+                                </li>
+                                <li>
+                                    <p>5 京A33333-XXX街道-违章-压双黄线</p>
+                                </li>
+                                <li>
+                                    <p>6 鄂A33333-XXX街道-违章-闯红灯</p>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="boxfoot"></div>
+                    </div>
+                    <div class="echart-div" id="echart-div3" style="margin-top:20px"></div>
+                    <div class="echart-div" id="echart-div4" style="margin-top:20px"></div>
+                </div>
+
+                <div class="row" id="row_res" style="display:none">
+                    <div class="col-md-12">
+                        <div class="portlet box blue-hoki">
+                            <div class="portlet-title">
+                                <div class="caption">
+                                    <i class="fa fa-comments"></i>结果表
                                 </div>
+                                <div class="tools">
+                                    <a href="javascript:;" class="collapse">
+                                    </a>
+                                    <a href="#portlet-config" data-toggle="modal" class="config">
+                                    </a>
+                                    <a href="javascript:;" class="reload">
+                                    </a>
+                                    <a href="javascript:;" class="remove">
+                                    </a>
+                                </div>
+                            </div>
 
-                                <div class="portlet-body">
-                                    <div class="table-scrollable">
-                                        <table class="table table-striped table-bordered table-hover datatable" id="sample_1">
-                                            <thead >
-                                            <tr id = "tableHead">
+                            <div class="portlet-body">
+                                <div class="table-scrollable">
+                                    <table class="table table-striped table-bordered table-hover datatable" id="sample_1">
+                                        <thead >
+                                        <tr id = "tableHead">
 
-                                            </tr>
-                                            </thead>
-                                        </table>
-                                    </div>
+                                        </tr>
+                                        </thead>
+                                    </table>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
 
 
         </div>
@@ -316,14 +415,22 @@
 
 <%@include file="../../home/frame/frame_javascript.jsp"%>
 <script>
-
+    var whei=$(window).width()
+    $("html").css({fontSize:whei/20})
+    $(window).resize(function(){
+        var whei=$(window).width()
+        $("html").css({fontSize:whei/20})
+    });
     function initdiv1(id,data) {
         var echartDiv1 = echarts.init(document.getElementById(id));
         echartDiv1.setOption(data);
     }
     var echartdata1 = {
         title: {
-            text: '闯红灯情况'
+            text: '闯红灯情况',
+            textStyle:{
+                color:'#fff'
+            }
         },
         color:['#2d8acd'],
         tooltip: {
@@ -344,12 +451,24 @@
                 data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
                 axisTick: {
                     alignWithLabel: true
+                },
+                axisLabel: {
+                    show: true,
+                    textStyle: {
+                        color: '#fff'
+                    }
                 }
             }
         ],
         yAxis: [
             {
-                type: 'value'
+                type: 'value',
+                axisLabel: {
+                    show: true,
+                    textStyle: {
+                        color: '#fff'
+                    }
+                }
             }
         ],
         series: [
@@ -363,7 +482,10 @@
     }
     var echartdata2 = {
         title: {
-            text: '逆行'
+            text: '逆行',
+            textStyle:{
+                color:'#fff'
+            }
         },
         color:['#28ce89'],
         tooltip: {
@@ -384,12 +506,24 @@
                 data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
                 axisTick: {
                     alignWithLabel: true
+                },
+                axisLabel: {
+                    show: true,
+                    textStyle: {
+                        color: '#fff'
+                    }
                 }
             }
         ],
         yAxis: [
             {
-                type: 'value'
+                type: 'value',
+                axisLabel: {
+                    show: true,
+                    textStyle: {
+                        color: '#fff'
+                    }
+                }
             }
         ],
         series: [
@@ -406,7 +540,10 @@
     var echartdata3 = {
         color: ['#80FFA5', '#00DDFF', '#37A2FF', '#FF0087', '#FFBF00'],
         title: {
-            text: '逆行情况'
+            text: '逆行情况',
+            textStyle:{
+                color:'#fff'
+            }
         },
         tooltip: {
             trigger: 'axis',
@@ -432,12 +569,24 @@
             {
                 type: 'category',
                 boundaryGap: false,
-                data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+                data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                axisLabel: {
+                    show: true,
+                    textStyle: {
+                        color: '#fff'
+                    }
+                }
             }
         ],
         yAxis: [
             {
-                type: 'value'
+                type: 'value',
+                axisLabel: {
+                    show: true,
+                    textStyle: {
+                        color: '#fff'
+                    }
+                }
             }
         ],
         series: [
@@ -473,7 +622,10 @@
 
     var echartdata4 = {
         title: {
-            text: '压双黄线'
+            text: '压双黄线',
+            textStyle:{
+                color:'#fff'
+            }
         },
         color:['#2d8ad0'],
         tooltip: {
@@ -494,12 +646,24 @@
                 data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
                 axisTick: {
                     alignWithLabel: true
+                },
+                axisLabel: {
+                    show: true,
+                    textStyle: {
+                        color: '#fff'
+                    }
                 }
             }
         ],
         yAxis: [
             {
-                type: 'value'
+                type: 'value',
+                axisLabel: {
+                    show: true,
+                    textStyle: {
+                        color: '#fff'
+                    }
+                }
             }
         ],
         series: [
@@ -603,6 +767,21 @@
             alert('只能上传视频文件')
         }
     }
+    var html=$(".wrap ul").html()
+    $(".wrap ul").append(html)
+    var ls=$(".wrap li").length/2+1
+    i=0
+    var ref = setInterval(function(){
+        i++
+        if(i==ls){
+            i=1
+            $(".wrap ul").css({marginTop:0})
+            $(".wrap ul").animate({marginTop:-'.52'*i+'rem'},1000)
+        }
+        $(".wrap ul").animate({marginTop:-'.52'*i+'rem'},1000)
+
+
+    },2400);
 </script>
 
 <script src="containers/js/video.js"></script>
