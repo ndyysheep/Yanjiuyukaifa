@@ -93,7 +93,6 @@
                 </ul>
             </li>
             <li>
-
                 <a href="javascript:;">
                     <i class="icon-diamond"></i>
                     <span class="title">视频分析</span>
@@ -104,17 +103,14 @@
                         <a href="../../maintain/section/section.jsp">
                             <span class="badge badge-warning">new</span>路段管理</a>
                     </li>
-
                     <li id ="weibo">
                         <a href="../../maintain/weibohot/section.jsp">
                             <span class="badge badge-warning">new</span>Api管理</a>
                     </li>
-
                     <li>
                         <a href="../../maintain/monitor/video_statistics.jsp">
                             交通视频分析</a>
                     </li>
-
                 </ul>
             </li>
             <!-- BEGIN ANGULARJS LINK -->
