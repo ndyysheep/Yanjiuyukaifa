@@ -148,10 +148,7 @@
                 </td>
             </tr>
         </tbody>
-        <!-- 添加Word打印按钮 -->
-        <button type="button" class="btn btn-primary" id="printButton">
-            <i class="fa fa-print"></i> 打印
-        </button>
+
     </table>
 
     <p class=MsoNormal><span lang=EN-US style='font-family:"微软雅黑",sans-serif'>&nbsp;</span></p>
@@ -159,26 +156,6 @@
 </div>
 <%@include file="../../home/frame/frame_javascript.jsp"%>
 <script src="containers/js/monitor.js" type="text/javascript"></script>
-<style>
-    /* 在媒体类型为 print 时隐藏打印按钮 */
-    @media print {
-        #printButton {
-            display: none;
-        }
-
-    }
-</style>
-<script>
-
-    // 在页面加载完成后执行的 JavaScript
-    $(document).ready(function() {
-        // 给打印按钮添加点击事件
-        $("#printButton").click(function() {
-            // 调用浏览器的打印功能
-            window.print();
-        });
-    });
-</script>
 </body>
 
 </html>

@@ -21,7 +21,7 @@ public class Db {
         /* 访问数据库端口 */
         String myPort = "3306";
         /* 访问数据库用户名 */
-        String user = "root";
+        String user = "tmxq";
         /* 访问数据库密码 */
         String passWord = "123456";
 

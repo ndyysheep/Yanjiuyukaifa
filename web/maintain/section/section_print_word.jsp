@@ -43,7 +43,7 @@
 
 
 <div class=WordSection1 style='layout-grid:15.6pt'>
-    <input type="hidden" id="page_id" name="page_id" value="monitor_print_word">
+    <input type="hidden" id="page_id" name="page_id" value="section_print_word">
     <table class=MsoTable15Grid3Accent3 border=1 cellspacing=0 cellpadding=0
            style='border-collapse:collapse;border:none'>
         <tr style='height:28.05pt'>

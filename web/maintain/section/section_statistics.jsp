@@ -246,7 +246,7 @@
                 </div>
             </div>
 
-            <input  type="hidden" id="page_id" name="page_id" value="monitor_statistics">
+            <input  type="hidden" id="page_id" name="page_id" value="section_statistics">
         <hr />
 
 
@@ -374,4 +374,4 @@
 <script src="../../assets/global/plugins/amcharts/ammap/maps/js/worldLow.js" type="text/javascript"></script>
 <script src="../../assets/global/plugins/amcharts/amstockcharts/amstock.js" type="text/javascript"></script>
 
-<script src="containers/js/monitor.js" type="text/javascript"></script>
+<script src="containers/js/section.js" type="text/javascript"></script>

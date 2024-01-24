@@ -238,32 +238,6 @@
 
                 </div>
 
-                <!--上传文件处理-->
-                <div class="row">
-                    <div class="col-md-12">
-                        <div id="current_attachment_name" name="current_attachment_name" value=""></div>
-                        <input type="hidden" id="current_attachment_object_id" name="current_attachment_object_id" value="">
-                        <form id="ajax_form" name="ajax_form" class="form-horizontal" method="post" enctype="multipart/form-data">
-                            <div id="ajax_div" name="ajax_div">
-                                <div id="record_list_div" name="record_list_div"></div>
-                                <span class="btn green fileinput-button">
-                                    <i class="fa fa-plus"></i>
-                                    <span>Add files... </span>
-                                    <input type="file" id="upload_file" name="upload_file">
-                                </span>
-
-                                <button type="button" class="btn red fileinput-button" id="upload_button" name="upload_button">
-                                    <i class="fa fa-upload"></i>
-                                    <span>Start upload </span>
-                                </button>
-                            </div>
-
-                        </form>
-                        <hr>
-                    </div>
-
-                </div>
-                <%--上传文件处理结束--%>
                 <!-- END PAGE CONTENT-->
 
             </div>

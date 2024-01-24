@@ -178,37 +178,6 @@
             <!-- BEGIN PAGE CONTENT-->
 
 
-            <!--视频预览区块-->
-            <div class="row" id="video_row"></div>
-            <!--视频预览区块结束-->
-
-            <!--上传文件处理-->
-            <div class="row">
-                <div class="col-md-12">
-                    <div id="current_attachment_name" name="current_attachment_name" value=""></div>
-                    <input type="hidden" id="current_attachment_object_id" name="current_attachment_object_id" value="">
-                    <form id="ajax_form" name="ajax_form" class="form-horizontal" method="post" enctype="multipart/form-data">
-                        <div id="ajax_div" name="ajax_div">
-                            <div id="record_list_div" name="record_list_div"></div>
-                            <span class="btn green fileinput-button">
-                                    <i class="fa fa-plus"></i>
-                                    <span>Add files... </span>
-                                    <input type="file" id="upload_file" name="upload_file">
-                                </span>
-
-                            <button type="button" class="btn red fileinput-button" id="upload_button" name="upload_button">
-                                <i class="fa fa-upload"></i>
-                                <span>Start upload </span>
-                            </button>
-                        </div>
-
-                    </form>
-                    <hr>
-                </div>
-
-            </div>
-            <%--上传文件处理结束--%>
-
             <%--开始当前自写板块--%>
             <input  type="hidden" id="page_id" name="page_id" value="monitor_list">
 
@@ -217,8 +186,6 @@
                 <div class="col-md-12">
                     <button type="button" id="ac_add_button" name ="ac_add_button" class="btn default red-stripe">添加记录</button>
                     <button type="button" id="export_button" name ="export_button" class="btn default blue-stripe">导出记录</button>
-                    <button type="button" id="importButton" name ="importButton" class="btn default blue-stripe">导入记录</button>
-                    <input type="file" id="fileInput" style="display: none;" accept=".xlsx, .xls"/>
                     <button type="button" id="print_button" name="print_button" class="btn default red-stripe">打印</button>
                     <button type="button" id="print_button_for_word" name="print_button_for_word" class="btn default blue-stripe">用word打印</button>
                     <button type="button" id="statistics_button" name="statistics_button" class="btn default blue-stripe">统计</button>
@@ -299,33 +266,3 @@
 
 </html>
 <script src="containers/js/monitor.js" type="text/javascript"></script>
-<script type="text/javascript">
-    // 当用户点击按钮时触发文件选择
-    document.getElementById('importButton').addEventListener('click', function() {
-        document.getElementById('fileInput').click();
-    });
-
-    // 当用户选择文件时
-    document.getElementById('fileInput').addEventListener('change', function() {
-        var file = this.files[0]; // 获取选择的文件
-        if (file) {
-            var formData = new FormData();
-            formData.append('file', file); // 将文件添加到 form data
-            var type=3;
-            $.ajax({
-                url: 'http://localhost:8080/uploadExcel?type=' +type , // Servlet URL
-                type: 'POST',
-                data: formData,
-                processData: false, // 告诉 jQuery 不要处理发送的数据
-                contentType: false, // 告诉 jQuery 不要设置内容类型
-                success: function(response) {
-                    alert("上传成功！")
-                    location.reload(); // 在这里添加页面刷新
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    alert("上传失败！")
-                }
-            });
-        }
-    });
-</script>

@@ -25,7 +25,7 @@
     <meta content="" name="description"/>
     <meta content="" name="author"/>
     <%@include file="../../home/frame/frame_style.jsp"%>
-    <script src="/assets/global/plugins/echarts/echarts.min.js" type="text/javascript"></script>
+    <script src="../../assets/global/plugins/echarts/echarts.min.js" type="text/javascript"></script>
     <style>
         .page-content{
             display: flex;
@@ -203,13 +203,13 @@
                 <div id="ajax_div" name="ajax_div">
                     <span class="btn green fileinput-button">
                                     <i class="fa fa-plus"></i>
-                                    <span>Add files... </span>
+                                    <span>添加视频文件... </span>
                                     <input type="file" id="upload_file" name="upload_file" onchange="showFile()">
                                 </span>
 
                     <button type="button" class="btn red fileinput-button" onclick="onAjaxUploadFile()">
                         <i class="fa fa-upload"></i>
-                        <span>Start upload </span>
+                        <span>开始上传 </span>
                     </button>
                 </div>
                 <div id="record_list_div" name="record_list_div"></div>
@@ -257,19 +257,15 @@
 <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
 
 <%@include file="../../home/frame/frame_javascript.jsp"%>
-<!-- END JAVASCRIPTS -->
-</body>
-<!-- END BODY -->
-
-<!--修改数据-->
-<%@include file="monitor_add_div.jsp"%>
-<%@include file="monitor_query_div.jsp"%>
-<%@include file="monitor_modify_div.jsp"%>
-<%@include file="monitor_export_div.jsp"%>
-
-</html>
-<script src="containers/js/monitor.js" type="text/javascript"></script>
 <script>
+    jQuery(document).ready(function() {
+        // initiate layout and plugins
+        Metronic.init(); // init metronic core components
+        Layout.init(); // init current layout
+        Demo.init(); // init demo features
+        ComponentsPickers.init();//选择时间
+
+    });
     function initdiv1(id,data) {
         var echartDiv1 = echarts.init(document.getElementById(id));
         echartDiv1.setOption(data);
@@ -464,13 +460,14 @@
             }
         ]
     }
+
     var onAjaxUploadFile=function(){
         $('#site_activities_loading').css('display','flex');
         var deviceId = $("#device_id").val();
         var deviceName = $("#device_name").val();
         var options = {
             type : 'post', /*设置表单以post方法提交*/
-            url : '../../monitor_data_servlet_action?action=upload_file&device_id='+deviceId+"&device_name="+deviceName, /*设置post提交到的页面*/
+            url : '../../video_data_servlet_action?action=upload_file&device_id='+deviceId+"&device_name="+deviceName, /*设置post提交到的页面*/
             success : function(json) {
                 console.log("[onAjaxUploadFile]上传文件返回结果="+JSON.stringify(json));
                 if(json.upload_files.length>0){
@@ -545,6 +542,7 @@
         };
         $("#ajax_form").ajaxSubmit(options);
     }
+
     function showFile() {
         if($('#upload_file').val().indexOf('.mp4')>0){
             $('#record_list_div').html($('#upload_file').val());
@@ -554,3 +552,16 @@
         }
     }
 </script>
+<!-- END JAVASCRIPTS -->
+</body>
+<!-- END BODY -->
+
+<!--修改数据-->
+<%@include file="monitor_add_div.jsp"%>
+<%@include file="monitor_query_div.jsp"%>
+<%@include file="monitor_modify_div.jsp"%>
+<%@include file="monitor_export_div.jsp"%>
+
+
+</html>
+

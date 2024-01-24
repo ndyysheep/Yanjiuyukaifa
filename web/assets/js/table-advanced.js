@@ -11,9 +11,14 @@ var TableAdvanced = function () {
         var table = $('#sample_1');
 
 
-
+        var user = "";
         $("#record_modify_div #submit_button").click(function (){
             var sumbitdata = $("#modify_form").serializeObject()
+            if(sumbitdata.user_name === user)
+            {
+                delete sumbitdata.user_name;
+            }
+            user = "";
             sumbitdata.type= "modify"
             console.log(sumbitdata)
             $.post("/UserInfo",sumbitdata,function (res)
@@ -185,6 +190,11 @@ var TableAdvanced = function () {
             },{
                 "mRender": function(data, type, full) {
 
+                    return full.role_type;
+                }
+            },{
+                "mRender": function(data, type, full) {
+
                     return full.mobile_number;
                 }
             },{
@@ -218,10 +228,13 @@ var TableAdvanced = function () {
             var uid = $(this).prev().val()
             var email =$(this).parent().prev().prev().text()
             var phone =$(this).parent().prev().prev().prev().text()
-            var occupation = $(this).parent().prev().prev().prev().prev().text()
-            var nickname =$(this).parent().prev().prev().prev().prev().prev().text()
-            var user_name =$(this).parent().prev().prev().prev().prev().prev().prev().text()
-            console.log(user_name)
+            var role_type = $(this).parent().prev().prev().prev().prev().text()
+            var occupation = $(this).parent().prev().prev().prev().prev().prev().text()
+            var nickname =$(this).parent().prev().prev().prev().prev().prev().prev().text()
+            var user_name =$(this).parent().prev().prev().prev().prev().prev().prev().prev().text()
+            user = user_name;
+            console.log(role_type)
+            $("#modify_select").val(role_type)
             $("#record_modify_div #uid").val(uid)
             $("#record_modify_div #user_name").val(user_name)
             $("#record_modify_div #nickname").val(nickname)
@@ -367,6 +380,11 @@ var TableAdvanced = function () {
                     "mRender": function(data, type, full) {
 
                         return full.occupation;
+                    }
+                },{
+                    "mRender": function(data, type, full) {
+
+                        return full.role_type;
                     }
                 },{
                     "mRender": function(data, type, full) {

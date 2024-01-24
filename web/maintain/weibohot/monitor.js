@@ -181,7 +181,6 @@ var Page = function() {
 
 	//init-monitor_file functions begin
 	var initDeviceFileControlEvent=function(id){
-		$('#jump_div #upload_button').click(function() {onJumpUploadFile();});
 		$('#upload_button').click(function() {onAjaxUploadFile();});
 		console.log("[initDeviceFileControlEvent]");
 	}

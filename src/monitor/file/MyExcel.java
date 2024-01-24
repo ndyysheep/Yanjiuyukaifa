@@ -67,7 +67,7 @@ public class MyExcel {
          * 输出excel文件
          */
         System.out.println("路径是:" + "D:" + json.getString("file_path"));
-        FileOutputStream output = new FileOutputStream(json.getString("file_path"));
+        FileOutputStream output = new FileOutputStream("D:" + json.getString("file_path"));
         wb.write(output);
         output.flush();
         output.close();

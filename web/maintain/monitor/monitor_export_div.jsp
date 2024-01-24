@@ -28,7 +28,10 @@
                     </form>
                 </div>
             </div>
-
+            <div class="modal-footer">
+                <button type="button" class="btn default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn blue" id="submit_button" name="submit_button">确认修改</button>
+            </div>
         </div>
         <!-- /.modal-content -->
     </div>

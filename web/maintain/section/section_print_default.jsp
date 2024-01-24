@@ -12,8 +12,6 @@
     <meta content="" name="description"/>
     <meta content="" name="author"/>
     <%@include file="../../home/frame/frame_style.jsp"%>
-    <link rel="shortcut icon" href="containers/favicon.ico"/>
-    <link href="containers/css/dataTables.bootstrap.css" rel="stylesheet" type="text/css"/>
 </head>
 <body class="page-header-fixed">
 <div class="clearfix">
@@ -27,7 +25,7 @@
                 我的数据库表<small>车辆抓拍统计表</small>
             </h3>
 
-            <input  type="hidden" id="page_id" name="page_id" value="monitor_print">
+            <input  type="hidden" id="page_id" name="page_id" value="section_print">
 
             <div class="row" >
                 <div class="col-md-12">

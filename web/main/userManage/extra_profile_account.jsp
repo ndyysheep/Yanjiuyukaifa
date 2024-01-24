@@ -1,5 +1,5 @@
 <%@ page import="org.apache.poi.ss.formula.functions.Na" %>
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
 	String Name="";
 	String Email="";
@@ -510,123 +510,7 @@
 <!-- BEGIN CONTAINER -->
 <div class="page-container">
 	<!-- BEGIN SIDEBAR -->
-	<div class="page-sidebar-wrapper">
-		<!-- DOC: Set data-auto-scroll="false" to disable the sidebar from auto scrolling/focusing -->
-		<!-- DOC: Change data-auto-speed="200" to adjust the sub menu slide up/down speed -->
-		<div class="page-sidebar navbar-collapse collapse">
-			<!-- BEGIN SIDEBAR MENU -->
-			<!-- DOC: Apply "page-sidebar-menu-light" class right after "page-sidebar-menu" to enable light sidebar menu style(without borders) -->
-			<!-- DOC: Apply "page-sidebar-menu-hover-submenu" class right after "page-sidebar-menu" to enable hoverable(hover vs accordion) sub menu mode -->
-			<!-- DOC: Apply "page-sidebar-menu-closed" class right after "page-sidebar-menu" to collapse("page-sidebar-closed" class must be applied to the body element) the sidebar sub menu mode -->
-			<!-- DOC: Set data-auto-scroll="false" to disable the sidebar from auto scrolling/focusing -->
-			<!-- DOC: Set data-keep-expand="true" to keep the submenues expanded -->
-			<!-- DOC: Set data-auto-speed="200" to adjust the sub menu slide up/down speed -->
-			<ul class="page-sidebar-menu " data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
-				<li class="start ">
-					<a href="index.html">
-						<i class="icon-home"></i>
-						<span class="title">Dashboard</span>
-					</a>
-				</li>
-				<li>
-					<ul class="sub-menu">
-						<li>
-							<a href="ecommerce_index.html">
-								<i class="icon-home"></i>
-								Dashboard</a>
-						</li>
-						<li>
-							<a href="ecommerce_orders.html">
-								<i class="icon-basket"></i>
-								Orders</a>
-						</li>
-						<li>
-							<a href="ecommerce_orders_view.html">
-								<i class="icon-tag"></i>
-								Order View</a>
-						</li>
-						<li>
-							<a href="ecommerce_products.html">
-								<i class="icon-handbag"></i>
-								Products</a>
-						</li>
-						<li>
-							<a href="ecommerce_products_edit.html">
-								<i class="icon-pencil"></i>
-								Product Edit</a>
-						</li>
-					</ul>
-				</li>
-				<li>
-					<a href="javascript:;">
-						<i class="icon-rocket"></i>
-						<span class="title">车辆检测数据</span>
-						<span class="arrow open"></span>
-					</a>
-					<ul class="sub-menu">
-						<li id ="monitor_list">
-							<a href="../../maintain/monitor/monitor_list.jsp">
-								<span class="badge badge-warning">new</span>车辆数据监控</a>
-						</li>
-						<li id ="monitor_statistics">
-							<a href="../../maintain/monitor/monitor_statistics.jsp">
-								车辆数据统计</a>
-						</li>
-						<li id ="illegal_data_list">
-							<a href="../../maintain/illegal_data/illegal_data_list.jsp">
-								违法数据监控</a>
-						</li >
-						<li id ="illegal_data_statistics">
-							<a href="../../maintain/illegal_data/illegal_data_statistics.jsp">
-								违法数据统计</a>
-						</li>
-						<li id="flow_list">
-							<a href="../../maintain/count_of_lane/flow_list.jsp">
-								车流量监控</a>
-						</li>
-						<li id="flow_data_statistics">
-							<a href="../../maintain/count_of_lane/flow_statistics.jsp">
-								车流量统计</a>
-						</li>
-					</ul>
-				</li>
-				<li>
-					<a href="javascript:;">
-						<i class="icon-diamond"></i>
-						<span class="title">流量统计分析</span>
-						<span class="arrow "></span>
-					</a>
-					<ul class="sub-menu">
-						<li>
-							<a href="../../maintain/comprehensive_statistics/daily_statistics.jsp">
-								监测数据日报表</a>
-						</li>
-						<li>
-							<a href="../../maintain/comprehensive_statistics/weekly_statistics.jsp">
-								监测数据周报表</a>
-						</li>
-						<li>
-							<a href="../../maintain/comprehensive_statistics/monthly_statistics.jsp">
-								监测数据月报表</a>
-						</li>
-						<li>
-							<a href="../../maintain/comprehensive_statistics/yearly_statistics.jsp">
-								监测数据年报表</a>
-						</li>
-					</ul>
-				</li>
-				<!-- BEGIN ANGULARJS LINK -->
-				<!-- END ANGULARJS LINK -->
-				<li class="active open">
-					<a href="../../main/userManage/extra_profile_account.jsp">
-						<i class="icon-user-following"></i>
-						<span class="title">用户信息</span>
-					</a>
-				</li>
-			</ul>
-			<!-- END SIDEBAR MENU -->
-		</div>
-	</div>
+	<%@include file ="../../home/frame/page_sidebar.jsp"%>
 	<!-- END SIDEBAR -->
 	<!-- BEGIN CONTENT -->
 	<div class="page-content-wrapper">
@@ -885,9 +769,6 @@
 										<li>
 											<a href="#tab_1_3" data-toggle="tab">Change Password</a>
 										</li>
-										<li>
-											<a href="#tab_1_4" data-toggle="tab">Privacy Settings</a>
-										</li>
 									</ul>
 								</div>
 								<div class="portlet-body">
@@ -969,6 +850,7 @@
 										<!-- CHANGE PASSWORD TAB -->
 										<div class="tab-pane" id="tab_1_3">
 											<form id="repassword">
+												<input type="hidden" name="username" value="<%=Name%>">
 												<input type="hidden" name="type" value="resetPassword">
 												<div class="form-group">
 													<label class="control-label">Current Password</label>
@@ -989,127 +871,6 @@
 											</form>
 										</div>
 										<!-- END CHANGE PASSWORD TAB -->
-										<!-- PRIVACY SETTINGS TAB -->
-										<div class="tab-pane" id="tab_1_4">
-											<div class="row">
-												<div class="col-md-12">
-													<!-- BEGIN EXAMPLE TABLE PORTLET-->
-													<div class="portlet box blue">
-														<div class="portlet-title">
-															<div class="caption">
-																<i class="fa fa-edit"></i>Editable Table
-															</div>
-															<div class="tools">
-																<a href="javascript:;" class="collapse">
-																</a>
-																<a href="#portlet-config" data-toggle="modal" class="config">
-																</a>
-																<a href="javascript:;" class="reload">
-																</a>
-																<a href="javascript:;" class="remove">
-																</a>
-															</div>
-														</div>
-														<div class="portlet-body">
-															<div class="table-toolbar">
-																<div class="row">
-																	<div class="col-md-6">
-																		<div class="btn-group">
-																			<button id="sample_editable_1_new" class="btn green">
-																				Add New <i class="fa fa-plus"></i>
-																			</button>
-																		</div>
-																	</div>
-																	<div class="col-md-6">
-																		<div class="btn-group pull-right">
-																			<button class="btn dropdown-toggle" data-toggle="dropdown">Tools <i class="fa fa-angle-down"></i>
-																			</button>
-																			<ul class="dropdown-menu pull-right">
-																				<li>
-																					<a href="javascript:;">
-																						Print </a>
-																				</li>
-																				<li>
-																					<a href="javascript:;">
-																						Save as PDF </a>
-																				</li>
-																				<li>
-																					<a href="javascript:;">
-																						Export to Excel </a>
-																				</li>
-																			</ul>
-																		</div>
-																	</div>
-																</div>
-															</div>
-															<table class="table table-striped table-hover table-bordered" id="sample_editable_1">
-																<thead>
-																<tr>
-																	<th>
-																		user name
-																	</th>
-																	<th>
-																		nick Name
-																	</th>
-																	<th>
-																		occupation
-																	</th>
-																	<th>
-																		phone
-																	</th>
-																	<th>
-																		email
-																	</th>
-																	<th>
-																		create time
-																	</th>
-																	<th>
-																		Edit
-																	</th>
-																	<th>
-																		Delete
-																	</th>
-																</tr>
-																</thead>
-																<tbody>
-																<tr>
-																	<td>
-																		alex
-																	</td>
-																	<td>
-																		Alex Nilson
-																	</td>
-																	<td>
-																		1234
-																	</td>
-																	<td>
-																		1234
-																	</td>
-																	<td>
-																		1234
-																	</td>
-																	<td class="center">
-																		power user
-																	</td>
-
-																	<td>
-																		<a class="edit" href="javascript:;">
-																			Edit </a>
-																	</td>
-																	<td>
-																		<a class="delete" href="javascript:;">
-																			Delete </a>
-																	</td>
-																</tr>
-																</tbody>
-															</table>
-														</div>
-													</div>
-													<!-- END EXAMPLE TABLE PORTLET-->
-												</div>
-											</div>
-										</div>
-										<!-- END PRIVACY SETTINGS TAB -->
 									</div>
 								</div>
 							</div>

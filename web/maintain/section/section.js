@@ -1,4 +1,4 @@
-var module="monitor";
+var module="section";
 var sub="data";
 var check = 0;
 document.domain="localhost";
@@ -20,30 +20,30 @@ var Page = function() {
 	/*----------------------------------------入口函数  开始----------------------------------------*/
 	var initPageControl=function(){
 		pageId = $("#page_id").val();
-		if(pageId==="monitor_list"){
-			$(".sub-menu #monitor_list").addClass("active");
+		if(pageId==="section_list"){
+			$(".sub-menu #section_list").addClass("active");
 			//设备列表页面
-			initMonitorList();
+			initSectionList();
 		}
-		if(pageId==="monitor_file"){
+		if(pageId==="section_file"){
 			//文件
 			initDeviceFile();
 		}
 
-		if(pageId==="monitor_print"){
+		if(pageId==="section_print"){
 			//打印页面
-			initMonitorPrint();
+			initSectionPrint();
 		}
-		if(pageId==="monitor_print_word"){
+		if(pageId==="section_print_word"){
 			//Word打印页面
-			initMonitorPrint_Word();
+			initSectionPrint_Word();
 		}
 
-		if(pageId==="monitor_statistics"){
-			$(".sub-menu #monitor_statistics").addClass("active");
+		if(pageId==="section_statistics"){
+			$(".sub-menu #section_statistics").addClass("active");
 			//打印页面
-			initMonitorStatisticsControlEvent();
-			initMonitorStatistics();
+			initSectionStatisticsControlEvent();
+			initSectionStatistics();
 		}
 	};
 	/*----------------------------------------入口函数  结束----------------------------------------*/
@@ -56,20 +56,20 @@ var Page = function() {
 	var pageLength = 0;
 	/*----------------------------------------业务函数  开始----------------------------------------*/
 	/*------------------------------针对各个页面的入口  开始------------------------------*/
-	var initMonitorList=function(){
+	var initSectionList=function(){
 
-		onPageListenerForMonitorList();
-		initMonitorListControlEvent();
-		initMonitorRecordList();
+		onPageListenerForSectionList();
+		initSectionListControlEvent();
+		initSectionRecordList();
 		initDeviceFile();
 	}
 
-	var initMonitorAdd=function(){
-		initMonitorAddControlEvent();
+	var initSectionAdd=function(){
+		initSectionAddControlEvent();
 	}
 
 	var initDeviceQuery=function(){
-		initMonitorQueryControlEvent();
+		initSectionQueryControlEvent();
 	}
 
 	var initDeviceFile=function(){
@@ -77,17 +77,17 @@ var Page = function() {
 		initDeviceFileControlEvent();
 	}
 
-	var initMonitorPrint = function(){
-		initMonitorRecordForPrint();
+	var initSectionPrint = function(){
+		initSectionRecordForPrint();
 	}
 
-	var initMonitorPrint_Word = function(){
-		initMonitorRecordForPrint_Word();
+	var initSectionPrint_Word = function(){
+		initSectionRecordForPrint_Word();
 	}
 
-	var initMonitorStatistics = function(time_from,time_to){
+	var initSectionStatistics = function(time_from,time_to){
 		$.ajaxSettings.async=false;
-		initMonitorRecordForStatistics(time_from,time_to);
+		initSectionRecordForStatistics(time_from,time_to);
 		$.ajaxSettings.async=true;
 		initChartSets();
 		initChartSample7();
@@ -97,9 +97,9 @@ var Page = function() {
 	/*------------------------------针对各个页面的入口 结束------------------------------*/
 
 	//事件处理初始化--开始
-	var initMonitorListControlEvent=function(){
+	var initSectionListControlEvent=function(){
 		//添加信息
-		$('#ac_add_button').click(function() {onAddRecord(),initMonitorAdd();});
+		$('#ac_add_button').click(function() {onAddRecord(),initSectionAdd();});
 		//查询信息
 		$('#ac_query_button').click(function() {onQueryRecord(),initDeviceQuery();});
 		//修改信息
@@ -114,16 +114,16 @@ var Page = function() {
 
 	}
 
-	var initMonitorAddControlEvent=function(){
+	var initSectionAddControlEvent=function(){
 		$('#record_add_div #submit_button').click(function() {submitAddRecord();});
 	}
 
-	var initMonitorQueryControlEvent=function(){
+	var initSectionQueryControlEvent=function(){
 		$("#help_button").click(function() {help();});
 		$('#record_query_div #query_button').click(function() {myQuerySubmit();});
 	}
 
-	var initMonitorStatisticsControlEvent = function(){
+	var initSectionStatisticsControlEvent = function(){
 
 		onPageListenerForStatisitcs();
 		$("#time_submit_button").click(function(){onTimeLimitSubmit()})
@@ -131,23 +131,23 @@ var Page = function() {
 	//事件处理初始化--结束
 
 	//数据获取初始化--开始
-	var initMonitorRecordList=function(){
+	var initSectionRecordList=function(){
 		//使用Datatable的数据表,统计总数据
-		getMonitorRecordDatatable();
+		getSectionRecordDatatable();
 	}
 
-	var initMonitorRecordForPrint=function(){
-		getMonitorRecordPrint();
+	var initSectionRecordForPrint=function(){
+		getSectionRecordPrint();
 	}
 
-	var initMonitorRecordForPrint_Word=function(){
-		getMonitorRecordPrint_Word();
+	var initSectionRecordForPrint_Word=function(){
+		getSectionRecordPrint_Word();
 	}
 
-	var initMonitorRecordForStatistics =function(time_from,time_to){
-		var url = "../../monitor_data_servlet_action";
+	var initSectionRecordForStatistics =function(time_from,time_to){
+		var url = "../../section_data_servlet_action";
 		var data={};
-		data.action="monitor_statistics";
+		data.action="section_statistics";
 		if(time_from!=undefined&&time_to!=undefined)
 		{
 			data.time_from = time_from;
@@ -179,13 +179,13 @@ var Page = function() {
 
 	}
 
-	//init-monitor_file functions begin
+	//init-section_file functions begin
 	var initDeviceFileControlEvent=function(id){
 		$('#jump_div #upload_button').click(function() {onJumpUploadFile();});
 		$('#upload_button').click(function() {onAjaxUploadFile();});
 		console.log("[initDeviceFileControlEvent]");
 	}
-	//init-monitor_file functions end
+	//init-section_file functions end
 
 	var initChartSets = function(){
 
@@ -314,7 +314,7 @@ var Page = function() {
 
 
 	//页面监听函数--开始
-	var onPageListenerForMonitorList= function() {
+	var onPageListenerForSectionList= function() {
 
 		var inputListener = $(".form-group input");
 		var colorContainer=inputListener.css("borderColor");
@@ -405,7 +405,7 @@ var Page = function() {
 
 
 	//数据获取函数--开始
-	var getMonitorRecordDatatable =function(data){
+	var getSectionRecordDatatable =function(data){
 
 		var servletRequest ="../../sction_data_servlet_action";
 		resultList=[];
@@ -537,7 +537,7 @@ var Page = function() {
 
 	}
 
-	var  getMonitorRecordPrint = function(){
+	var  getSectionRecordPrint = function(){
 		var url = "../../sction_data_servlet_action";
 		var data={};
 		data.action="section_print";
@@ -564,7 +564,7 @@ var Page = function() {
 	}
 
 	//word打印
-	var  getMonitorRecordPrint_Word = function(){
+	var  getSectionRecordPrint_Word = function(){
 
 		var url = "../../sction_data_servlet_action";
 		var data={};
@@ -688,7 +688,7 @@ var Page = function() {
 		var deviceName = $("#device_name").val();
 		var options = {
 			type : 'post', /*设置表单以post方法提交*/
-			url : '../../monitor_data_servlet_action?action=upload_file&device_id='+deviceId+"&device_name="+deviceName, /*设置post提交到的页面*/
+			url : '../../section_data_servlet_action?action=upload_file&device_id='+deviceId+"&device_name="+deviceName, /*设置post提交到的页面*/
 			success : function(json) {
 				console.log("[onAjaxUploadFile]上传文件返回结果="+JSON.stringify(json));
 				if(json.upload_files.length>0){
@@ -789,7 +789,7 @@ var Page = function() {
 		{
 			$("#record_query_div").modal("hide");
 
-			getMonitorRecordDatatable(data);
+			getSectionRecordDatatable(data);
 		}
 		else
 		{
@@ -893,7 +893,7 @@ var Page = function() {
 			barContainer.style.display="none";
 			beginMinuteContainer.style.borderColor="#d6e9c6";
 			endMinuteContainer.style.borderColor="#d6e9c6";
-			initMonitorStatistics(time_from,time_to);
+			initSectionStatistics(time_from,time_to);
 		}
 
 

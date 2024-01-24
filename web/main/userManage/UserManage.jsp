@@ -613,6 +613,12 @@
 						<span class="title">用户信息</span>
 					</a>
 				</li>
+				<li>
+					<a href="../../main/WeatherReport/WeatherReporter.jsp">
+						<i class="icon-pointer"></i>
+						<span class="title">天气预报</span>
+					</a>
+				</li>
 			</ul>
 			<!-- END SIDEBAR MENU -->
 		</div>
@@ -894,6 +900,9 @@
 												occupation
 											</th>
 											<th>
+												permissions
+											</th>
+											<th>
 												phone
 											</th>
 											<th>
@@ -1070,12 +1079,23 @@
 								</div>
 							</div>
 						</div>
+						<div class="form-body">
+							<div class="form-group">
+								<label class="col-md-3 control-label">role type</label>
+								<div class="col-md-9">
+									<select name="role_id" id="modify_select" class="btn btn-default btn-sm dropdown-toggle">
+										<option value="3">普通用户</option>
+										<option value="2">管理员</option>
+									</select>
+								</div>
+							</div>
+						</div>
 					</form>
 				</div>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn default" data-dismiss="modal">Close</button>
-				<button type="button" class="btn blue" id="submit_button" name="submit_button">Save changes</button>
+				<button type="button" class="btn blue" id="submit_button" name="submit_button">comfirm</button>
 			</div>
 		</div>
 		<!-- /.modal-content -->
@@ -1154,6 +1174,17 @@
 								</div>
 							</div>
 						</div>
+						<div class="form-body">
+							<div class="form-group">
+								<label class="col-md-3 control-label">role type</label>
+								<div class="col-md-9">
+									<select name="role_id" class="btn btn-default btn-sm dropdown-toggle">
+										<option value="3">普通用户</option>
+										<option value="2">管理员</option>
+									</select>
+								</div>
+							</div>
+						</div>
 					</form>
 				</div>
 			</div>
@@ -1224,6 +1255,18 @@
 									<input type="text" class="form-control" placeholder="Enter text" name="email">
 									<span class="help-block">
 											输入 </span>
+								</div>
+							</div>
+						</div>
+						<div class="form-body">
+							<div class="form-group">
+								<label class="col-md-3 control-label">role type</label>
+								<div class="col-md-9">
+									<select name="role_id" class="btn btn-default btn-sm dropdown-toggle">
+										<option value="3">普通用户</option>
+										<option value="2">管理员</option>
+										<option value="-1">不选择</option>
+									</select>
 								</div>
 							</div>
 						</div>

@@ -346,20 +346,7 @@ public class SectionDao {
 
     }
 
-    public void modifyDeviceRecordForView(Data data, JSONObject json) throws JSONException, SQLException {
-        // 构造sql语句，根据传递过来的条件参数
-        String id = data.getParam().has("pk") ? data.getParam().getString("pk") : null;
-        String _op = data.getParam().getString("name");
 
-        if (id != null && _op != null) {
-            String sql = "update " + relationName + " set " + _op + "='" + data.getParam().getString("value") + "'";
-            sql += "where id=" + "'" + id + "'";
-            data.getParam().put("sql", sql);
-            updateRecord(data, json);
-
-        }
-
-    }
 
     /**
      * 查询记录
@@ -371,85 +358,11 @@ public class SectionDao {
         queryRecord(data, json);
     }
 
-    public void viewMonitorRecord(Data data, JSONObject json) throws JSONException, SQLException {
-        // 构造sql语句，根据传递过来的查询条件参数
-        String sql = createViewRecordSql(data); // 构造sql语句，根据传递过来的查询条件参数
-        data.getParam().put("sql", sql);
-        queryRecord(data, json);
-    }
+
 
     public void getQueryRecord(Data data, JSONObject json) throws JSONException, SQLException {
         // 构造sql语句，根据传递过来的查询条件参数
         String sql = createGetQueryRecordSql(data,true); // 构造sql语句，根据传递过来的查询条件参数
-        data.getParam().put("sql", sql);
-        queryRecord(data, json);
-    }
-
-    public void getRecordForStatisticsHour(Data data, JSONObject json) throws JSONException {
-        /*--------------------获取变量 开始--------------------*/
-        String resultMsg = "ok";
-
-        String where = "";
-        JSONObject param = data.getParam();
-        where = useTimeWhere(param,where,"time_from","time_to");
-
-        int resultCode = 0;
-        List jsonList = new ArrayList();
-        /*--------------------获取变量 完毕--------------------*/
-        /*--------------------数据操作 开始--------------------*/
-        Db queryDb = new Db(dbName);
-        String sql = "select DATE_FORMAT(capture_time,\"%H\") as time_interval,count(*) as total, "
-                +"count(case when illegal_status<>0 then 1 end) as illegal_total,"
-                +"count(case when illegal_status=0 then 1 end) as legal_total"
-                +" from " + relationName;
-        sql += where;
-        sql += " group by time_interval";
-        showDebug("[toStatistics]构造的SQL语句是：" + sql);
-
-        try {
-
-            ResultSet rs = queryDb.executeQuery(sql);
-            ResultSetMetaData rsmd = rs.getMetaData();
-            int fieldCount = rsmd.getColumnCount();
-
-            while (rs.next()) {
-
-                int time = rs.getInt("time_interval");
-                HashMap map = new HashMap();
-                map.put("time_interval", time);
-                map.put("total", rs.getInt("total"));
-                map.put("legal_total", rs.getInt("legal_total"));
-                map.put("illegal_total", rs.getInt("illegal_total"));
-
-                jsonList.add(map);
-
-            }
-
-            rs.close();
-
-        } catch (Exception e) {
-
-            e.printStackTrace();
-            showDebug("[toStatistics]查询数据库出现错误：" + sql);
-            resultCode = 10;
-            resultMsg = "查询数据库出现错误！" + e.getMessage();
-
-        }
-
-        queryDb.close();
-        /*--------------------数据操作 结束--------------------*/
-        /*--------------------返回数据 开始--------------------*/
-
-        showDebug(jsonList.toString());
-        json.put("my_aaData", jsonList);
-        json.put("result_msg", resultMsg); // 如果发生错误就设置成"error"等
-        json.put("result_code", resultCode); // 返回0表示正常，不等于0就表示有错误产生，错误代码
-        /*--------------------返回数据 结束--------------------*/
-    }
-
-    public void getRecordForStatisticsType(Data data, JSONObject json) throws JSONException, SQLException {
-        // 构造sql语句，根据传递过来的查询条件参数
-        String sql = createStatisticsSqlForType(data); // 构造sql语句，根据传递过来的查询条件参数
         data.getParam().put("sql", sql);
         queryRecord(data, json);
     }
@@ -574,43 +487,8 @@ public class SectionDao {
 
 
 
-    private String createViewRecordSql(Data data) throws JSONException {
-        JSONObject param = data.getParam();
-        String sql = "select * from " + relationName ;
-        String where="";
-        sql += createJoinSql(relationName, "lane_data", "lane_id", "lane_id",1);
-        sql += createJoinSql(relationName,"illegal_info","id","monitor_id",1);
-
-        if(checkParamValid(param,"id"))
-        {
-            where +=" where "+relationName+"."+"id="+param.getString("id");
-        }
-
-        showDebug(sql);
-        sql+=where;
-        return sql;
-
-    }
-
-    private String createStatisticsSqlForType(Data data) throws JSONException
-    {
-        String timeTo = "";
-        String timeFrom = "";
-        String Now=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
-
-        String where = "";
-        JSONObject param = data.getParam();
-        String sql = " select vehicle_type,count(vehicle_type) as num "
-                +" from " + relationName;
-        where = useTimeWhere(param, where,"time_from", "time_to");
-        sql += where;
-        sql += " group by vehicle_type";
-        showDebug("[percentageToStatistics]构造的SQL语句是：" + sql);
 
 
-
-        return sql;
-    }
     //构建SQL语句函数-----结束
 
 
@@ -669,42 +547,4 @@ public class SectionDao {
 
     //导出处理函数-----结束
 
-    //上传文件函数-----开始
-    public void saveUploadFileRecord(JSONObject json, Data data) throws JSONException, SQLException {
-        // 构造sql语句，根据传递过来的查询条件参数
-        // 首先分析json里有多少文件，多个文件需要用循环构造多个sql语句
-        showDebug("[saveUploadFileRecord]保存文件后，文件和字段信息json是：" + json.toString());
-        /*--------------------sql语句 开始--------------------*/
-
-        Data videoData = new Data();
-        videoData.setParam(json);
-
-        // 构造sql语句，根据传递过来的条件参数
-
-        JSONArray jsonFileList = videoData.getParam().getJSONArray("upload_files");
-
-        String file_path_name = jsonFileList.getJSONObject(0).has("file_path_name")
-                ? jsonFileList.getJSONObject(0).get("file_path_name").toString()
-                : null;
-
-        String visual_path_name = jsonFileList.getJSONObject(0).has("file_url_name")
-                ? jsonFileList.getJSONObject(0).get("file_url_name").toString()
-                : null;
-
-        String upload_time = (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).format(new Date());
-
-        if (file_path_name != null) {
-            String sql = "insert into " + "video_info" + "(upload_time,video_attachment,video_url)";
-
-            sql = sql + " values('" + upload_time + "','" + file_path_name + "','" + visual_path_name + "')";
-            data.getParam().put("sql", sql);
-            updateRecord(data, json);
-
-            showDebug("[saveUploadFileRecord]保存文件后，构造的sql是：" + sql);
-        } else {
-            showDebug("[saveUploadFileRecord]保存文件后,没有得到数据" + file_path_name);
-        }
-
-    }
-    //上传文件函数-----结束
 }

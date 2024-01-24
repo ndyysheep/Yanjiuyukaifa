@@ -29,7 +29,7 @@ public class MonitorDao {
 
     /**
      * 生成调试信息
-     *
+     * 
      * @param msg 接收的第一个参数,主要调试信息
      */
     public void showDebug(String msg) {
@@ -39,7 +39,7 @@ public class MonitorDao {
 
     /**
      * 判断json对象存储的信息是否合法,拒绝含有特殊字符的请求
-     *
+     * 
      * @param param 接收的第一个参数,接收json对象信息
      * @param field 接收的第二个参数,接收json对象包含列名
      * @return 判断结果
@@ -74,6 +74,7 @@ public class MonitorDao {
      * @param table2 连接用第二个表
      * @param key1 第一个表主键
      * @param key2 第二个表主键
+     * @param outer key:{0:none;1:"left outer",2:"right outer",3:"full outer"}
      * @return 返回sql语句
      */
     private String createJoinSql(String table1, String table2, String key1, String key2,int outer) {
@@ -271,29 +272,58 @@ public class MonitorDao {
     }
     /**
      * 添加设备记录
-     *
+     * 
      * @param data 接收的第一个参数,json对象中的数据信息
      * @param json 接收的第二个参数,json对象
      * @throws JSONException 抛出json类异常
      * @throws SQLException 抛出sql类异常
      */
     public void addMonitorRecord(Data data, JSONObject json) throws JSONException, SQLException {
+
+
         JSONObject param = data.getParam();
+        // 构造sql语句，根据传递过来的条件参数
+
+        String lane_name = null;
+
+
+
         String create_time = (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).format(new Date());
+        String capture_time = create_time;
+        String commandSql = "insert into " + relationName + "(car_code,vehicle_type,illegal_status,"
+                + "capture_time,speed,create_time,lane_id)";
+
+        //构建sql语句部分
+        String sql = "";
+
+        sql = useInsert(param,"car_code",sql);
+        sql = useInsert(param,"vehicle_type",sql);
+        sql = useInsert(param,"illegal_status",sql);
+
+        if(checkParamValid(param,"capture_time"))
+        {
+            capture_time = param.getString("capture_time");
+        }
+        //添加capture_time字段
+        sql+=",'"+capture_time+"'";
+
+        sql = useInsert(param,"speed",sql);
+
+        //添加create_time字段
+        sql+=",'"+create_time+"'";
+
+        if(checkParamValid(param,"lane_name"))
+        {
+            lane_name=param.getString("lane_name");
+
+        }
+
+        sql+=",(select lane_id from lane_data where lane_name = '"+ lane_name +"')";
 
 
 
-        String code = param.getString("car_code"); //车牌号
-        String type = param.getString("vehicle_type"); //车类型
-        String captureTime=param.getString("capture_time"); //抓拍时间
-        int illegalStatus = param.getInt("illegal_status");//违规状态
-        Double speed=param.getDouble("speed");//速度
-
-        String createTime = create_time; //创建时间
-        String sql="INSERT INTO `yjykfsj8`.`monitoring_data`(`car_code`, `vehicle_type`," +
-                " `capture_time`, `illegal_status`, `speed`, `create_time`) " +
-                "VALUES ('"+code+"', '"+type+"', '"+captureTime+"', '"+illegalStatus+"', '"+speed+"', '"+createTime+"')";
-
+        //进行sql语句的处理
+        sql = commandSql+sql;
         data.getParam().put("sql", sql);
         updateRecord(data, json);
 
@@ -303,7 +333,7 @@ public class MonitorDao {
 
     /**
      * 删除设备记录
-     *
+     * 
      * @param data 接收的第一个参数,json对象中的数据信息
      * @param json 接收的第二个参数,json对象
      * @throws JSONException 抛出json类异常
@@ -339,7 +369,14 @@ public class MonitorDao {
             sql = useSet(param,"capture_time",sql);
             sql = useSet(param,"speed",sql);
 
+            // 需要道路名
 
+            if(checkParamValid(param,"lane_name"))
+            {
+                String keyData = param.getString("lane_name");
+                sql+= ",lane_id= "+ " (select lane_id from lane_data where lane_name ='"+keyData+"')";
+
+            }
             sql = sql + " where id=" + id;
 
             sql = commandSql+sql;
@@ -454,6 +491,13 @@ public class MonitorDao {
     public void getRecordForStatisticsType(Data data, JSONObject json) throws JSONException, SQLException {
         // 构造sql语句，根据传递过来的查询条件参数
         String sql = createStatisticsSqlForType(data); // 构造sql语句，根据传递过来的查询条件参数
+        data.getParam().put("sql", sql);
+        queryRecord(data, json);
+    }
+
+    public void getRecordForStatisticsForWeiboHot(Data data, JSONObject json) throws JSONException, SQLException {
+        // 构造sql语句，根据传递过来的查询条件参数
+        String sql = createStatisticsSqlForWeiboHot(data); // 构造sql语句，根据传递过来的查询条件参数
         data.getParam().put("sql", sql);
         queryRecord(data, json);
     }
@@ -610,16 +654,16 @@ public class MonitorDao {
 
     private String createStatisticsSqlForType(Data data) throws JSONException
     {
-        String timeTo = "";
-        String timeFrom = "";
+
         String Now=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
 
         String where = "";
         JSONObject param = data.getParam();
-        String sql="SELECT title, COUNT(*) as num\n" +
-                "FROM weibohot\n" +
-                "WHERE hot > \"6万\"\n" +
-                "GROUP BY title;";
+        String sql = " select vehicle_type,count(vehicle_type) as num "
+                +" from " + relationName;
+        where = useTimeWhere(param, where,"time_from", "time_to");
+        sql += where;
+        sql += " group by vehicle_type";
         showDebug("[percentageToStatistics]构造的SQL语句是：" + sql);
 
 
@@ -628,25 +672,26 @@ public class MonitorDao {
     }
     //构建SQL语句函数-----结束
 
+    private String createStatisticsSqlForWeiboHot(Data data) throws JSONException
+    {
 
+        String sql="SELECT title, COUNT(*) as num\n" +
+                "FROM weibohot\n" +
+                "WHERE hot > 60000" +
+                "GROUP BY title;";
+        showDebug("[percentageToStatistics]构造的SQL语句是：" + sql);
+
+        return sql;
+    }
 
 
     //导出处理函数-----开始
 
     public void getExportMonitorRecordToExcel(JSONObject json, Data data) throws JSONException, IOException {
-
-
-        String saveDirectory = "D:\\ykpro\\web\\upload\\maintain";
-        String filePath = saveDirectory + "\\export_maintain.xls";
-        json.put("download_url", "/upload/maintain/export_maintain.xls");
-        json.put("file_path", filePath);
-
+        json.put("download_url", "/upload/maintain/monitor/export_monitor.xls");
+        json.put("file_path", "/upload/maintain/monitor/export_monitor.xls");
         MyExcel m = new MyExcel();
-        try {
-            m.exportData(data, json);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        m.exportData(data, json);
     }
 
     public void getExportMonitorRecordToTxt(JSONObject json, Data data) throws JSONException {

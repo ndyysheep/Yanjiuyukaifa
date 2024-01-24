@@ -483,7 +483,7 @@ public class ServletAction extends HttpServlet {
             throws JSONException, SQLException {
         // 先做初始化工作，定义一堆目录变量
         String fileUrl = null;
-        String rootPath = "D:\\\\upload";
+        String rootPath = System.getProperty("user.dir")+"\\\\upload";
         String filePath = rootPath + "\\\\teach\\\\" + (new SimpleDateFormat("yyyyMMddHH")).format(new Date());
         String rootUrl = "/upload";
         String filePathUrl = rootUrl + "/teach/" + (new SimpleDateFormat("yyyyMMddHH")).format(new Date());

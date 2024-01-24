@@ -122,10 +122,14 @@ public class DB {
         String email = null;
         String occupation = "none";
         int role_id = 3;
+        if(param.has("role_id"))
+        {
+            role_id = param.getInt("role_id");
+        }
         if (param.has("username")) {
             user_name = param.getString("username");
         }
-        if(existUser(user_name))
+        if(existUser(user_name) || user_name == "")
         {
             return true;
         }
@@ -216,6 +220,11 @@ public class DB {
         }
         if (param.has("phone")) {
             phone = param.getString("phone");
+            set = set + "mobile_number='" +phone+"',";
+            session.setAttribute("mobile_number",phone);
+        }
+        if (param.has("mobile_number")) {
+            phone = param.getString("mobile_number");
             set = set + "mobile_number='" +phone+"',";
             session.setAttribute("mobile_number",phone);
         }

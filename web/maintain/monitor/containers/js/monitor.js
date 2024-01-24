@@ -21,13 +21,10 @@ var Page = function() {
 	var initPageControl=function(){
 		pageId = $("#page_id").val();
 		if(pageId==="monitor_list"){
+			$("#monitor_lists").addClass("active open")
 			$(".sub-menu #monitor_list").addClass("active");
 			//设备列表页面
 			initMonitorList();
-		}
-		if(pageId==="monitor_file"){
-			//文件
-			initDeviceFile();
 		}
 
 		if(pageId==="monitor_print"){
@@ -40,6 +37,7 @@ var Page = function() {
 		}
 
 		if(pageId==="monitor_statistics"){
+			$("#monitor_lists").addClass("active open")
 			$(".sub-menu #monitor_statistics").addClass("active");
 			//打印页面
 			initMonitorStatisticsControlEvent();
@@ -61,7 +59,6 @@ var Page = function() {
 		onPageListenerForMonitorList();
 		initMonitorListControlEvent();
 		initMonitorRecordList();
-		initDeviceFile();
 	}
 
 	var initMonitorAdd=function(){
@@ -70,11 +67,6 @@ var Page = function() {
 
 	var initDeviceQuery=function(){
 		initMonitorQueryControlEvent();
-	}
-
-	var initDeviceFile=function(){
-		console.log("[initDeviceFile]");
-		initDeviceFileControlEvent();
 	}
 
 	var initMonitorPrint = function(){
@@ -179,13 +171,6 @@ var Page = function() {
 
 	}
 
-	//init-monitor_file functions begin
-	var initDeviceFileControlEvent=function(id){
-		$('#jump_div #upload_button').click(function() {onJumpUploadFile();});
-		$('#upload_button').click(function() {onAjaxUploadFile();});
-		console.log("[initDeviceFileControlEvent]");
-	}
-	//init-monitor_file functions end
 
 	var initChartSets = function(){
 
@@ -707,40 +692,6 @@ var Page = function() {
 		window.location.href = "monitor_view.jsp?id="+id;
 	}
 
-	var onAjaxUploadFile=function(){
-		console.log("[onAjaxUploadFile]====");
-		var deviceId = $("#device_id").val();
-		var deviceName = $("#device_name").val();
-		var options = {
-			type : 'post', /*设置表单以post方法提交*/
-			url : '../../monitor_data_servlet_action?action=upload_file&device_id='+deviceId+"&device_name="+deviceName, /*设置post提交到的页面*/
-			success : function(json) {
-				console.log("[onAjaxUploadFile]上传文件返回结果="+JSON.stringify(json));
-				if(json.upload_files.length>0){
-					var files=json.upload_files;
-					var fileUrl = files[0].file_url_name;
-					var objectId = files[0].file_object_id;
-					$("#current_attachment_name").html("您当前上传的附件是：<span style='color:blue;'><a href='javascript:window.open(\""+fileUrl+"\")'>" + fileUrl + "</a></span>");
-					$("#current_attachment_object_id").val(objectId);
-
-					var html="";
-					html+="<video width=\"640\" height=\"360\" controls>";
-					html+="<source src='"+fileUrl+"' type=\"video/mp4\">"+"</video>"
-
-					$("#video_row").html(html);
-					console.log("[onAjaxUploadFile]fileUrl="+fileUrl);
-					console.log("[onAjaxUploadFile]objectId="+objectId);
-				}else{
-					alert("[onAjaxUploadFile]没有上传文件结果返回！");
-				}
-			},
-			error : function(error) {
-				alert(error);
-			},
-			dataType : "json" /*设置返回值类型为文本*/
-		};
-		$("#ajax_form").ajaxSubmit(options);
-	}
 	//on-functions end
 
 	//submit functions begin
@@ -873,34 +824,11 @@ var Page = function() {
 			if(json.result_code_for_export==0){
 				console.log(JSON.stringify(json));
 				console.log(json.download_url);
-				$("#record_export_div #download_url").attr("data-download_url", "http://localhost:8080" + json.download_url);
+				$("#record_export_div #download_url").attr("download_url",json.download_url);
 				$("#record_export_div").modal("show");
 			}
 		});
 	}
-// 在页面加载完成后，为下载链接添加点击事件处理程序
-	$(document).ready(function(){
-		$("#download_url").on("click", function(e){
-			// 阻止默认行为，防止链接直接打开
-			e.preventDefault();
-
-			// 获取下载链接
-			var downloadUrl = $("#download_url").attr("data-download_url");
-			//alert(downloadUrl)
-			// 创建一个隐藏的 <a> 元素
-			var downloadLink = document.createElement("a");
-			downloadLink.href = downloadUrl;
-			downloadLink.download = "exported_monitor.xls";
-
-			// 将 <a> 元素添加到页面并触发点击
-			document.body.appendChild(downloadLink);
-			downloadLink.click();
-			document.body.removeChild(downloadLink);
-			setTimeout(function() {
-				$("#record_export_div").modal("hide");
-			}, 1000);
-		});
-	});
 
 	var myPrintAPI = function(){
 		window.open("monitor_print_default.jsp");
