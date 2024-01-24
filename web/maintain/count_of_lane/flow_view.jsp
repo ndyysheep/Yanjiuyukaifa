@@ -185,7 +185,7 @@ License: You must have a valid license purchased only from themeforest(the above
             <div class="page-head">
                 <!-- BEGIN PAGE TITLE -->
                 <div class="page-title">
-                    <h1>车辆数据详情页<small id="small_title">车辆id:</small></h1>
+                    <h1>车流量详情页<small id="small_title">车辆id:</small></h1>
                 </div>
                 <!-- END PAGE TITLE -->
                 <!-- BEGIN PAGE TOOLBAR -->
@@ -201,11 +201,11 @@ License: You must have a valid license purchased only from themeforest(the above
                         <i class="fa fa-circle"></i>
                     </li>
                     <li>
-                        <a href="../monitor/monitor_list.jsp">车辆监测数据</a>
+                        <a href="../count_of_lane/flow_list.jsp">车流量数据表</a>
                         <i class="fa fa-circle"></i>
                     </li>
                     <li>
-                        <a href="../monitor/monitor_list.jsp">车辆数据监控</a>
+                        <a href="../count_of_lane/flow_view.jsp">车流量数据详情页</a>
                     </li>
                 </ul>
             </div>
@@ -215,12 +215,6 @@ License: You must have a valid license purchased only from themeforest(the above
             <input type="hidden" id="page_id" name="page_id" value="monitor_view">
             <div class="portlet light">
                 <div class="portlet-body" id="record_view_div">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <button id="enable" class="btn blue">修改/保存修改</button>
-                            <hr>
-                        </div>
-                    </div>
 
                     <div class = "tiles">
                         <div class="tile image double selected">
@@ -231,7 +225,7 @@ License: You must have a valid license purchased only from themeforest(the above
                             </div>
                             <div class="tile-object">
                                 <div class="name">
-                                    车辆序号
+                                    车流量记录序号
                                 </div>
                                 <div class="number">
 
@@ -246,94 +240,81 @@ License: You must have a valid license purchased only from themeforest(the above
                                 <tbody>
                                 <tr>
                                     <td style="width:15%">
-                                        车牌号
+                                        检测路段
                                     </td>
                                     <td style="width:50%">
-                                        <a href="javascript:;" id="car_code" data-type="text" data-placeholder="Required" data-pk="1" data-original-title="输入车牌号">
-                                            车牌号 </a>
+                                        <a href="javascript:;" id="lane_name" data-type="text" data-placeholder="Required" data-pk="1" data-original-title="输入车牌号">
+                                            检测路段 </a>
                                     </td>
                                     <td style="width:35%">
 									<span class="text-muted">
-									该车辆的车牌号 </span>
+									检测路段 </span>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        车辆类型
+                                        车流量总数
                                     </td>
                                     <td>
-                                        <a href="javascript:;" id="vehicle_type" data-type="text" data-pk="1" data-placement="right"  data-original-title="车辆类型">
+                                        <a href="javascript:;" id="total_num" data-type="text" data-pk="1" data-placement="right"  data-original-title="车辆类型">
                                         </a>
                                     </td>
                                     <td>
 									<span class="text-muted">
-									该车辆的车辆类型</span>
+									该路段的车流量总数</span>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        抓拍时间
+                                        开始记录时间
                                     </td>
                                     <td>
-                                        <a href="javascript:;" id="capture_time"  data-type="datetime" data-pk="1" data-url="/post" data-placement="right" title="Set date & time">
-                                            2023-11-30 11:11:00 </a>
+                                        <a href="javascript:;" id="start_time"  data-type="datetime" data-pk="1" data-url="/post" data-placement="right" title="Set date & time">
+                                             </a>
                                     </td>
                                     <td>
 									<span class="text-muted">
-									该车的被抓拍时间1 </span>
+									开始记录时间 </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        结束记录时间
+                                    </td>
+                                    <td>
+                                        <a href="javascript:;" id="end_time"  data-type="datetime" data-pk="1" data-url="/post" data-placement="right" title="Set date & time">
+                                        </a>
+                                    </td>
+                                    <td>
+									<span class="text-muted">
+									结束记录时间 </span>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td style="width:15%">
-                                        车辆行驶速度
+                                        路段小型车限速
                                     </td>
                                     <td style="width:50%">
-                                        <a href="javascript:;" id="speed" data-type="text" data-placeholder="Required" data-pk="1" data-original-title="输入车牌号">
-                                            车辆行驶速度 </a>
+                                        <a href="javascript:;" id="speed_limit" data-type="text" data-placeholder="Required" data-pk="1" data-original-title="输入车牌号">
+                                            路段小型车限速 </a>
                                     </td>
                                     <td style="width:35%">
 									<span class="text-muted">
-									该车辆的行驶速度,单位km/h</span>
+									路段小型车限速,单位km/h</span>
                                     </td>
                                 </tr>
 
                                 <tr>
                                     <td>
-                                       违法类型
+                                        路段其它车辆限速
                                     </td>
                                     <td>
-                                        <a href="javascript:;" id="illegal_status" data-type="select2" data-pk="1" data-value="正常行驶" data-original-title="选择违法类型">
+                                        <a href="javascript:;" id="speed_limit_for_others" data-type="select2" data-pk="1" data-value="" data-original-title="路段其它车辆限速">
                                         </a>
                                     </td>
                                     <td>
 									<span class="text-muted">
-									车辆的违法类型 </span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        抓拍路段
-                                    </td>
-                                    <td>
-                                        <a href="javascript:;" id="lane_name" data-type="select2" data-pk="1" data-value="" data-original-title="选择路段">
-                                        </a>
-                                    </td>
-                                    <td>
-									<span class="text-muted">
-									车辆的行驶路段 </span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        Address
-                                    </td>
-                                    <td>
-                                        <a href="javascript:;" id="address" data-type="address" data-pk="1" data-original-title="Please, fill address">
-                                        </a>
-                                    </td>
-                                    <td>
-									<span class="text-muted">
-									Your custom input, several fields </span>
+									路段其它车辆限速 </span>
                                     </td>
                                 </tr>
 
@@ -390,7 +371,7 @@ License: You must have a valid license purchased only from themeforest(the above
 <script src="../../assets/global/scripts/metronic.js" type="text/javascript"></script>
 <script src="../../assets/admin/layout4/scripts/layout.js" type="text/javascript"></script>
 <script src="../../assets/admin/layout4/scripts/demo.js" type="text/javascript"></script>
-<script src="containers/js/monitor.view.js" type="text/javascript"></script>
+<script src="containers/js/flow.view.js" type="text/javascript"></script>
 <script>
 
 </script>

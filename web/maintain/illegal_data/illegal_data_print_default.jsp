@@ -19,7 +19,7 @@ License: You must have a valid license purchased only from themeforest(the above
 <!-- BEGIN HEAD -->
 <head>
     <meta charset="UTF-8"/>
-    <title>My_pro:web|打印|</title>
+    <title>XM-08|违法车辆数据表|打印|</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="width=monitor-width, initial-scale=1.0" name="viewport"/>
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">

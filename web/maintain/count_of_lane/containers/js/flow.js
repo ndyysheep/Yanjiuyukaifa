@@ -31,6 +31,11 @@ var Page = function() {
             initFlowPrint();
         }
 
+        if(pageId==="flow_print_word"){
+            //打印页面
+            initMonitorPrint_Word();
+        }
+
     };
     /*----------------------------------------入口函数  结束----------------------------------------*/
     //全局变量数组
@@ -310,6 +315,62 @@ var Page = function() {
 
     }
 
+    var  getFlowRecordPrint_Word = function(){
+        var url = "../../flow_data_servlet_action";
+        var data={};
+        data.action="flow_print";
+        $.post(url,data,function(json){
+            if(json.result_code==0){
+                console.log(JSON.stringify(json));
+
+                var list = json.aaData;
+
+                var html="";
+                if(list!=undefined && list.length>0)
+                {
+                    for(var i=0;i<list.length;i++) {
+
+                        var record=list[i];
+                        html=html+"<tr style='height:26.95pt'>";
+                        html=html+" <td width=63 valign=top style='width:46.95pt;border:none;border-right:solid #C9C9C9 1.0pt;";
+                        html=html+"  background:white;padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>";
+                        html=html+" <p class=MsoNormal align=center style='text-align:center'><i><span";
+                        html=html+" lang=EN-US style='font-family:\"微软雅黑\",sans-serif'>"+record.id+"</span></i></p>";
+                        html=html+" </td>";
+                        html=html+" <td width=63 valign=top style='width:47.05pt;border-top:none;border-left:";
+                        html=html+" none;border-bottom:solid #C9C9C9 1.0pt;border-right:solid #C9C9C9 1.0pt;";
+                        html=html+" padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>";
+                        html=html+" <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US";
+                        html=html+" style='font-family:\"微软雅黑\",sans-serif'>"+record.lane_name+"</span></p>";
+                        html=html+" </td>";
+                        html=html+" <td width=106 valign=top style='width:79.4pt;border-top:none;border-left:";
+                        html=html+"  none;border-bottom:solid #C9C9C9 1.0pt;border-right:solid #C9C9C9 1.0pt;";
+                        html=html+"  padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>";
+                        html=html+" <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US";
+                        html=html+" style='font-family:\"微软雅黑\",sans-serif'>"+record.start_time+"</span></p>";
+                        html=html+" </td>";
+                        html=html+" <td width=63 valign=top style='width:47.05pt;border-top:none;border-left:";
+                        html=html+"  none;border-bottom:solid #C9C9C9 1.0pt;border-right:solid #C9C9C9 1.0pt;";
+                        html=html+"  padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>";
+                        html=html+" <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US";
+                        html=html+" style='font-family:\"微软雅黑\",sans-serif'>"+record.end_time+"</span></p>";
+                        html=html+" </td>";
+                        html=html+" <td width=63 valign=top style='width:47.05pt;border-top:none;border-left:";
+                        html=html+" none;border-bottom:solid #C9C9C9 1.0pt;border-right:solid #C9C9C9 1.0pt;";
+                        html=html+" padding:0cm 5.4pt 0cm 5.4pt;height:26.95pt'>";
+                        html=html+" <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US";
+                        html=html+" style='font-family:\"微软雅黑\",sans-serif'>"+record.total_num+"</span></p>";
+                        html=html+" </td>";
+                        html=html+" </tr>";
+
+                    }
+                }
+            }
+            $("#print_list_for_word").html(html);
+        });
+
+
+    }
     //数据获取函数--结束
 
     //on-functions begin
